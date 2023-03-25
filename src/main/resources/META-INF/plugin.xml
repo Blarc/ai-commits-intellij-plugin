@@ -1,0 +1,65 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.github.blarc.ai-commits-intellij-plugin</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>AI Commits</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="" url="https://github.com/Blarc">Blarc</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+        <p>AI Commits is a plugin that generates your commit messages with AI.</p>
+        <h3>Usage</h3>
+        <p>To get started, install the plugin and set OpenAI private token in plugin's settings:
+        <br/>
+        Settings > Tools > AI Commits</p>
+        <h3>Troubleshooting</h3>
+        <p>We'd love to hear from you if you have any issues or feature requests. Please report them
+        <a href="https://github.com/Blarc/ai-commits-intellij-plugin/issues">here</a>.</p>
+    ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>Git4Idea</depends>
+
+    <applicationListeners>
+
+    </applicationListeners>
+
+    <projectListeners>
+
+    </projectListeners>
+
+    <resource-bundle>messages.MyBundle</resource-bundle>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.github.blarc.ai.commits.intellij.plugin.AppSettings"/>
+        <applicationService serviceImplementation="com.github.blarc.ai.commits.intellij.plugin.OpenAIService"/>
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.github.blarc.ai.commits.intellij.plugin.AppSettingsConfigurable"/>
+    </extensions>
+
+    <actions>
+        <action
+                id="AICommit.Button"
+                text="AI Commit"
+                description="Create commit message with AI"
+                icon="/icons/gitlabLint.svg"
+                class="com.github.blarc.ai.commits.intellij.plugin.AICommitAction">
+
+            <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+        </action>
+    </actions>
+
+</idea-plugin>
