@@ -1,0 +1,1 @@
+rootProject.name = "ai-commits-intellij-plugin"
