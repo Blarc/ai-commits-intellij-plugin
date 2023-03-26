@@ -32,10 +32,10 @@ object AICommitsBundle : DynamicBundle(BUNDLE) {
     }
 
     fun openRepository() {
-        BrowserLauncher.instance.open("https://github.com/Blarc/gitlab-template-lint-plugin");
+        BrowserLauncher.instance.open("https://github.com/Blarc/ai-commits-intellij-plugin");
     }
 
-    fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("com.github.blarc.gitlab-template-lint-plugin"))
+    fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("com.github.blarc.ai-commits-intellij-plugin"))
 
 
 }

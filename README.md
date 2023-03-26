@@ -1,28 +1,22 @@
 
 
-[//]: # (<div align="center">)
-
-[//]: # (    <a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint">)
-
-[//]: # (        <img src="./src/main/resources/META-INF/pluginIcon.svg" width="200" height="200" alt="logo"/>)
-
-[//]: # (    </a>)
-
-[//]: # (</div>)
+<div align="center">
+    <a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint">
+        <img src="./src/main/resources/META-INF/pluginIcon.svg" width="200" height="200" alt="logo"/>
+    </a>
+</div>
 <h1 align="center">AI Commits</h1>
 <p align="center">AI Commits for IntelliJ based IDEs/Android Studio.</p>
 
-[//]: # (<p align="center">)
-
-[//]: # (<a href="https://actions-badge.atrox.dev/Blarc/gitlab-lint-plugin/goto?ref=main"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FBlarc%2Fgitlab-lint-plugin%2Fbadge%3Fref%3Dmain&style=flat" /></a>)
+<p align="center">
+<a href="https://actions-badge.atrox.dev/blarc/ai-commits-intellij-plugin/goto?ref=main"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblarc%2Fai-commits-intellij-plugin%2Fbadge%3Fref%3Dmain&style=popout-square" /></a>
 
 [//]: # (<a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint"><img src="https://img.shields.io/jetbrains/plugin/r/stars/19411?style=flat-square"></a>)
 
 [//]: # (<a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint"><img src="https://img.shields.io/jetbrains/plugin/d/19411-gitlab-template-lint.svg?style=flat-square"></a>)
 
 [//]: # (<a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint"><img src="https://img.shields.io/jetbrains/plugin/v/19411-gitlab-template-lint.svg?style=flat-square"></a>)
-
-[//]: # (</p>)
+</p>
 <br>
 
 - [Description](#description)
