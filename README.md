@@ -80,6 +80,10 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
+## Acknowledgements
+
+Inspired by Nutlope's [AICommits](https://github.com/Nutlope/aicommits).
+
 ## License
 
 Please see [LICENSE](LICENSE) for details.
