@@ -10,7 +10,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     override fun createPanel() = panel {
 
         row {
-            textField()
+            passwordField()
                 .label(message("settings.openAIToken"))
                 .bindText(
                     { AppSettings.instance.getOpenAIToken().orEmpty() },

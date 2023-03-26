@@ -16,7 +16,6 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 class AppSettings : PersistentStateComponent<AppSettings> {
 
     private val openAITokenTitle = "OpenAIToken"
-
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.AppSettings"
 

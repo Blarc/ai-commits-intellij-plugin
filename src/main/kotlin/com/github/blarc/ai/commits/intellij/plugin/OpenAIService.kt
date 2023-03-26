@@ -24,7 +24,6 @@ class OpenAIService {
     @OptIn(BetaOpenAI::class)
     suspend fun generateCommitMessage(locale: String, diff: String, completions: Int): String {
         val prompt = getPrompt(locale, diff)
-        println(prompt)
 
         val chatCompletionRequest = ChatCompletionRequest(
             ModelId(model),

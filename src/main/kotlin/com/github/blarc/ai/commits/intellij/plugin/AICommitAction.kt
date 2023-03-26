@@ -2,13 +2,9 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.application.EDT
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.vcs.VcsDataKeys
 import git4idea.GitUtil
-import git4idea.GitVcs.runInBackground
-import git4idea.commands.Git
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
