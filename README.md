@@ -10,12 +10,9 @@
 
 <p align="center">
 <a href="https://actions-badge.atrox.dev/blarc/ai-commits-intellij-plugin/goto?ref=main"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblarc%2Fai-commits-intellij-plugin%2Fbadge%3Fref%3Dmain&style=popout-square" /></a>
-
-[//]: # (<a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint"><img src="https://img.shields.io/jetbrains/plugin/r/stars/19411?style=flat-square"></a>)
-
-[//]: # (<a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint"><img src="https://img.shields.io/jetbrains/plugin/d/19411-gitlab-template-lint.svg?style=flat-square"></a>)
-
-[//]: # (<a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint"><img src="https://img.shields.io/jetbrains/plugin/v/19411-gitlab-template-lint.svg?style=flat-square"></a>)
+<a href="https://plugins.jetbrains.com/plugin/21335-ai-commits"><img src="https://img.shields.io/jetbrains/plugin/r/stars/21335?style=flat-square"></a>
+<a href="https://plugins.jetbrains.com/plugin/21335-ai-commits"><img src="https://img.shields.io/jetbrains/plugin/d/21335-ai-commits.svg?style=flat-square"></a>
+<a href="https://plugins.jetbrains.com/plugin/21335-ai-commits"><img src="https://img.shields.io/jetbrains/plugin/v/21335-ai-commits.svg?style=flat-square"></a>
 </p>
 <br>
 
@@ -35,17 +32,13 @@ install the plugin and set OpenAI private token in plugin's settings:
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
 
-[//]: # (## Install)
-
-[//]: # (<a href="https://plugins.jetbrains.com/embeddable/install/19411">)
-
-[//]: # (    <img src="https://user-images.githubusercontent.com/12044174/123105697-94066100-d46a-11eb-9832-338cdf4e0612.png" width="300"/>)
-
-[//]: # (</a>)
-
-[//]: # (Or you could install it inside your IDE:)
-
 ## Install
+
+<a href="https://plugins.jetbrains.com/embeddable/install/21335">
+<img src="https://user-images.githubusercontent.com/12044174/123105697-94066100-d46a-11eb-9832-338cdf4e0612.png" width="300"/>
+</a>
+
+Or you could install it inside your IDE:
 
 For Windows & Linux: <kbd>File</kbd> > <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AI Commits"</kbd> > <kbd>Install Plugin</kbd> > <kbd>Restart IntelliJ IDEA</kbd>
 
@@ -66,11 +59,8 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 
 * Star the repository
 * [Buy me a coffee](https://ko-fi.com/blarc)
-
-[//]: # (* [Rate the plugin]&#40;https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint&#41;)
-
-[//]: # (* [Share the plugin]&#40;https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint&#41;)
-
+* [Rate the plugin](https://plugins.jetbrains.com/plugin/21335-ai-commits)
+* [Share the plugin](https://plugins.jetbrains.com/plugin/21335-ai-commits)
 
 ## Change log
 
