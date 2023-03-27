@@ -3,4 +3,6 @@
 ## [Unreleased]
 
 ### Added
-- Basic implementation.
+- Basic action for generating commit message.
+- Settings for locale and OpenAI token.
+- Create commit message only for selected files.
