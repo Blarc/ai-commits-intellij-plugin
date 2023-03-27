@@ -33,7 +33,7 @@ class AICommitAction : AnAction(), DumbAware {
                     repository!!.root,
                     GitCommand.DIFF
                 )
-                diffCommand.addParameters("--cached", it.virtualFile!!.path)
+                diffCommand.addParameters(it.virtualFile!!.path)
 
                 val commandResult = Git.getInstance().runCommand(diffCommand)
                 commandResult.outputAsJoinedString
