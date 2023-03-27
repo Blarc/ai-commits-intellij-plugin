@@ -4,6 +4,7 @@ import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 
@@ -22,8 +23,8 @@ class OpenAIService {
         "Write an insightful but concise Git commit message in a complete sentence in present tense for the following diff without prefacing it with anything, the response must be in the language ${locale}:\\n${diff}"
 
     @OptIn(BetaOpenAI::class)
-    suspend fun generateCommitMessage(locale: String, diff: String, completions: Int): String {
-        val prompt = getPrompt(locale, diff)
+    suspend fun generateCommitMessage(diff: String, completions: Int): String {
+        val prompt = getPrompt(AppSettings.instance.locale.displayLanguage, diff)
 
         val chatCompletionRequest = ChatCompletionRequest(
             ModelId(model),

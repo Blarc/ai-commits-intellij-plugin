@@ -26,7 +26,7 @@ class AICommitAction : AnAction(), DumbAware {
 
         val instance = OpenAIService.instance
         GlobalScope.launch(Dispatchers.Main) {
-            val generatedCommitMessage = instance.generateCommitMessage("english", diff, 1)
+            val generatedCommitMessage = instance.generateCommitMessage(diff, 1)
             commitMessage?.setCommitMessage(generatedCommitMessage)
         }
     }

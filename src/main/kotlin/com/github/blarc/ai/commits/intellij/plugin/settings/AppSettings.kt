@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin
+package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
@@ -8,6 +8,7 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import java.util.Locale
 
 @State(
     name = AppSettings.SERVICE_NAME,
@@ -15,9 +16,10 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 )
 class AppSettings : PersistentStateComponent<AppSettings> {
 
+    var locale: Locale = Locale.getDefault()
     private val openAITokenTitle = "OpenAIToken"
     companion object {
-        const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.AppSettings"
+        const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
 
         val instance: AppSettings
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
