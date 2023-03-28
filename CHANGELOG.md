@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Show notification when diff is empty.
+
+### Fixed
+- Use `--cached` flag for computing git diff.
 
 ## [0.2.0] - 2023-03-27
 
