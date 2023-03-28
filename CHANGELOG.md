@@ -3,9 +3,8 @@
 ## [Unreleased]
 ### Added
 - Show notification when diff is empty.
-
-### Fixed
-- Use `--cached` flag for computing git diff.
+- Compute diff using `IdeaTextPatchBuilder` instead of `git diff`.
+  - This allows to compute diff only from files and **lines** selected in the commit dialog.
 
 ## [0.2.0] - 2023-03-27
 

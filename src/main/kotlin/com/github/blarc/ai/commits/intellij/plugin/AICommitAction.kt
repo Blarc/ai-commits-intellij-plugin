@@ -5,20 +5,20 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
+import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import git4idea.commands.Git
-import git4idea.commands.GitCommand
-import git4idea.commands.GitLineHandler
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.StringWriter
 
 class AICommitAction : AnAction(), DumbAware {
     @OptIn(DelicateCoroutinesApi::class)
@@ -45,30 +45,42 @@ class AICommitAction : AnAction(), DumbAware {
             }
         }
     }
+
     private fun computeDiff(
         includedChanges: List<Change>,
         project: Project
     ): String {
-        val diff = includedChanges.joinToString("\n") {
 
-            // Try to get the virtual file for the change and return an empty string if it doesn't exist
-            val file = it.virtualFile ?: return@joinToString ""
+        val gitRepositoryManager = GitRepositoryManager.getInstance(project)
 
-            // Try to get the git repository for the file and return an empty string if it doesn't exist
-            val repository = GitRepositoryManager.getInstance(project).getRepositoryForFile(file)
-                ?: return@joinToString ""
+        // go through included changes, create a map of repository to changes and discard nulls
+        val changesByRepository = includedChanges
+            .mapNotNull { change ->
+                change.virtualFile?.let { file ->
+                    gitRepositoryManager.getRepositoryForFileQuick(
+                        file
+                    ) to change
+                }
+            }
+            .groupBy({ it.first }, { it.second })
 
-            val diffCommand = GitLineHandler(
-                project,
-                repository.root,
-                GitCommand.DIFF
-            )
-            diffCommand.addParameters("--cached")
-            diffCommand.addParameters(file.path)
 
-            val commandResult = Git.getInstance().runCommand(diffCommand)
-            commandResult.outputAsJoinedString
-        }
-        return diff
+        // compute diff for each repository
+        return changesByRepository
+            .map { (repository, changes) ->
+                repository?.let {
+                    val filePatches = IdeaTextPatchBuilder.buildPatch(
+                        project,
+                        changes,
+                        repository.root.toNioPath(), false, true
+                    )
+
+                    val stringWriter = StringWriter()
+                    stringWriter.write("Repository: ${repository.root.path}\n")
+                    UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
+                    stringWriter.toString()
+                }
+            }
+            .joinToString("\n")
     }
 }

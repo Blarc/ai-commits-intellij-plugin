@@ -17,17 +17,21 @@
 <br>
 
 - [Description](#description)
+- [Features](#features)
 - [Compatibility](#compatibility)
 - [Install](#install)
 - [Installation from zip](#installation-from-zip)
 
-[//]: # (- [Features]&#40;#features&#41;)
 [//]: # (- [Demo]&#40;#demo&#41;)
 
 ## Description
 AI Commits is a plugin that generates your commit messages with AI. To get started, 
 install the plugin and set OpenAI private token in plugin's settings:
 <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
+
+## Features
+- Generate commit message from diff using OpenAI API
+- Compute diff only from the selected files and lines in the commit dialog
 
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
