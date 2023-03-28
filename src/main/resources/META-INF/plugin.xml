@@ -48,6 +48,17 @@
         <applicationConfigurable
             parentId="tools"
             instance="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettingsConfigurable"/>
+
+        <notificationGroup
+                id="ai.commits.notification.general"
+                displayType="BALLOON"
+                key="notification.group.general.name"
+        />
+        <notificationGroup
+                id="ai.commits.notification.important"
+                displayType="STICKY_BALLOON"
+                key="notification.group.important.name"
+        />
     </extensions>
 
     <actions>

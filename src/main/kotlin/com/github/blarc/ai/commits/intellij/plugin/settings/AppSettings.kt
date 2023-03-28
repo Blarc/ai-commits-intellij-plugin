@@ -16,8 +16,9 @@ import java.util.Locale
 )
 class AppSettings : PersistentStateComponent<AppSettings> {
 
-    var locale: Locale = Locale.getDefault()
     private val openAITokenTitle = "OpenAIToken"
+    var locale: Locale = Locale.getDefault()
+    var requestSupport = true
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
 
