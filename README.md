@@ -1,7 +1,7 @@
 
 
 <div align="center">
-    <a href="https://plugins.jetbrains.com/plugin/19411-gitlab-template-lint">
+    <a href="https://plugins.jetbrains.com/plugin/21335-ai-commits">
         <img src="./src/main/resources/META-INF/pluginIcon.svg" width="200" height="200" alt="logo"/>
     </a>
 </div>
