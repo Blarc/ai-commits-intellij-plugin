@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fix
+- Plugin should not have until build number.
 
 ## [0.3.0] - 2023-03-28
 

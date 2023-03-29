@@ -24,6 +24,7 @@ intellij {
     pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
+    updateSinceUntilBuild.set(false)
 
     plugins.set(
         properties("platformPlugins").split(',')
