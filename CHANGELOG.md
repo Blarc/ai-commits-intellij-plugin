@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add button for verifying Open AI token in settings.
+
 
 ## [0.4.0] - 2023-03-29
 

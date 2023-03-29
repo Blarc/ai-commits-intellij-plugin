@@ -2,6 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.*
+import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
@@ -45,5 +46,9 @@ class OpenAIService {
         val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
         return completion.choices[0].message!!.content
 
+    }
+    @Throws(Exception::class)
+    suspend fun verifyToken(token: String){
+        OpenAI(token).models()
     }
 }
