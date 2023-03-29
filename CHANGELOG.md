@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Removed unused `org.jetbrains.plugins.yaml` platform plugin.
+
 ### Fix
 - Plugin should not have until build number.
 
