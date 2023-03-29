@@ -76,7 +76,8 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Acknowledgements
 
-Inspired by Nutlope's [AICommits](https://github.com/Nutlope/aicommits).
+- Inspired by Nutlope's [AICommits](https://github.com/Nutlope/aicommits).
+- [openai-kotlin](https://github.com/aallam/openai-kotlin) for OpenAI API client.
 
 ## License
 
