@@ -15,6 +15,11 @@
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
         <p>AI Commits is a plugin that generates your commit messages with AI.</p>
+        <h3>Features</h3>
+        <ul>
+            <li>Generate commit message from diff using OpenAI API</li>
+            <li>Compute diff only from the selected files and lines in the commit dialog</li>
+        </ul>
         <h3>Usage</h3>
         <p>To get started, install the plugin and set OpenAI private token in plugin's settings:
         <br/>
