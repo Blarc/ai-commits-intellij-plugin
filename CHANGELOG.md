@@ -3,7 +3,7 @@
 ## [Unreleased]
 ### Added
 - Add button for verifying Open AI token in settings.
-
+- Check if prompt is too large for Open AI API.
 
 ## [0.4.0] - 2023-03-29
 

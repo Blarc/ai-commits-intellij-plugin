@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
@@ -13,6 +14,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import com.knuddels.jtokkit.Encodings
+import com.knuddels.jtokkit.api.EncodingType
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +38,12 @@ class AICommitAction : AnAction(), DumbAware {
 
             if (diff.isBlank()) {
                 sendNotification(Notification.emptyDiff())
+                return@runBackgroundableTask
+            }
+
+            val prompt = AppSettings.instance.getPrompt(diff)
+            if (isPromptTooLarge(prompt)) {
+                sendNotification(Notification.promptTooLarge())
                 return@runBackgroundableTask
             }
 
@@ -82,5 +91,11 @@ class AICommitAction : AnAction(), DumbAware {
                 }
             }
             .joinToString("\n")
+    }
+
+    private fun isPromptTooLarge(prompt: String): Boolean {
+        val registry = Encodings.newDefaultEncodingRegistry()
+        val encoding = registry.getEncoding(EncodingType.CL100K_BASE)
+        return encoding.countTokens(prompt) > 4000
     }
 }

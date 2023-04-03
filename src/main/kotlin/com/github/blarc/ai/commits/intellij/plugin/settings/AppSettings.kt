@@ -26,6 +26,9 @@ class AppSettings : PersistentStateComponent<AppSettings> {
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
+    fun getPrompt(diff: String) =
+        "Write an insightful but concise Git commit message in a complete sentence in present tense for the following diff without prefacing it with anything, the response must be in the language ${locale}. The following text are the differences between files, where deleted lines are prefixed with a single minus sign and added lines are prefixed with a single plus sign:\\n${diff}"
+
     fun saveOpenAIToken(token: String) {
         PasswordSafe.instance.setPassword(getCredentialAttributes(openAITokenTitle), token)
     }

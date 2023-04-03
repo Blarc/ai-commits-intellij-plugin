@@ -8,6 +8,8 @@ import com.aallam.openai.client.OpenAI
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
+import com.knuddels.jtokkit.Encodings
+import com.knuddels.jtokkit.api.EncodingType
 
 @Service
 class OpenAIService {
@@ -20,12 +22,8 @@ class OpenAIService {
             get() = ApplicationManager.getApplication().getService(OpenAIService::class.java)
     }
 
-    private fun getPrompt(locale: String, diff: String) =
-        "Write an insightful but concise Git commit message in a complete sentence in present tense for the following diff without prefacing it with anything, the response must be in the language ${locale}. The following text are the differences between files, where deleted lines are prefixed with a single minus sign and added lines are prefixed with a single plus sign:\\n${diff}"
-
     @OptIn(BetaOpenAI::class)
-    suspend fun generateCommitMessage(diff: String, completions: Int): String {
-        val prompt = getPrompt(AppSettings.instance.locale.displayLanguage, diff)
+    suspend fun generateCommitMessage(prompt: String, completions: Int): String {
 
         val chatCompletionRequest = ChatCompletionRequest(
             ModelId(model),
