@@ -4,9 +4,12 @@
 ### Added
 - Add button for verifying Open AI token in settings.
 - Check if prompt is too large for Open AI API.
+- Welcome and star notification.
 
 ### Changed
 - Set default Locale to English.
+- Target latest intellij version (2023.1).
+- Improve error handling.
 
 ### Fixed
 - Properly serialize Locale when saving settings.

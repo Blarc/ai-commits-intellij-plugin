@@ -47,10 +47,21 @@ class AICommitAction : AnAction(), DumbAware {
                 return@runBackgroundableTask
             }
 
+            if (commitMessage == null) {
+                sendNotification(Notification.noCommitMessage())
+                return@runBackgroundableTask
+            }
+
             val openAIService = OpenAIService.instance
             GlobalScope.launch(Dispatchers.Main) {
-                val generatedCommitMessage = openAIService.generateCommitMessage(diff, 1)
-                commitMessage?.setCommitMessage(generatedCommitMessage)
+                try {
+                    val generatedCommitMessage = openAIService.generateCommitMessage(diff, 1)
+                    commitMessage.setCommitMessage(generatedCommitMessage)
+                }
+                catch (e: Exception) {
+                    commitMessage.setCommitMessage(message("action.error"))
+                    sendNotification(Notification.unsuccessfulRequest(e.message ?: message("action.unknown-error")))
+                }
             }
         }
     }

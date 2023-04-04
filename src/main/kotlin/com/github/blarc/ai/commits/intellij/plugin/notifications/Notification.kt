@@ -27,7 +27,7 @@ data class Notification(
 
         fun star() = Notification(
             message = """
-                Finding Gitlab Template Lint useful? Show your support 💖 and ⭐ the repository 🙏.
+                Finding AI Commit useful? Show your support 💖 and ⭐ the repository 🙏.
             """.trimIndent(),
             actions = setOf(
                 NotificationAction.openRepository() {
@@ -42,6 +42,7 @@ data class Notification(
         fun emptyDiff() = Notification(DEFAULT_TITLE, message = message("notifications.empty-diff"))
         fun promptTooLarge() = Notification(DEFAULT_TITLE, message = message("notifications.prompt-too-large"))
         fun unsuccessfulRequest(message: String) = Notification(message = message("notifications.unsuccessful-request", message))
+        fun noCommitMessage(): Notification = Notification(message = message("notifications.no-commit-message"))
 
     }
 
