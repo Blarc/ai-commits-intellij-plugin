@@ -2,14 +2,11 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.*
-import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
-import com.knuddels.jtokkit.Encodings
-import com.knuddels.jtokkit.api.EncodingType
 
 @Service
 class OpenAIService {

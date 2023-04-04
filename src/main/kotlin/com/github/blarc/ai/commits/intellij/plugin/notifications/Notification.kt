@@ -23,7 +23,7 @@ data class Notification(
     companion object {
         private val DEFAULT_TITLE = message("notifications.title")
 
-        fun welcome(version: String) = Notification(message = message("notifications.welcome", version))
+        fun welcome(version: String) = Notification(message = message("notifications.welcome", version), type = Type.TRANSIENT)
 
         fun star() = Notification(
             message = """

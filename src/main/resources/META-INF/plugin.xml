@@ -63,6 +63,9 @@
                 displayType="STICKY_BALLOON"
                 key="notification.group.important.name"
         />
+        <postStartupActivity
+                implementation="com.github.blarc.ai.commits.intellij.plugin.listeners.ApplicationStartupListener"/>
+
     </extensions>
 
     <actions>

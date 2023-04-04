@@ -1,5 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
+import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
+import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
 import com.intellij.ide.passwordSafe.PasswordSafe
@@ -19,10 +21,13 @@ import java.util.*
 class AppSettings : PersistentStateComponent<AppSettings> {
 
     private val openAITokenTitle = "OpenAIToken"
+    private var hits = 0
+
     @OptionTag(converter = LocaleConverter::class)
     var locale: Locale = Locale.ENGLISH
-
     var requestSupport = true
+    var lastVersion: String? = null
+
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
 
@@ -56,6 +61,13 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     override fun loadState(state: AppSettings) {
         XmlSerializerUtil.copyBean(state, this)
+    }
+
+    fun recordHit() {
+        hits++
+        if (requestSupport && (hits == 50 || hits % 100 == 0)) {
+            sendNotification(Notification.star())
+        }
     }
 
     class LocaleConverter : Converter<Locale>() {
