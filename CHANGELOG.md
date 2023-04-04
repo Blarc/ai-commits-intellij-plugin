@@ -5,6 +5,12 @@
 - Add button for verifying Open AI token in settings.
 - Check if prompt is too large for Open AI API.
 
+### Changed
+- Set default Locale to English.
+
+### Fixed
+- Properly serialize Locale when saving settings.
+
 ## [0.4.0] - 2023-03-29
 
 ### Changed

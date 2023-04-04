@@ -7,8 +7,10 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
+import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.XmlSerializerUtil
-import java.util.Locale
+import com.intellij.util.xmlb.annotations.OptionTag
+import java.util.*
 
 @State(
     name = AppSettings.SERVICE_NAME,
@@ -17,7 +19,9 @@ import java.util.Locale
 class AppSettings : PersistentStateComponent<AppSettings> {
 
     private val openAITokenTitle = "OpenAIToken"
-    var locale: Locale = Locale.getDefault()
+    @OptionTag(converter = LocaleConverter::class)
+    var locale: Locale = Locale.ENGLISH
+
     var requestSupport = true
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
@@ -52,6 +56,16 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     override fun loadState(state: AppSettings) {
         XmlSerializerUtil.copyBean(state, this)
+    }
+
+    class LocaleConverter : Converter<Locale>() {
+        override fun toString(value: Locale): String? {
+            return value.toLanguageTag()
+        }
+
+        override fun fromString(value: String): Locale? {
+            return Locale.forLanguageTag(value)
+        }
     }
 
 }
