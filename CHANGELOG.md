@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Use prompt instead of diff when making request to Open AI API.
 
 ## [0.5.0] - 2023-04-04
 
