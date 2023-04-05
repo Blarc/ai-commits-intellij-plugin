@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Different prompts to choose from.
 
 ### Changed
 - Sort locales alphabetically.

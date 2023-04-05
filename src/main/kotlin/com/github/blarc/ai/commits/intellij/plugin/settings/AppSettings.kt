@@ -28,15 +28,45 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var requestSupport = true
     var lastVersion: String? = null
 
+    var currentPrompt: String = "basic"
+    var prompts: MutableMap<String, String> = mutableMapOf(
+        // Generate UUIDs for game objects in Mine.py and call the function in start_game().
+        "basic" to "Write an insightful but concise Git commit message in a complete sentence in present tense for the " +
+                "following diff without prefacing it with anything, the response must be in the language {locale} and must" +
+                "not be longer than 74 characters. The sent text will be the differences between files, where deleted lines" +
+                " are prefixed with a single minus sign and added lines are prefixed with a single plus sign.\n" +
+                "{diff}",
+        // feat: generate unique UUIDs for game objects on Mine game start
+        "conventional" to "Write a clean and comprehensive commit message in the conventional commit convention. " +
+                "I'll send you an output of 'git diff --staged' command, and you convert " +
+                "it into a commit message. " +
+                "Do NOT preface the commit with anything. " +
+                "Do NOT add any descriptions to the commit, only commit message. " +
+                "Use the present tense. " +
+                "Lines must not be longer than 74 characters. " +
+                "Use {locale} language to answer.\n" +
+                "{diff}",
+        // ✨ feat(mine): Generate objects UUIDs and start team timers on game start
+        "emoji" to "Write a clean and comprehensive commit messages in the conventional commit convention. " +
+                "I'll send you an output of 'git diff --staged' command, and you convert " +
+                "it into a commit message. " +
+                "Use GitMoji convention to preface the commit. " +
+                "Do NOT add any descriptions to the commit, only commit message. " +
+                "Use the present tense. " +
+                "Lines must not be longer than 74 characters. " +
+                "Use {locale} language to answer.\n" +
+                "{diff}",
+    )
+
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
-
         val instance: AppSettings
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
-    fun getPrompt(diff: String) =
-        "Write an insightful but concise Git commit message in a complete sentence in present tense for the following diff without prefacing it with anything, the response must be in the language ${locale}. The following text are the differences between files, where deleted lines are prefixed with a single minus sign and added lines are prefixed with a single plus sign:\\n${diff}"
+    fun getPrompt(diff: String) = prompts.getOrDefault(currentPrompt, prompts["basic"]!!)
+        .replace("{locale}", locale.displayName)
+        .replace("{diff}", diff)
 
     fun saveOpenAIToken(token: String) {
         PasswordSafe.instance.setPassword(getCredentialAttributes(openAITokenTitle), token)
