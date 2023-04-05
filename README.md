@@ -50,7 +50,7 @@ For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> 
 
 
 ### Installation from zip
-1. Download zip from [releases](https://github.com/Blarc/gitlab-lint-plugin/releases)
+1. Download zip from [releases](https://github.com/Blarc/ai-commits-intellij-plugin/releases)
 2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from disk...</kbd>
 3. Set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
 
