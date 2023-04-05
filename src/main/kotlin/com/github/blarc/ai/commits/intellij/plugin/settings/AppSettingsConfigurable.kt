@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.progress.runBackgroundableTask
+import com.intellij.openapi.ui.naturalSorted
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.*
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -42,7 +43,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 .align(AlignX.RIGHT)
         }
         row {
-            comboBox(Locale.getAvailableLocales().toList(), AppSettingsListCellRenderer())
+            comboBox(Locale.getAvailableLocales().toList().sortedBy { it.displayName }, AppSettingsListCellRenderer())
                 .label(message("settings.locale"))
                 .bindItem(AppSettings.instance::locale.toNullableProperty())
         }

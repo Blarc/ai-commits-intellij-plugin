@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Sort locales alphabetically.
+
 ## [0.5.1] - 2023-04-05
 
 ### Fixed
