@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Different prompts to choose from.
+- Bug report link to settings.
 
 ### Changed
 - Sort locales alphabetically.

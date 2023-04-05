@@ -1,6 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.aallam.openai.api.exception.OpenAIAPIException
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
 import com.intellij.icons.AllIcons
@@ -68,6 +69,9 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 .align(Align.FILL)
                 .resizableColumn()
         }.resizableRow()
+        row {
+            browserLink(message("settings.report-bug"), AICommitsBundle.URL_BUG_REPORT.toString())
+        }
     }
 
     @OptIn(DelicateCoroutinesApi::class)
