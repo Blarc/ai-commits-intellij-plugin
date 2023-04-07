@@ -1,5 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
+import ai.grazie.utils.capitalize
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import java.awt.Component
 import java.util.*
 import javax.swing.DefaultListCellRenderer
@@ -16,6 +18,9 @@ class AppSettingsListCellRenderer : DefaultListCellRenderer() {
         val component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
         if (value is Locale) {
             text = value.displayName
+        }
+        if (value is Prompt) {
+            text = value.name
         }
         return component
     }

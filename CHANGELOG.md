@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Table for setting prompts.
 - Different prompts to choose from.
 - Bug report link to settings.
 - Add generate commit action progress indicator.
