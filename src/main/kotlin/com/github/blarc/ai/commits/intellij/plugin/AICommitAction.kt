@@ -19,8 +19,7 @@ import com.knuddels.jtokkit.api.EncodingType
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.StringWriter
 
 class AICommitAction : AnAction(), DumbAware {
@@ -53,7 +52,7 @@ class AICommitAction : AnAction(), DumbAware {
             }
 
             val openAIService = OpenAIService.instance
-            GlobalScope.launch(Dispatchers.Main) {
+            runBlocking(Dispatchers.Main) {
                 try {
                     val generatedCommitMessage = openAIService.generateCommitMessage(prompt, 1)
                     commitMessage.setCommitMessage(generatedCommitMessage)

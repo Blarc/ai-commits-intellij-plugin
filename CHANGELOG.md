@@ -4,6 +4,7 @@
 ### Added
 - Different prompts to choose from.
 - Bug report link to settings.
+- Add generate commit action progress indicator.
 
 ### Changed
 - Sort locales alphabetically.
