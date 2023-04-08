@@ -9,6 +9,9 @@
 ### Changed
 - Sort locales alphabetically.
 
+### Fixed
+- Changing token does not work.
+
 ## [0.5.1] - 2023-04-05
 
 ### Fixed

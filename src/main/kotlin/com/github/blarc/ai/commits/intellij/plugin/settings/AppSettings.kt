@@ -69,7 +69,11 @@ class AppSettings : PersistentStateComponent<AppSettings> {
         .replace("{diff}", diff)
 
     fun saveOpenAIToken(token: String) {
-        PasswordSafe.instance.setPassword(getCredentialAttributes(openAITokenTitle), token)
+        try {
+            PasswordSafe.instance.setPassword(getCredentialAttributes(openAITokenTitle), token)
+        } catch (e: Exception) {
+            sendNotification(Notification.unableToSaveToken())
+        }
     }
 
     fun getOpenAIToken(): String? {

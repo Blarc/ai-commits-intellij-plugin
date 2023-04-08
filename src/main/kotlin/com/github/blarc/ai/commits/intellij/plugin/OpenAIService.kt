@@ -11,8 +11,6 @@ import com.intellij.openapi.components.Service
 @Service
 class OpenAIService {
 
-    private val openAI: OpenAI = OpenAI(AppSettings.instance.getOpenAIToken().orEmpty())
-
     companion object {
         const val model = "gpt-3.5-turbo"
         val instance: OpenAIService
@@ -21,6 +19,8 @@ class OpenAIService {
 
     @OptIn(BetaOpenAI::class)
     suspend fun generateCommitMessage(prompt: String, completions: Int): String {
+        val openAIToken = AppSettings.instance.getOpenAIToken() ?: throw Exception("OpenAI Token is not set.")
+        val openAI = OpenAI(openAIToken)
 
         val chatCompletionRequest = ChatCompletionRequest(
             ModelId(model),
