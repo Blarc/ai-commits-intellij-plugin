@@ -17,18 +17,20 @@ import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import com.knuddels.jtokkit.Encodings
 import com.knuddels.jtokkit.api.EncodingType
 import git4idea.repo.GitRepositoryManager
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.io.StringWriter
 
 class AICommitAction : AnAction(), DumbAware {
-    @OptIn(DelicateCoroutinesApi::class)
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
 
-        val commitWorkflowHandler =
-            e.getData(VcsDataKeys.COMMIT_WORKFLOW_HANDLER) as AbstractCommitWorkflowHandler<*, *>
+        val commitWorkflowHandler = e.getData(VcsDataKeys.COMMIT_WORKFLOW_HANDLER) as AbstractCommitWorkflowHandler<*, *>?
+        if (commitWorkflowHandler == null) {
+            sendNotification(Notification.noCommitMessage())
+            return
+        }
+
         val includedChanges = commitWorkflowHandler.ui.getIncludedChanges()
         val commitMessage = VcsDataKeys.COMMIT_MESSAGE_CONTROL.getData(e.dataContext)
 

@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Commit workflow handler can be null.
 
 ## [0.6.0] - 2023-04-08
 
