@@ -32,6 +32,7 @@ install the plugin and set OpenAI private token in plugin's settings:
 ## Features
 - Generate commit message from diff using OpenAI API
 - Compute diff only from the selected files and lines in the commit dialog
+- Create your own prompt for commit message generation
 
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me

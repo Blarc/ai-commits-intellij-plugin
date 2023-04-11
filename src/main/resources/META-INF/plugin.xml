@@ -19,6 +19,7 @@
         <ul>
             <li>Generate commit message from diff using OpenAI API</li>
             <li>Compute diff only from the selected files and lines in the commit dialog</li>
+            <li>Create your own prompt for commit message generation</li>
         </ul>
         <h3>Usage</h3>
         <p>To get started, install the plugin and set OpenAI private token in plugin's settings:
