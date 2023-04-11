@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Locale is not used in prompt.
 
 ## [0.6.1] - 2023-04-10
 
