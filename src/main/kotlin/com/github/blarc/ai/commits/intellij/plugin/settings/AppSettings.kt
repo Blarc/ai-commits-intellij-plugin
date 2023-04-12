@@ -1,5 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
+import com.aallam.openai.client.OpenAIConfig
+import com.aallam.openai.client.ProxyConfig
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
@@ -28,6 +30,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var locale: Locale = Locale.ENGLISH
     var requestSupport = true
     var lastVersion: String? = null
+    var proxyUrl: String? = null
 
     var prompts: MutableMap<String, Prompt> = initPrompts()
     var currentPrompt: Prompt = prompts["basic"]!!
@@ -55,6 +58,11 @@ class AppSettings : PersistentStateComponent<AppSettings> {
         } catch (e: Exception) {
             sendNotification(Notification.unableToSaveToken())
         }
+    }
+
+    fun getOpenAIConfig(): OpenAIConfig {
+        val token = getOpenAIToken() ?: throw Exception("OpenAI Token is not set.")
+        return OpenAIConfig(token, proxy = proxyUrl?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) })
     }
 
     fun getOpenAIToken(): String? {

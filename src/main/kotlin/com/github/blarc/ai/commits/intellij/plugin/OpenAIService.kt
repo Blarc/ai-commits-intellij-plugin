@@ -19,8 +19,7 @@ class OpenAIService {
 
     @OptIn(BetaOpenAI::class)
     suspend fun generateCommitMessage(prompt: String, completions: Int): String {
-        val openAIToken = AppSettings.instance.getOpenAIToken() ?: throw Exception("OpenAI Token is not set.")
-        val openAI = OpenAI(openAIToken)
+        val openAI = OpenAI(AppSettings.instance.getOpenAIConfig())
 
         val chatCompletionRequest = ChatCompletionRequest(
             ModelId(model),

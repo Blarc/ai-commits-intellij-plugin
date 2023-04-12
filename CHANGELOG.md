@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Open AI proxy setting.
 
 ## [0.6.2] - 2023-04-11
 

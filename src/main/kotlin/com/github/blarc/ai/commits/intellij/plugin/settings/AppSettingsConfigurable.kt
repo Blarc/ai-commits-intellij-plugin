@@ -16,6 +16,8 @@ import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.*
+import com.intellij.ui.util.minimumWidth
+import com.intellij.ui.util.preferredWidth
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,66 +36,78 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     private lateinit var promptComboBox: Cell<ComboBox<Prompt>>
     override fun createPanel() = panel {
 
-        row {
-            cell(tokenPasswordField)
-                    .label(message("settings.openAIToken"))
-                    .bindText(
-                            { AppSettings.instance.getOpenAIToken().orEmpty() },
-                            { AppSettings.instance.saveOpenAIToken(it) }
-                    )
-                    .align(Align.FILL)
-                    .resizableColumn()
-                    .focused()
-            button(message("settings.verifyToken")) {
-                verifyToken()
-            }.align(AlignX.RIGHT)
+        group(JBLabel("OpenAI")) {
+            row {
+                cell(tokenPasswordField)
+                        .label(message("settings.openAIToken"))
+                        .bindText(
+                                { AppSettings.instance.getOpenAIToken().orEmpty() },
+                                { AppSettings.instance.saveOpenAIToken(it) }
+                        )
+                        .align(Align.FILL)
+                        .resizableColumn()
+                        .focused()
+                button(message("settings.verifyToken")) {
+                    verifyToken()
+                }.align(AlignX.RIGHT)
+            }
+            row {
+                comment(message("settings.openAITokenComment"))
+                        .align(AlignX.LEFT)
+                cell(verifyLabel)
+                        .align(AlignX.RIGHT)
+            }
+            row {
+                textField()
+                        .label(message("settings.openAIProxy"))
+                        .bindText(AppSettings.instance::proxyUrl.toNonNullableProperty(""))
+                        .resizableColumn()
+                        .applyToComponent { minimumWidth = 300 }
+            }
         }
-        row {
-            comment(message("settings.openAITokenComment"))
-                    .align(AlignX.LEFT)
-            cell(verifyLabel)
-                    .align(AlignX.RIGHT)
-        }
-        row {
-            comboBox(Locale.getAvailableLocales().toList().sortedBy { it.displayName }, AppSettingsListCellRenderer())
-                    .label(message("settings.locale"))
-                    .bindItem(AppSettings.instance::locale.toNullableProperty())
-        }
-        row {
-            promptComboBox = comboBox(AppSettings.instance.prompts.values, AppSettingsListCellRenderer())
-                    .label(message("settings.prompt"))
-                    .bindItem(AppSettings.instance::currentPrompt.toNullableProperty())
-        }
-        row {
-            toolbarDecorator = ToolbarDecorator.createDecorator(promptTable.table)
-                    .setAddAction {
-                        promptTable.addPrompt().let {
-                            promptComboBox.component.addItem(it)
-                        }
-                    }
-                    .setEditAction {
-                        promptTable.editPrompt()?.let {
-                            promptComboBox.component.removeItem(it.first)
-                            promptComboBox.component.addItem(it.second)
-                        }
-                    }
-                    .setEditActionUpdater {
-                        updateActionAvailability(CommonActionsPanel.Buttons.EDIT)
-                        true
-                    }
-                    .setRemoveAction {
-                        promptTable.removePrompt()?.let {
-                            promptComboBox.component.removeItem(it)
-                        }
-                    }
-                    .setRemoveActionUpdater {
-                        updateActionAvailability(CommonActionsPanel.Buttons.REMOVE)
-                        true
-                    }
-                    .disableUpDownActions()
 
-            cell(toolbarDecorator.createPanel())
-                    .align(Align.FILL)
+        group(JBLabel("Prompt")) {
+            row {
+                comboBox(Locale.getAvailableLocales().toList().sortedBy { it.displayName }, AppSettingsListCellRenderer())
+                        .label(message("settings.locale"))
+                        .bindItem(AppSettings.instance::locale.toNullableProperty())
+            }
+            row {
+                promptComboBox = comboBox(AppSettings.instance.prompts.values, AppSettingsListCellRenderer())
+                        .label(message("settings.prompt"))
+                        .bindItem(AppSettings.instance::currentPrompt.toNullableProperty())
+            }
+            row {
+                toolbarDecorator = ToolbarDecorator.createDecorator(promptTable.table)
+                        .setAddAction {
+                            promptTable.addPrompt().let {
+                                promptComboBox.component.addItem(it)
+                            }
+                        }
+                        .setEditAction {
+                            promptTable.editPrompt()?.let {
+                                promptComboBox.component.removeItem(it.first)
+                                promptComboBox.component.addItem(it.second)
+                            }
+                        }
+                        .setEditActionUpdater {
+                            updateActionAvailability(CommonActionsPanel.Buttons.EDIT)
+                            true
+                        }
+                        .setRemoveAction {
+                            promptTable.removePrompt()?.let {
+                                promptComboBox.component.removeItem(it)
+                            }
+                        }
+                        .setRemoveActionUpdater {
+                            updateActionAvailability(CommonActionsPanel.Buttons.REMOVE)
+                            true
+                        }
+                        .disableUpDownActions()
+
+                cell(toolbarDecorator.createPanel())
+                        .align(Align.FILL)
+            }.resizableRow()
         }.resizableRow()
 
         row {
