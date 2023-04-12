@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.7.0] - 2023-04-12
+
 ### Added
 - Open AI proxy setting.
 
@@ -69,7 +72,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.2...v0.7.0
 [0.6.2]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.5.1...v0.6.0
