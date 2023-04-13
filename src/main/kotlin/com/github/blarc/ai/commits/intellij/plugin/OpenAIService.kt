@@ -8,21 +8,22 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 
+
 @Service
 class OpenAIService {
 
     companion object {
-        const val model = "gpt-3.5-turbo"
         val instance: OpenAIService
             get() = ApplicationManager.getApplication().getService(OpenAIService::class.java)
     }
 
     @OptIn(BetaOpenAI::class)
     suspend fun generateCommitMessage(prompt: String, completions: Int): String {
+        val openAIModel = AppSettings.instance.openAIModel.id
         val openAI = OpenAI(AppSettings.instance.getOpenAIConfig())
 
         val chatCompletionRequest = ChatCompletionRequest(
-            ModelId(model),
+            ModelId(openAIModel),
             listOf(
                 ChatMessage(
                     role = ChatRole.User,

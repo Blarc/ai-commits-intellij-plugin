@@ -4,11 +4,10 @@ import com.aallam.openai.api.exception.OpenAIAPIException
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
+import com.github.blarc.ai.commits.intellij.plugin.openaiModel.OpenAIModel
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.PromptTable
 import com.intellij.icons.AllIcons
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.ui.ComboBox
@@ -17,15 +16,12 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
-import com.intellij.ui.util.preferredWidth
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
-import javax.swing.JComponent
 import javax.swing.JPasswordField
-import javax.swing.JScrollPane
 
 class AppSettingsConfigurable : BoundConfigurable(message("settings.general.group.title")) {
 
@@ -37,6 +33,12 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     override fun createPanel() = panel {
 
         group(JBLabel("OpenAI")) {
+            row {
+                comboBox(OpenAIModel.values().toList(),
+                        AppSettingsListCellRenderer())
+                        .label(message("settings.openAIModel"))
+                        .bindItem(AppSettings.instance::openAIModel.toNullableProperty())
+            }
             row {
                 cell(tokenPasswordField)
                         .label(message("settings.openAIToken"))
