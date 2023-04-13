@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
-import ai.grazie.utils.capitalize
+import com.github.blarc.ai.commits.intellij.plugin.openaiModel.OpenAIModel
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import java.awt.Component
 import java.util.*
@@ -21,6 +21,9 @@ class AppSettingsListCellRenderer : DefaultListCellRenderer() {
         }
         if (value is Prompt) {
             text = value.name
+        }
+        if (value is OpenAIModel) {
+            text = value.id
         }
         return component
     }
