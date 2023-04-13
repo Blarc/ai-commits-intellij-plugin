@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
-import com.github.blarc.ai.commits.intellij.plugin.openaiModel.OpenAIModel
+import com.aallam.openai.api.model.ModelId
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import java.awt.Component
 import java.util.*
@@ -22,7 +22,7 @@ class AppSettingsListCellRenderer : DefaultListCellRenderer() {
         if (value is Prompt) {
             text = value.name
         }
-        if (value is OpenAIModel) {
+        if (value is ModelId) {
             text = value.id
         }
         return component

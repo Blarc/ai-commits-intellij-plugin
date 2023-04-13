@@ -4,7 +4,6 @@ import com.aallam.openai.client.OpenAIConfig
 import com.aallam.openai.client.ProxyConfig
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.openaiModel.OpenAIModel
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
@@ -36,7 +35,8 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var prompts: MutableMap<String, Prompt> = initPrompts()
     var currentPrompt: Prompt = prompts["basic"]!!
 
-    var openAIModel: OpenAIModel = OpenAIModel.GPT_3_5_TURBO
+    var openAIModelId: String = "gpt-3.5-turbo"
+    var openAIModelIds: List<String> = listOf("gpt-3.5-turbo", "gpt-4")
 
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
