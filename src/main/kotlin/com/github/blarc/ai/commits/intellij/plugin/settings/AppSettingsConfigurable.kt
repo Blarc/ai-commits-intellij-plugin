@@ -4,44 +4,45 @@ import com.aallam.openai.api.exception.OpenAIAPIException
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
-import com.github.blarc.ai.commits.intellij.plugin.openaiModel.OpenAIModel
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.PromptTable
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.ui.naturalSorted
 import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.*
+import com.intellij.ui.util.maximumWidth
 import com.intellij.ui.util.minimumWidth
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
+import javax.swing.DefaultComboBoxModel
 import javax.swing.JPasswordField
 
 class AppSettingsConfigurable : BoundConfigurable(message("settings.general.group.title")) {
 
     private val tokenPasswordField = JPasswordField()
     private val verifyLabel = JBLabel()
+    private var modelComboBox: ComboBox<String> = ComboBox<String>()
     private val promptTable = PromptTable()
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: Cell<ComboBox<Prompt>>
+
+    init {
+        modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIModelIds.naturalSorted()))
+        modelComboBox.renderer = AppSettingsListCellRenderer()
+    }
+
     override fun createPanel() = panel {
 
         group(JBLabel("OpenAI")) {
             row {
-                comboBox(OpenAIModel.values().toList(),
-                        AppSettingsListCellRenderer())
-                        .label(message("settings.openAIModel"))
-                        .bindItem(AppSettings.instance::openAIModel.toNullableProperty())
-            }
-            row {
+                label(message("settings.openAIToken"))
+                        .widthGroup("label")
                 cell(tokenPasswordField)
-                        .label(message("settings.openAIToken"))
                         .bindText(
                                 { AppSettings.instance.getOpenAIToken().orEmpty() },
                                 { AppSettings.instance.saveOpenAIToken(it) }
@@ -49,9 +50,9 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                         .align(Align.FILL)
                         .resizableColumn()
                         .focused()
-                button(message("settings.verifyToken")) {
-                    verifyToken()
-                }.align(AlignX.RIGHT)
+                button(message("settings.verifyToken")) { verifyToken() }
+                        .align(AlignX.RIGHT)
+                        .widthGroup("button")
             }
             row {
                 comment(message("settings.openAITokenComment"))
@@ -60,23 +61,46 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                         .align(AlignX.RIGHT)
             }
             row {
-                textField()
-                        .label(message("settings.openAIProxy"))
-                        .bindText(AppSettings.instance::proxyUrl.toNonNullableProperty(""))
+                label(message("settings.openAIModel")).widthGroup("label")
+
+                cell(modelComboBox)
+                        .bindItem({ AppSettings.instance.openAIModelId }, {
+                            if (it != null) {
+                                AppSettings.instance.openAIModelId = it
+                            }
+                        })
                         .resizableColumn()
-                        .applyToComponent { minimumWidth = 300 }
+                        .align(Align.FILL)
+                button(message("settings.refreshModels")) {
+                    runBackgroundableTask(message("settings.loadingModels")) {
+                        runBlocking(Dispatchers.IO) {
+                            OpenAIService.instance.refreshOpenAIModelIds()
+                            modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIModelIds.naturalSorted()))
+                            modelComboBox.item = AppSettings.instance.openAIModelId
+                        }
+                    }
+                }
+                        .align(AlignX.RIGHT)
+                        .widthGroup("button")
+            }
+            row {
+                label(message("settings.openAIProxy")).widthGroup("label")
+                textField()
+                        .bindText(AppSettings.instance::proxyUrl.toNonNullableProperty(""))
+                        .applyToComponent { minimumWidth = 350 }
+                        .resizableColumn()
             }
         }
 
         group(JBLabel("Prompt")) {
             row {
+                label(message("settings.locale")).widthGroup("labelPrompt")
                 comboBox(Locale.getAvailableLocales().toList().sortedBy { it.displayName }, AppSettingsListCellRenderer())
-                        .label(message("settings.locale"))
                         .bindItem(AppSettings.instance::locale.toNullableProperty())
             }
             row {
+                label(message("settings.prompt")).widthGroup("labelPrompt")
                 promptComboBox = comboBox(AppSettings.instance.prompts.values, AppSettingsListCellRenderer())
-                        .label(message("settings.prompt"))
                         .bindItem(AppSettings.instance::currentPrompt.toNullableProperty())
             }
             row {

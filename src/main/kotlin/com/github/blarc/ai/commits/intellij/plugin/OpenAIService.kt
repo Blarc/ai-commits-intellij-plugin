@@ -19,11 +19,10 @@ class OpenAIService {
 
     @OptIn(BetaOpenAI::class)
     suspend fun generateCommitMessage(prompt: String, completions: Int): String {
-        val openAIModel = AppSettings.instance.openAIModel.id
         val openAI = OpenAI(AppSettings.instance.getOpenAIConfig())
 
         val chatCompletionRequest = ChatCompletionRequest(
-            ModelId(openAIModel),
+            ModelId(AppSettings.instance.openAIModelId),
             listOf(
                 ChatMessage(
                     role = ChatRole.User,
@@ -42,6 +41,12 @@ class OpenAIService {
         return completion.choices[0].message!!.content
 
     }
+
+    suspend fun refreshOpenAIModelIds() {
+        val openAI = OpenAI(AppSettings.instance.getOpenAIConfig())
+        AppSettings.instance.openAIModelIds=openAI.models().map { it.id.id }
+    }
+
     @Throws(Exception::class)
     suspend fun verifyToken(token: String){
         OpenAI(token).models()
