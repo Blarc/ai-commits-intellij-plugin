@@ -14,8 +14,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import com.knuddels.jtokkit.Encodings
-import com.knuddels.jtokkit.api.EncodingType
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -42,18 +40,13 @@ class AICommitAction : AnAction(), DumbAware {
                 return@runBackgroundableTask
             }
 
-            val prompt = AppSettings.instance.getPrompt(diff)
-            if (isPromptTooLarge(prompt)) {
-                sendNotification(Notification.promptTooLarge())
-                return@runBackgroundableTask
-            }
-
             if (commitMessage == null) {
                 sendNotification(Notification.noCommitMessage())
                 return@runBackgroundableTask
             }
 
             val openAIService = OpenAIService.instance
+            val prompt = AppSettings.instance.getPrompt(diff)
             runBlocking(Dispatchers.Main) {
                 try {
                     val generatedCommitMessage = openAIService.generateCommitMessage(prompt, 1)
@@ -104,11 +97,5 @@ class AICommitAction : AnAction(), DumbAware {
                 }
             }
             .joinToString("\n")
-    }
-
-    private fun isPromptTooLarge(prompt: String): Boolean {
-        val registry = Encodings.newDefaultEncodingRegistry()
-        val encoding = registry.getEncoding(EncodingType.CL100K_BASE)
-        return encoding.countTokens(prompt) > 4000
     }
 }
