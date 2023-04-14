@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add option to select OpenAI model.
+
+### Changed
+- Do not check if prompt is too large, but let OpenAI API do the validation.
 
 ## [0.7.0] - 2023-04-12
 
