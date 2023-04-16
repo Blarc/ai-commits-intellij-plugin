@@ -15,7 +15,6 @@ import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.util.maximumWidth
 import com.intellij.ui.util.minimumWidth
 import kotlinx.coroutines.*
 import java.util.*
@@ -97,6 +96,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 label(message("settings.locale")).widthGroup("labelPrompt")
                 comboBox(Locale.getAvailableLocales().toList().sortedBy { it.displayName }, AppSettingsListCellRenderer())
                         .bindItem(AppSettings.instance::locale.toNullableProperty())
+                browserLink(message("settings.more-prompts"), AICommitsBundle.URL_PROMPTS_DISCUSSION.toString())
+                        .align(AlignX.RIGHT)
             }
             row {
                 label(message("settings.prompt")).widthGroup("labelPrompt")

@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add more prompts button to settings.
+
 ### Changed
 - Use jtokkit library for getting max content length for a model and check if prompt is too large.
 
