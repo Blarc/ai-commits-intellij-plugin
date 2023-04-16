@@ -14,6 +14,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import com.knuddels.jtokkit.Encodings
+import com.knuddels.jtokkit.api.ModelType
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -40,20 +42,24 @@ class AICommitAction : AnAction(), DumbAware {
                 return@runBackgroundableTask
             }
 
+            val prompt = AppSettings.instance.getPrompt(diff)
+            if (isPromptTooLarge(prompt)) {
+                sendNotification(Notification.promptTooLarge())
+                return@runBackgroundableTask
+            }
+
             if (commitMessage == null) {
                 sendNotification(Notification.noCommitMessage())
                 return@runBackgroundableTask
             }
 
             val openAIService = OpenAIService.instance
-            val prompt = AppSettings.instance.getPrompt(diff)
             runBlocking(Dispatchers.Main) {
                 try {
                     val generatedCommitMessage = openAIService.generateCommitMessage(prompt, 1)
                     commitMessage.setCommitMessage(generatedCommitMessage)
                     AppSettings.instance.recordHit()
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     commitMessage.setCommitMessage(message("action.error"))
                     sendNotification(Notification.unsuccessfulRequest(e.message ?: message("action.unknown-error")))
                 }
@@ -62,40 +68,56 @@ class AICommitAction : AnAction(), DumbAware {
     }
 
     private fun computeDiff(
-        includedChanges: List<Change>,
-        project: Project
+            includedChanges: List<Change>,
+            project: Project
     ): String {
 
         val gitRepositoryManager = GitRepositoryManager.getInstance(project)
 
         // go through included changes, create a map of repository to changes and discard nulls
         val changesByRepository = includedChanges
-            .mapNotNull { change ->
-                change.virtualFile?.let { file ->
-                    gitRepositoryManager.getRepositoryForFileQuick(
-                        file
-                    ) to change
+                .mapNotNull { change ->
+                    change.virtualFile?.let { file ->
+                        gitRepositoryManager.getRepositoryForFileQuick(
+                                file
+                        ) to change
+                    }
                 }
-            }
-            .groupBy({ it.first }, { it.second })
+                .groupBy({ it.first }, { it.second })
 
 
         // compute diff for each repository
         return changesByRepository
-            .map { (repository, changes) ->
-                repository?.let {
-                    val filePatches = IdeaTextPatchBuilder.buildPatch(
-                        project,
-                        changes,
-                        repository.root.toNioPath(), false, true
-                    )
+                .map { (repository, changes) ->
+                    repository?.let {
+                        val filePatches = IdeaTextPatchBuilder.buildPatch(
+                                project,
+                                changes,
+                                repository.root.toNioPath(), false, true
+                        )
 
-                    val stringWriter = StringWriter()
-                    stringWriter.write("Repository: ${repository.root.path}\n")
-                    UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
-                    stringWriter.toString()
+                        val stringWriter = StringWriter()
+                        stringWriter.write("Repository: ${repository.root.path}\n")
+                        UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
+                        stringWriter.toString()
+                    }
                 }
-            }
-            .joinToString("\n")
+                .joinToString("\n")
+    }
+
+    private fun isPromptTooLarge(prompt: String): Boolean {
+        val registry = Encodings.newDefaultEncodingRegistry()
+
+        /*
+         * Try to find the model type based on the model id by finding the longest matching model type
+         * If no model type matches, let the request go through and let the OpenAI API handle it
+         */
+        val modelType = ModelType.values()
+                .filter { AppSettings.instance.openAIModelId.contains(it.name) }
+                .maxByOrNull { it.name.length }
+                ?: return false
+
+        val encoding = registry.getEncoding(modelType.encodingType)
+        return encoding.countTokens(prompt) > modelType.maxContextLength
     }
 }

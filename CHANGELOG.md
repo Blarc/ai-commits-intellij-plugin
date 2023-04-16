@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Use jtokkit library for getting max content length for a model and check if prompt is too large.
 
 ## [0.8.0] - 2023-04-14
 
