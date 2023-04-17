@@ -35,6 +35,9 @@ install the plugin and set OpenAI private token in plugin's settings:
 - Create your own prompt for commit message generation
 - Choose any of the models available in OpenAI API
 
+## Demo
+![demo.gif](./screenshots/plugin.gif)
+
 ## Compatibility
 IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
 
