@@ -34,6 +34,7 @@ install the plugin and set OpenAI private token in plugin's settings:
 - Compute diff only from the selected files and lines in the commit dialog
 - Create your own prompt for commit message generation
 - Choose any of the models available in OpenAI API
+- Set OpenAI network proxy
 
 ## Demo
 ![demo.gif](./screenshots/plugin.gif)
