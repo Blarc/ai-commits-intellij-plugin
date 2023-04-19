@@ -14,6 +14,7 @@ import com.intellij.openapi.ui.naturalSorted
 import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 import kotlinx.coroutines.*
@@ -23,14 +24,18 @@ import javax.swing.JPasswordField
 
 class AppSettingsConfigurable : BoundConfigurable(message("settings.general.group.title")) {
 
+    private val hostComboBox = ComboBox<String>()
     private val tokenPasswordField = JPasswordField()
     private val verifyLabel = JBLabel()
-    private var modelComboBox: ComboBox<String> = ComboBox<String>()
+    private val proxyTextField = JBTextField()
+    private var modelComboBox = ComboBox<String>()
     private val promptTable = PromptTable()
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: Cell<ComboBox<Prompt>>
 
     init {
+        hostComboBox.isEditable = true
+        hostComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIHosts.naturalSorted()))
         modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIModelIds.naturalSorted()))
         modelComboBox.renderer = AppSettingsListCellRenderer()
     }
@@ -38,6 +43,25 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     override fun createPanel() = panel {
 
         group(JBLabel("OpenAI")) {
+            row {
+                label(message("settings.openAIHost"))
+                        .widthGroup("label")
+
+                cell(hostComboBox)
+                        .bindItem(AppSettings.instance::openAIHost.toNullableProperty())
+                        .widthGroup("input")
+            }
+            row {
+                label(message("settings.openAIProxy")).widthGroup("label")
+                cell(proxyTextField)
+                        .bindText(AppSettings.instance::proxyUrl.toNonNullableProperty(""))
+                        .applyToComponent { minimumWidth = 400 }
+                        .resizableColumn()
+                        .widthGroup("input")
+            }
+            row {
+                comment(message("settings.openAIProxyComment"))
+            }
             row {
                 label(message("settings.openAIToken"))
                         .widthGroup("label")
@@ -81,16 +105,6 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 }
                         .align(AlignX.RIGHT)
                         .widthGroup("button")
-            }
-            row {
-                label(message("settings.openAIProxy")).widthGroup("label")
-                textField()
-                        .bindText(AppSettings.instance::proxyUrl.toNonNullableProperty(""))
-                        .applyToComponent { minimumWidth = 350 }
-                        .resizableColumn()
-            }
-            row {
-                comment(message("settings.openAIProxyComment"))
             }
         }
 
@@ -156,6 +170,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     }
 
     override fun apply() {
+        AppSettings.instance.openAIHosts.add(hostComboBox.item)
         promptTable.apply()
         super.apply()
     }
@@ -177,7 +192,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        OpenAIService.instance.verifyToken(String(tokenPasswordField.password))
+                        OpenAIService.instance.verifyOpenAIConfiguration(hostComboBox.item, String(tokenPasswordField.password), proxyTextField.text)
                         verifyLabel.text = message("settings.verify.valid")
                         verifyLabel.icon = AllIcons.General.InspectionsOK
                     } catch (e: OpenAIAPIException) {

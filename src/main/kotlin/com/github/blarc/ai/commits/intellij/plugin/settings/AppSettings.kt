@@ -1,6 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.aallam.openai.client.OpenAIConfig
+import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
@@ -25,11 +26,13 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     private val openAITokenTitle = "OpenAIToken"
     private var hits = 0
-
     @OptionTag(converter = LocaleConverter::class)
     var locale: Locale = Locale.ENGLISH
+
     var requestSupport = true
     var lastVersion: String? = null
+    var openAIHost: String = OpenAIHost.OpenAI.baseUrl
+    var openAIHosts: MutableSet<String> = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
     var proxyUrl: String? = null
 
     var prompts: MutableMap<String, Prompt> = initPrompts()
@@ -65,7 +68,11 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     fun getOpenAIConfig(): OpenAIConfig {
         val token = getOpenAIToken() ?: throw Exception("OpenAI Token is not set.")
-        return OpenAIConfig(token, proxy = proxyUrl?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) })
+        return OpenAIConfig(
+                token,
+                host = openAIHost.takeIf { it.isNotBlank() }?.let { OpenAIHost(it) } ?: OpenAIHost.OpenAI,
+                proxy = proxyUrl?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) }
+        )
     }
 
     fun getOpenAIToken(): String? {

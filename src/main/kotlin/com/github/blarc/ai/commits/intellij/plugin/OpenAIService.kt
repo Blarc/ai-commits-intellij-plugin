@@ -4,6 +4,9 @@ import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
+import com.aallam.openai.client.OpenAIConfig
+import com.aallam.openai.client.OpenAIHost
+import com.aallam.openai.client.ProxyConfig
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
@@ -48,7 +51,14 @@ class OpenAIService {
     }
 
     @Throws(Exception::class)
-    suspend fun verifyToken(token: String){
-        OpenAI(token).models()
+    suspend fun verifyOpenAIConfiguration(host: String, token: String, proxy: String?){
+
+        val config = OpenAIConfig(
+                token,
+                host = host.takeIf { it.isNotBlank() }?.let { OpenAIHost(it) } ?: OpenAIHost.OpenAI,
+                proxy = proxy?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) }
+        )
+        val openAI = OpenAI(config)
+        openAI.models()
     }
 }
