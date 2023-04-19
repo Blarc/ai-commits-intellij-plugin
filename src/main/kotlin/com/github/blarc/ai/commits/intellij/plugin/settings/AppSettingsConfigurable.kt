@@ -89,6 +89,9 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                         .applyToComponent { minimumWidth = 350 }
                         .resizableColumn()
             }
+            row {
+                comment(message("settings.openAIProxyComment"))
+            }
         }
 
         group(JBLabel("Prompt")) {
