@@ -14,12 +14,15 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        <p>AI Commits is a plugin that generates your commit messages with AI.</p>
+        <p>AI Commits is a plugin that generates your commit messages by using git diff and OpenAI.</p>
         <h3>Features</h3>
         <ul>
             <li>Generate commit message from diff using OpenAI API</li>
             <li>Compute diff only from the selected files and lines in the commit dialog</li>
             <li>Create your own prompt for commit message generation</li>
+            <li>Choose any of the models available in OpenAI API</li>
+            <li>Set OpenAI network proxy</li>
+            <li>Set custom OpenAI compatible API endpoint</li>
         </ul>
         <h3>Usage</h3>
         <p>To get started, install the plugin and set OpenAI private token in plugin's settings:
@@ -28,6 +31,14 @@
         <h3>Troubleshooting</h3>
         <p>We'd love to hear from you if you have any issues or feature requests. Please report them
         <a href="https://github.com/Blarc/ai-commits-intellij-plugin/issues">here</a>.</p>
+        <h3>Demo</h3>
+        <p>
+            <img
+            src="https://raw.githubusercontent.com/Blarc/ai-commits-intellij-plugin/dc45b4533e432ddde531c1a13bc9397c17d240ad/screenshots/plugin.gif"
+            border="0"
+            width="600"
+            alt="Demo.gif"/>
+         </p>
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.

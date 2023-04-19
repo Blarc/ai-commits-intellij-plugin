@@ -1,5 +1,3 @@
-
-
 <div align="center">
     <a href="https://plugins.jetbrains.com/plugin/21335-ai-commits">
         <img src="./src/main/resources/META-INF/pluginIcon.svg" width="200" height="200" alt="logo"/>
@@ -25,22 +23,27 @@
 [//]: # (- [Demo]&#40;#demo&#41;)
 
 ## Description
-AI Commits is a plugin that generates your commit messages with AI. To get started, 
-install the plugin and set OpenAI private token in plugin's settings:
-<kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
+
+AI Commits is a plugin that generates your commit messages by using git diff and OpenAI. To get started, install the
+plugin and set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
 
 ## Features
+
 - Generate commit message from diff using OpenAI API
 - Compute diff only from the selected files and lines in the commit dialog
 - Create your own prompt for commit message generation
 - Choose any of the models available in OpenAI API
 - Set OpenAI network proxy
+- Set custom OpenAI compatible API endpoint
 
 ## Demo
+
 ![demo.gif](./screenshots/plugin.gif)
 
 ## Compatibility
-IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio, DataSpell, Code With Me
+
+IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, DataGrip, Rider, MPS, Android Studio,
+DataSpell, Code With Me
 
 ## Install
 
@@ -50,19 +53,23 @@ IntelliJ IDEA, PhpStorm, WebStorm, PyCharm, RubyMine, AppCode, CLion, GoLand, Da
 
 Or you could install it inside your IDE:
 
-For Windows & Linux: <kbd>File</kbd> > <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AI Commits"</kbd> > <kbd>Install Plugin</kbd> > <kbd>Restart IntelliJ IDEA</kbd>
+For Windows & Linux: <kbd>File</kbd> > <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search
+for "AI Commits"</kbd> > <kbd>Install Plugin</kbd> > <kbd>Restart IntelliJ IDEA</kbd>
 
-For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AI Commits"</kbd> > <kbd>Install Plugin</kbd>  > <kbd>Restart IntelliJ IDEA</kbd>
-
+For Mac: <kbd>IntelliJ IDEA</kbd> > <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search
+for "AI Commits"</kbd> > <kbd>Install Plugin</kbd>  > <kbd>Restart IntelliJ IDEA</kbd>
 
 ### Installation from zip
+
 1. Download zip from [releases](https://github.com/Blarc/ai-commits-intellij-plugin/releases)
-2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from disk...</kbd>
+2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from
+   disk...</kbd>
 3. Set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
 
 [//]: # (## Demo)
 
 [//]: # ()
+
 [//]: # (![demo.gif]&#40;./screenshots/plugin2.gif&#41;)
 
 ## Support
