@@ -1,6 +1,10 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Host setting for custom OpenAI compatible API endpoint.
+- Proxy url hint in settings.
+- Updated plugin description.
 
 ## [0.9.0] - 2023-04-16
 
