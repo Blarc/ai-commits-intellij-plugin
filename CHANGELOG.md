@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Commit message generation does not respect locale.
 
 ## [1.0.0] - 2023-04-19
 

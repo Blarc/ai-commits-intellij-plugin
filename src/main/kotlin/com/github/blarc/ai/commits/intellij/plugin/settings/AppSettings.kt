@@ -49,7 +49,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     fun getPrompt(diff: String): String {
         var content = currentPrompt.content
-        content = content.replace("{locale}", locale.displayName)
+        content = content.replace("{locale}", locale.displayLanguage)
 
         return if (content.contains("{diff}")) {
             content.replace("{diff}", diff)

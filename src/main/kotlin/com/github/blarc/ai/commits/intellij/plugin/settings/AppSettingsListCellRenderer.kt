@@ -17,7 +17,7 @@ class AppSettingsListCellRenderer : DefaultListCellRenderer() {
     ): Component {
         val component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
         if (value is Locale) {
-            text = value.displayName
+            text = value.displayLanguage
         }
         if (value is Prompt) {
             text = value.name

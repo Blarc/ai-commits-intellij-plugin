@@ -111,7 +111,11 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
         group(JBLabel("Prompt")) {
             row {
                 label(message("settings.locale")).widthGroup("labelPrompt")
-                comboBox(Locale.getAvailableLocales().toList().sortedBy { it.displayName }, AppSettingsListCellRenderer())
+                comboBox(Locale.getAvailableLocales()
+                        .distinctBy { it.displayLanguage }
+                        .sortedBy { it.displayLanguage },
+                        AppSettingsListCellRenderer()
+                )
                         .bindItem(AppSettings.instance::locale.toNullableProperty())
                 browserLink(message("settings.more-prompts"), AICommitsBundle.URL_PROMPTS_DISCUSSION.toString())
                         .align(AlignX.RIGHT)
