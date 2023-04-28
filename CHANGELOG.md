@@ -1,8 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.1.0] - 2023-04-28
+
 ### Added
-- Add `{branch}` variable for prompt customisation. 
+- Add `{branch}` variable for prompt customisation.
 
 ### Fixed
 - Commit message generation does not respect locale.
@@ -100,7 +103,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.7.0...v0.8.0
