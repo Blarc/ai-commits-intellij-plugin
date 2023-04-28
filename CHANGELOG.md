@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add `{branch}` variable for prompt customisation. 
+
 ### Fixed
 - Commit message generation does not respect locale.
 

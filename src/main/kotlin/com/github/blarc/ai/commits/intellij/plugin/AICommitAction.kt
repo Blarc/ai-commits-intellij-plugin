@@ -36,13 +36,19 @@ class AICommitAction : AnAction(), DumbAware {
 
         runBackgroundableTask(message("action.background"), project) {
             val diff = computeDiff(includedChanges, project)
-
             if (diff.isBlank()) {
                 sendNotification(Notification.emptyDiff())
                 return@runBackgroundableTask
             }
 
-            val prompt = AppSettings.instance.getPrompt(diff)
+            var branch = commonBranch(includedChanges, project)
+            if (branch == null) {
+                sendNotification(Notification.noCommonBranch())
+                // hardcoded fallback branch
+                branch = "main"
+            }
+
+            val prompt = AppSettings.instance.getPrompt(diff, branch)
             if (isPromptTooLarge(prompt)) {
                 sendNotification(Notification.promptTooLarge())
                 return@runBackgroundableTask
@@ -119,5 +125,12 @@ class AICommitAction : AnAction(), DumbAware {
 
         val encoding = registry.getEncoding(modelType.encodingType)
         return encoding.countTokens(prompt) > modelType.maxContextLength
+    }
+
+    private fun commonBranch(changes: List<Change>, project: Project): String? {
+        val repositoryManager = GitRepositoryManager.getInstance(project)
+        return changes.map {
+            repositoryManager.getRepositoryForFileQuick(it.virtualFile)?.currentBranchName
+        }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
     }
 }

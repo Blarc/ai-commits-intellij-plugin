@@ -31,15 +31,15 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     var requestSupport = true
     var lastVersion: String? = null
-    var openAIHost: String = OpenAIHost.OpenAI.baseUrl
-    var openAIHosts: MutableSet<String> = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
+    var openAIHost = OpenAIHost.OpenAI.baseUrl
+    var openAIHosts = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
     var proxyUrl: String? = null
 
-    var prompts: MutableMap<String, Prompt> = initPrompts()
-    var currentPrompt: Prompt = prompts["basic"]!!
+    var prompts = initPrompts()
+    var currentPrompt = prompts["basic"]!!
 
-    var openAIModelId: String = "gpt-3.5-turbo"
-    var openAIModelIds: List<String> = listOf("gpt-3.5-turbo", "gpt-4")
+    var openAIModelId = "gpt-3.5-turbo"
+    var openAIModelIds = listOf("gpt-3.5-turbo", "gpt-4")
 
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
@@ -47,9 +47,10 @@ class AppSettings : PersistentStateComponent<AppSettings> {
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
-    fun getPrompt(diff: String): String {
+    fun getPrompt(diff: String, branch: String): String {
         var content = currentPrompt.content
         content = content.replace("{locale}", locale.displayLanguage)
+        content = content.replace("{branch}", branch)
 
         return if (content.contains("{diff}")) {
             content.replace("{diff}", diff)
