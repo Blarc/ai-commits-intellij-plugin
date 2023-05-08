@@ -41,6 +41,8 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var openAIModelId = "gpt-3.5-turbo"
     var openAIModelIds = listOf("gpt-3.5-turbo", "gpt-4")
 
+    var appExclusions: Set<String> = setOf()
+
     companion object {
         const val SERVICE_NAME = "com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"
         val instance: AppSettings
