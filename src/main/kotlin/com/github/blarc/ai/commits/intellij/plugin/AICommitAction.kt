@@ -82,6 +82,11 @@ class AICommitAction : AnAction(), DumbAware {
 
         // go through included changes, create a map of repository to changes and discard nulls
         val changesByRepository = includedChanges
+                .filter {
+                    it.virtualFile?.path?.let { path ->
+                        AICommitsUtils.isPathExcluded(path, project)
+                    } ?: false
+                }
                 .mapNotNull { change ->
                     change.virtualFile?.let { file ->
                         gitRepositoryManager.getRepositoryForFileQuick(

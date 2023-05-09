@@ -1,5 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
@@ -21,6 +22,10 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
 
     override fun loadState(state: ProjectSettings) {
         XmlSerializerUtil.copyBean(state, this)
+    }
+
+    fun isPathExcluded(path: String): Boolean {
+        return AICommitsUtils.matchesGlobs(path, projectExclusions)
     }
 
 

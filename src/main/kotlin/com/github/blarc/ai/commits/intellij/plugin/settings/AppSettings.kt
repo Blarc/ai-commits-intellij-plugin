@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.aallam.openai.client.OpenAIConfig
 import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
@@ -104,6 +105,10 @@ class AppSettings : PersistentStateComponent<AppSettings> {
         if (requestSupport && (hits == 50 || hits % 100 == 0)) {
             sendNotification(Notification.star())
         }
+    }
+
+    fun isPathExcluded(path: String): Boolean {
+        return AICommitsUtils.matchesGlobs(path, appExclusions)
     }
 
     private fun initPrompts() = mutableMapOf(
