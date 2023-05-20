@@ -78,6 +78,7 @@ for "AI Commits"</kbd> > <kbd>Install Plugin</kbd>  > <kbd>Restart IntelliJ IDEA
 * [Buy me a coffee](https://ko-fi.com/blarc)
 * [Rate the plugin](https://plugins.jetbrains.com/plugin/21335-ai-commits)
 * [Share the plugin](https://plugins.jetbrains.com/plugin/21335-ai-commits)
+* [Sponsor me](https://github.com/sponsors/Blarc)
 
 ## Change log
 
