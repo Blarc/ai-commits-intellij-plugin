@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2023-06-15
+
 ### Added
 - Add OpenAI temperature setting.
 - Update preset conventional commit prompt.
@@ -108,7 +110,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.8.0...v0.9.0
