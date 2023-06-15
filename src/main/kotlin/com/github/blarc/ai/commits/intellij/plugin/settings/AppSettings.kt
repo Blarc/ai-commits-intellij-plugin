@@ -41,6 +41,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     var openAIModelId = "gpt-3.5-turbo"
     var openAIModelIds = listOf("gpt-3.5-turbo", "gpt-4")
+    var openAITemperature = "0.7"
 
     var appExclusions: Set<String> = setOf()
 

@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Add OpenAI temperature setting.
+
 ## [1.1.0] - 2023-04-28
 
 ### Added

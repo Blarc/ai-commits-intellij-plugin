@@ -32,7 +32,7 @@ class OpenAIService {
                     content = prompt
                 )
             ),
-            temperature = 0.7,
+            temperature = AppSettings.instance.openAITemperature.toDouble(),
             topP = 1.0,
             frequencyPenalty = 0.0,
             presencePenalty = 0.0,
@@ -42,7 +42,6 @@ class OpenAIService {
 
         val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
         return completion.choices[0].message!!.content
-
     }
 
     suspend fun refreshOpenAIModelIds() {

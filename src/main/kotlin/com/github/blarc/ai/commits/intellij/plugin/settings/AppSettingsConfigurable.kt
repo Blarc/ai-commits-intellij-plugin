@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.PromptTable
+import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.progress.runBackgroundableTask
@@ -105,6 +106,25 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 }
                         .align(AlignX.RIGHT)
                         .widthGroup("button")
+            }
+
+            row {
+                label(message("settings.openAITemperature"))
+                        .widthGroup("label")
+
+                textField()
+                        .bindText(AppSettings.instance::openAITemperature)
+                        .applyToComponent { minimumWidth = 400 }
+                        .resizableColumn()
+                        .widthGroup("input")
+                        .validationOnInput { temperatureValid(it.text) }
+
+                contextHelp(message("settings.openAITemperatureComment"))
+            }
+
+            row {
+                cell(verifyLabel)
+                        .align(AlignX.RIGHT)
             }
         }
 
