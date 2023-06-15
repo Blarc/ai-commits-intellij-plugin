@@ -4,6 +4,7 @@
 
 ### Added
 - Add OpenAI temperature setting.
+- Update preset conventional commit prompt.
 
 ## [1.1.0] - 2023-04-28
 

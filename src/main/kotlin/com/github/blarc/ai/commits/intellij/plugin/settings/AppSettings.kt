@@ -125,14 +125,11 @@ class AppSettings : PersistentStateComponent<AppSettings> {
             // feat: generate unique UUIDs for game objects on Mine game start
             "conventional" to Prompt("Conventional",
                     "Prompt for commit message in the conventional commit convention.",
-                    "Write a clean and comprehensive commit message in the conventional commit convention. " +
-                            "I'll send you an output of 'git diff --staged' command, and you convert " +
-                            "it into a commit message. " +
-                            "Do NOT preface the commit with anything. " +
-                            "Do NOT add any descriptions to the commit, only commit message. " +
-                            "Use the present tense. " +
-                            "Lines must not be longer than 74 characters. " +
-                            "Use {locale} language to answer.\n" +
+                    "Write a commit message in the conventional commit convention. I'll send you an output " +
+                            "of 'git diff --staged' command, and you convert it into a commit message. " +
+                            "Lines must not be longer than 74 characters. Use {locale} language to answer. " +
+                            "End commit title with issue number if you can get it from the branch name: " +
+                            "{branch} in parenthesis.\n" +
                             "{diff}",
                     false),
             // ✨ feat(mine): Generate objects UUIDs and start team timers on game start
