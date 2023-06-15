@@ -18,6 +18,7 @@ import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 import kotlinx.coroutines.*
+import java.awt.event.KeyEvent
 import java.util.*
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JPasswordField
@@ -28,6 +29,15 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     private val tokenPasswordField = JPasswordField()
     private val verifyLabel = JBLabel()
     private val proxyTextField = JBTextField()
+    private val temperatureTextField = object : JBTextField() {
+        override fun processKeyEvent(e: KeyEvent) {
+            val text = text + e.keyChar
+            if (!text.matches("^[0-2](\\.)?(\\.\\d)?\$".toRegex()))
+                e.consume()
+            else
+                super.processKeyEvent(e)
+        }
+    }
     private var modelComboBox = ComboBox<String>()
     private val promptTable = PromptTable()
     private lateinit var toolbarDecorator: ToolbarDecorator
@@ -105,6 +115,23 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 }
                         .align(AlignX.RIGHT)
                         .widthGroup("button")
+            }
+
+            row {
+                label(message("settings.openAITemperature")).widthGroup("label")
+
+                cell(temperatureTextField)
+                        .bindText(AppSettings.instance::openAITemperature)
+                        .applyToComponent { minimumWidth = 400 }
+                        .resizableColumn()
+                        .widthGroup("input")
+            }
+
+            row {
+                comment(message("settings.openAITemperatureComment"))
+                        .align(AlignX.LEFT)
+                cell(verifyLabel)
+                        .align(AlignX.RIGHT)
             }
         }
 

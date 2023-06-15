@@ -7,6 +7,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
+import com.google.type.Decimal
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
 import com.intellij.ide.passwordSafe.PasswordSafe
@@ -41,6 +42,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     var openAIModelId = "gpt-3.5-turbo"
     var openAIModelIds = listOf("gpt-3.5-turbo", "gpt-4")
+    var openAITemperature: String = "0.7"
 
     var appExclusions: Set<String> = setOf()
 
