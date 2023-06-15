@@ -16,6 +16,18 @@ fun <T> createColumn(name: String, formatter: (T) -> String) : ColumnInfo<T, Str
 fun ValidationInfoBuilder.notBlank(value: String): ValidationInfo? =
         if (value.isBlank()) error(message("validation.required")) else null
 
+
+fun ValidationInfoBuilder.temperatureValid(value: String): ValidationInfo?  {
+    if (value.isNotBlank()) {
+        value.toFloatOrNull().let {
+            if (it != null && it in 0.0..2.0) {
+                return null
+            }
+        }
+    }
+    return error(message("validation.temperature"))
+}
+
 fun ValidationInfoBuilder.unique(value: String, existingValues: Set<String>): ValidationInfo? =
         if (existingValues.contains(value)) error(message("validation.unique")) else null
 
