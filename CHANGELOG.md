@@ -5,6 +5,7 @@
 ### Added
 - Add OpenAI temperature setting.
 - Update preset conventional commit prompt.
+- Add exclusion globs table to settings.
 
 ## [1.1.0] - 2023-04-28
 
