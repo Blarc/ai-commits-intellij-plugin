@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.2.1] - 2023-06-17
+
 ### Fixed
 - Set error message as commit message when OpenAI API returns error, because notification seems unreliable.
 
@@ -112,7 +115,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.9.0...v1.0.0
