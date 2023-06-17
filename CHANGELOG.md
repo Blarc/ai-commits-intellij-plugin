@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Set error message as commit message when OpenAI API returns error, because notification seems unreliable.
 
 ## [1.2.0] - 2023-06-15
 

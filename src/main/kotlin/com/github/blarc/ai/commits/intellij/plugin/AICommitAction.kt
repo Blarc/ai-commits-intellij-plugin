@@ -66,7 +66,7 @@ class AICommitAction : AnAction(), DumbAware {
                     commitMessage.setCommitMessage(generatedCommitMessage)
                     AppSettings.instance.recordHit()
                 } catch (e: Exception) {
-                    commitMessage.setCommitMessage(message("action.error"))
+                    commitMessage.setCommitMessage(e.message ?: message("action.error"))
                     sendNotification(Notification.unsuccessfulRequest(e.message ?: message("action.unknown-error")))
                 }
             }
