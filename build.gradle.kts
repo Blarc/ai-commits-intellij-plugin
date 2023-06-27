@@ -115,5 +115,5 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk8")
     }
     
-    implementation("com.knuddels:jtokkit:0.5.0")
+    implementation("com.knuddels:jtokkit:0.5.1")
 }
