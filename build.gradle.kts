@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.8.22"
+    id("org.jetbrains.kotlin.jvm") version "1.9.0"
     id("org.jetbrains.intellij") version "1.14.2"
 
     // Gradle Changelog Plugin
