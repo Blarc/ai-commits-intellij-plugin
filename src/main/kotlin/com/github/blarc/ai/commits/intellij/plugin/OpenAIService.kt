@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin
 
-import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
@@ -20,7 +19,6 @@ class OpenAIService {
             get() = ApplicationManager.getApplication().getService(OpenAIService::class.java)
     }
 
-    @OptIn(BetaOpenAI::class)
     suspend fun generateCommitMessage(prompt: String, completions: Int): String {
         val openAI = OpenAI(AppSettings.instance.getOpenAIConfig())
 
@@ -41,7 +39,7 @@ class OpenAIService {
         )
 
         val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        return completion.choices[0].message!!.content
+        return completion.choices[0].message.content ?: "API returned an empty response."
     }
 
     suspend fun refreshOpenAIModelIds() {

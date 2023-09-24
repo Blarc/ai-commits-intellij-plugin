@@ -98,7 +98,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    implementation("com.aallam.openai:openai-client:3.2.5") {
+    implementation("com.aallam.openai:openai-client:3.4.1") {
         exclude(group = "org.slf4j", module = "slf4j-api")
         // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation:when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
@@ -114,6 +114,6 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk7")
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk8")
     }
-    
+
     implementation("com.knuddels:jtokkit:0.6.1")
 }
