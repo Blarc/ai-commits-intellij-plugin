@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Update dependencies.
+- Change word order of comment about prompt setting.
 
 ## [1.2.1] - 2023-06-17
 
