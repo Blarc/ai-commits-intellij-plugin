@@ -51,18 +51,6 @@ class AppSettings : PersistentStateComponent<AppSettings> {
             get() = ApplicationManager.getApplication().getService(AppSettings::class.java)
     }
 
-    fun getPrompt(diff: String, branch: String): String {
-        var content = currentPrompt.content
-        content = content.replace("{locale}", locale.displayLanguage)
-        content = content.replace("{branch}", branch)
-
-        return if (content.contains("{diff}")) {
-            content.replace("{diff}", diff)
-        } else {
-            "$content\n$diff"
-        }
-    }
-
     fun saveOpenAIToken(token: String) {
         try {
             PasswordSafe.instance.setPassword(getCredentialAttributes(openAITokenTitle), token)
