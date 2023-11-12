@@ -2,10 +2,17 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.prompt
 
 import ai.grazie.utils.applyIf
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.commonBranch
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.isPromptTooLarge
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.github.blarc.ai.commits.intellij.plugin.unique
+import com.intellij.dvcs.repo.VcsRepositoryManager
+import com.intellij.ide.DataManager
+import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
@@ -13,10 +20,15 @@ import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.TableView
+import com.intellij.ui.util.minimumWidth
+import com.intellij.ui.util.preferredHeight
+import com.intellij.ui.util.preferredWidth
 import com.intellij.util.ui.ListTableModel
+import git4idea.branch.GitBranchWorker
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
+import kotlin.math.max
 
 class PromptTable {
     private var prompts = AppSettings.instance.prompts
@@ -98,20 +110,43 @@ class PromptTable {
         val promptNameTextField = JBTextField()
         val promptDescriptionTextField = JBTextField()
         val promptContentTextArea = JBTextArea()
+        val promptPreviewTextArea = JBTextArea()
+        lateinit var branch: String
+        lateinit var diff: String
 
         init {
             title = newPrompt?.let { message("settings.prompt.edit.title") } ?: message("settings.prompt.add.title")
             setOKButtonText(newPrompt?.let { message("actions.update") } ?: message("actions.add"))
-            setSize(700, 500)
 
             promptContentTextArea.wrapStyleWord = true
             promptContentTextArea.lineWrap = true
+            promptContentTextArea.rows = 15
+            promptContentTextArea.autoscrolls = false
 
             if (!prompt.canBeChanged) {
                 isOKActionEnabled = false
                 promptNameTextField.isEditable = false
                 promptDescriptionTextField.isEditable = false
                 promptContentTextArea.isEditable = false
+            }
+
+            promptPreviewTextArea.wrapStyleWord = true
+            promptPreviewTextArea.lineWrap = true
+            promptPreviewTextArea.isEditable = false
+            promptPreviewTextArea.rows = 25
+            promptPreviewTextArea.columns = 100
+            promptPreviewTextArea.autoscrolls = false
+
+            DataManager.getInstance().dataContextFromFocusAsync.onSuccess {
+                val project = it.getData(CommonDataKeys.PROJECT)
+                val changes = VcsRepositoryManager.getInstance(project!!).repositories.stream()
+                        .map { r -> GitBranchWorker.loadTotalDiff(r, r.currentBranchName!!) }
+                        .flatMap { r -> r.stream() }
+                        .toList()
+
+                branch = commonBranch(changes, project)
+                diff = computeDiff(changes, project)
+                setPreview(prompt.content)
             }
 
             init()
@@ -135,16 +170,29 @@ class PromptTable {
             row {
                 label(message("settings.prompt.content"))
             }
-            row() {
-                cell(promptContentTextArea)
-                        .align(Align.FILL)
+            row {
+                scrollCell(promptContentTextArea)
                         .bindText(prompt::content)
                         .validationOnApply { notBlank(it.text) }
-                        .resizableColumn()
-            }.resizableRow()
+                        .onChanged { setPreview(it.text)}
+                        .align(Align.FILL)
+            }
+            row {
+                label("Preview")
+            }
+            row {
+                scrollCell(promptPreviewTextArea)
+                        .align(Align.FILL)
+            }
             row {
                 comment(message("settings.prompt.comment"))
             }
+        }
+
+        private fun setPreview(promptContent: String) {
+            val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch)
+            promptPreviewTextArea.text = constructPrompt.substring(0, constructPrompt.length.coerceAtMost(10000))
+            promptPreviewTextArea.caretPosition = max(0, promptContentTextArea.caretPosition - 10)
         }
 
     }
