@@ -2,8 +2,11 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.util.ui.ColumnInfo
+import com.intellij.util.ui.ComponentWithEmptyText
+import javax.swing.JComponent
 
 fun <T> createColumn(name: String, formatter: (T) -> String) : ColumnInfo<T, String> {
     return object : ColumnInfo<T, String>(name) {
@@ -43,4 +46,10 @@ fun ValidationInfoBuilder.isLong(value: String): ValidationInfo? {
             return null
         }
     }
+}
+
+// Adds emptyText method to all cells that contain a component that implements ComponentWithEmptyText class
+fun <T>Cell<T>.emptyText(emptyText: String) : Cell<T> where T : JComponent, T : ComponentWithEmptyText {
+    this.component.emptyText.text = emptyText
+    return this
 }

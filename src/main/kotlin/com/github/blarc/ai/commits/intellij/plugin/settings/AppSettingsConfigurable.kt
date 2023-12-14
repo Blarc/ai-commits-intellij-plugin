@@ -4,6 +4,7 @@ import com.aallam.openai.api.exception.OpenAIAPIException
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
+import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.PromptTable
 import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
@@ -15,18 +16,18 @@ import com.intellij.openapi.ui.naturalSorted
 import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 import kotlinx.coroutines.*
 import java.util.*
 import javax.swing.DefaultComboBoxModel
-import javax.swing.JPasswordField
 
 class AppSettingsConfigurable : BoundConfigurable(message("settings.general.group.title")) {
 
     private val hostComboBox = ComboBox<String>()
-    private val tokenPasswordField = JPasswordField()
+    private val tokenPasswordField = JBPasswordField()
     private val verifyLabel = JBLabel()
     private val proxyTextField = JBTextField()
     private var modelComboBox = ComboBox<String>()
@@ -71,6 +72,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                                 { AppSettings.instance.getOpenAIToken().orEmpty() },
                                 { AppSettings.instance.saveOpenAIToken(it) }
                         )
+                        .emptyText(message("settings.openAITokenExample"))
                         .align(Align.FILL)
                         .resizableColumn()
                         .focused()

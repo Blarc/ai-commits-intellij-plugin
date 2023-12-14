@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Show example OpenAI token value when field is empty.
+
 ## [1.3.0] - 2023-11-11
 
 ### Changed
