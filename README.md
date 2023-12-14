@@ -38,7 +38,11 @@ plugin and set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > 
 
 ## Demo
 
-![demo.gif](./screenshots/plugin.gif)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./screenshots/plugin-dark.gif">
+  <source media="(prefers-color-scheme: light)" srcset="./screenshots/plugin-white.gif">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="./screenshots/plugin-white.gif">
+</picture>
 
 ## Compatibility
 
