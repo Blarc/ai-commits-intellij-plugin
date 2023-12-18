@@ -2,6 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
@@ -10,6 +11,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
         name = ProjectSettings.SERVICE_NAME,
         storages = [Storage("AICommit.xml")]
 )
+@Service(Service.Level.PROJECT)
 class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
 
     companion object {

@@ -60,19 +60,20 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"/>
-        <applicationService serviceImplementation="com.github.blarc.ai.commits.intellij.plugin.OpenAIService"/>
 
-        <projectService serviceImplementation="com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings"/>
 
         <applicationConfigurable
-            parentId="tools"
-            instance="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettingsConfigurable"/>
+                parentId="tools"
+                instance="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettingsConfigurable"
+                key="name"
+        />
 
         <projectConfigurable
                 parentId="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettingsConfigurable"
                 instance="com.github.blarc.ai.commits.intellij.plugin.settings.ExclusionsConfigurable"
                 id="com.github.blarc.ai.commits.intellij.plugin.settings.ExclusionsConfigurable"
-                key="settings.exclusions.group.title" />
+                key="settings.exclusions.group.title"
+        />
 
         <notificationGroup
                 id="ai.commits.notification.general"
@@ -85,7 +86,8 @@
                 key="notification.group.important.name"
         />
         <postStartupActivity
-                implementation="com.github.blarc.ai.commits.intellij.plugin.listeners.ApplicationStartupListener"/>
+                implementation="com.github.blarc.ai.commits.intellij.plugin.listeners.ApplicationStartupListener"
+        />
 
     </extensions>
 
