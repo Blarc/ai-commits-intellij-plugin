@@ -4,6 +4,7 @@
 
 ### Added
 - Show example OpenAI token value when field is empty.
+- Show prompt preview when editing a prompt.
 
 ## [1.3.0] - 2023-11-11
 
