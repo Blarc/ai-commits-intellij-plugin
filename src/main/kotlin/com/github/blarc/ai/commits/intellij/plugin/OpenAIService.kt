@@ -11,7 +11,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 
 
-@Service
+@Service(Service.Level.APP)
 class OpenAIService {
 
     companion object {
