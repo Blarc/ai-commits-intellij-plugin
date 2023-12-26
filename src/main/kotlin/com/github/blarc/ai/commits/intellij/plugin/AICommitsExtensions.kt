@@ -34,14 +34,14 @@ fun ValidationInfoBuilder.temperatureValid(value: String): ValidationInfo?  {
 fun ValidationInfoBuilder.unique(value: String, existingValues: Set<String>): ValidationInfo? =
         if (existingValues.contains(value)) error(message("validation.unique")) else null
 
-fun ValidationInfoBuilder.isLong(value: String): ValidationInfo? {
+fun ValidationInfoBuilder.isInt(value: String): ValidationInfo? {
     if (value.isBlank()){
         return null
     }
 
-    value.toLongOrNull().let {
+    value.toIntOrNull().let {
         if (it == null) {
-            return error(message("validation.number"))
+            return error(message("validation.integer"))
         } else {
             return null
         }
