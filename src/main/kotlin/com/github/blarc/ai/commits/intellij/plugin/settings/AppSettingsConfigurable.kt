@@ -1,13 +1,10 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.aallam.openai.api.exception.OpenAIAPIException
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
+import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.OpenAIService
-import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.PromptTable
-import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.progress.runBackgroundableTask
@@ -30,6 +27,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     private val tokenPasswordField = JBPasswordField()
     private val verifyLabel = JBLabel()
     private val proxyTextField = JBTextField()
+    private val socketTimeoutTextField = JBTextField()
     private var modelComboBox = ComboBox<String>()
     private val promptTable = PromptTable()
     private lateinit var toolbarDecorator: ToolbarDecorator
@@ -63,6 +61,15 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             }
             row {
                 comment(message("settings.openAIProxyComment"))
+            }
+            row {
+                label(message("settings.openAISocketTimeout")).widthGroup("label")
+                cell(socketTimeoutTextField)
+                    .bindText(AppSettings.instance::openAISocketTimeout)
+                    .applyToComponent { minimumWidth = 400 }
+                    .resizableColumn()
+                    .widthGroup("input")
+                    .validationOnInput { isInt(it.text) }
             }
             row {
                 label(message("settings.openAIToken"))
@@ -218,11 +225,14 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        OpenAIService.instance.verifyOpenAIConfiguration(hostComboBox.item, String(tokenPasswordField.password), proxyTextField.text)
+                        OpenAIService.instance.verifyOpenAIConfiguration(hostComboBox.item, String(tokenPasswordField.password), proxyTextField.text, socketTimeoutTextField.text)
                         verifyLabel.text = message("settings.verify.valid")
                         verifyLabel.icon = AllIcons.General.InspectionsOK
                     } catch (e: OpenAIAPIException) {
                         verifyLabel.text = message("settings.verify.invalid", e.statusCode)
+                        verifyLabel.icon = AllIcons.General.InspectionsError
+                    } catch (e: NumberFormatException) {
+                        verifyLabel.text = message("settings.verify.invalid", e.localizedMessage)
                         verifyLabel.icon = AllIcons.General.InspectionsError
                     } catch (e: Exception) {
                         verifyLabel.text = message("settings.verify.invalid", "Unknown")

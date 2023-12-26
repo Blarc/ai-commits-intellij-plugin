@@ -1,6 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin
 
 import com.aallam.openai.api.chat.*
+import com.aallam.openai.api.http.Timeout
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import com.aallam.openai.client.OpenAIConfig
@@ -9,6 +10,7 @@ import com.aallam.openai.client.ProxyConfig
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
+import kotlin.time.Duration.Companion.seconds
 
 
 @Service(Service.Level.APP)
@@ -48,12 +50,13 @@ class OpenAIService {
     }
 
     @Throws(Exception::class)
-    suspend fun verifyOpenAIConfiguration(host: String, token: String, proxy: String?){
+    suspend fun verifyOpenAIConfiguration(host: String, token: String, proxy: String?, socketTimeout: String){
 
         val config = OpenAIConfig(
                 token,
                 host = host.takeIf { it.isNotBlank() }?.let { OpenAIHost(it) } ?: OpenAIHost.OpenAI,
-                proxy = proxy?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) }
+                proxy = proxy?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) },
+                timeout = Timeout(socket = socketTimeout.toInt().seconds)
         )
         val openAI = OpenAI(config)
         openAI.models()
