@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- OpenAI session timeout setting.
 
 ## [1.4.0] - 2023-12-18
 
