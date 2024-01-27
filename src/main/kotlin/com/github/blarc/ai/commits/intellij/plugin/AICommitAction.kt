@@ -33,7 +33,7 @@ class AICommitAction : AnAction(), DumbAware {
         val commitMessage = VcsDataKeys.COMMIT_MESSAGE_CONTROL.getData(e.dataContext)
 
         runBackgroundableTask(message("action.background"), project) {
-            val diff = computeDiff(includedChanges, project)
+            val diff = computeDiff(includedChanges, false, project)
             if (diff.isBlank()) {
                 sendNotification(Notification.emptyDiff())
                 return@runBackgroundableTask

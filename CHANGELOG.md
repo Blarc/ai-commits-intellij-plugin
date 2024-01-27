@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Diff "before" and "after" is swapped in "Edit Prompt" settings window.
+
 ## [1.5.0] - 2023-12-26
 
 ### Added

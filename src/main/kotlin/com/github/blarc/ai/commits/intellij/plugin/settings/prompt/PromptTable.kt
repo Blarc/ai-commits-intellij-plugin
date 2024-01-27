@@ -145,7 +145,7 @@ class PromptTable {
                         .toList()
 
                 branch = commonBranch(changes, project)
-                diff = computeDiff(changes, project)
+                diff = computeDiff(changes, true, project)
                 setPreview(prompt.content)
             }
 

@@ -60,6 +60,7 @@ object AICommitsUtils {
 
     fun computeDiff(
             includedChanges: List<Change>,
+            reversePatch: Boolean,
             project: Project
     ): String {
 
@@ -89,7 +90,7 @@ object AICommitsUtils {
                         val filePatches = IdeaTextPatchBuilder.buildPatch(
                                 project,
                                 changes,
-                                repository.root.toNioPath(), false, true
+                                repository.root.toNioPath(), reversePatch, true
                         )
 
                         val stringWriter = StringWriter()
