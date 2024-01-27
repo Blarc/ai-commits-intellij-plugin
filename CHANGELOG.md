@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
+## [1.5.1] - 2024-01-27
+
 ### Fixed
+
 - Diff "before" and "after" is swapped in "Edit Prompt" settings window.
 
 ## [1.5.0] - 2023-12-26
@@ -161,7 +164,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.1...v1.3.0
