@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Selected prompt resets after editing custom prompt.
+
 ## [1.5.1] - 2024-01-27
 
 ### Fixed

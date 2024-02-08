@@ -163,8 +163,13 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                         }
                         .setEditAction {
                             promptTable.editPrompt()?.let {
+                                val editingSelected = promptComboBox.component.selectedItem == it.first
                                 promptComboBox.component.removeItem(it.first)
                                 promptComboBox.component.addItem(it.second)
+
+                                if (editingSelected) {
+                                    promptComboBox.component.selectedItem = it.second
+                                }
                             }
                         }
                         .setEditActionUpdater {
