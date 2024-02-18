@@ -17,7 +17,7 @@ import java.nio.file.FileSystems
 
 object AICommitsUtils {
 
-    fun isPathExcluded(path: String, project: Project) : Boolean {
+    fun isPathExcluded(path: String, project: Project): Boolean {
         return !AppSettings.instance.isPathExcluded(path) && !project.service<ProjectSettings>().isPathExcluded(path)
     }
 
@@ -32,16 +32,33 @@ object AICommitsUtils {
         return false
     }
 
-    fun constructPrompt(promptContent: String, diff: String, branch: String): String {
+    fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?): String {
         var content = promptContent
         content = content.replace("{locale}", AppSettings.instance.locale.displayLanguage)
         content = content.replace("{branch}", branch)
+        content = replaceHint(content, hint)
 
         return if (content.contains("{diff}")) {
             content.replace("{diff}", diff)
         } else {
             "$content\n$diff"
         }
+    }
+
+    fun replaceHint(promptContent: String, hint: String?): String {
+        val hintRegex = Regex("\\{[^{}]*(\\\$hint)[^{}]*}")
+
+        hintRegex.find(promptContent, 0)?.let {
+            if (!hint.isNullOrBlank()) {
+                var hintValue = it.value.replace("\$hint", hint)
+                hintValue = hintValue.replace("{", "")
+                hintValue = hintValue.replace("}", "")
+                return promptContent.replace(it.value, hintValue)
+            } else {
+                return promptContent.replace(it.value, "")
+            }
+        }
+        return promptContent.replace("{hint}", hint.orEmpty())
     }
 
     fun commonBranch(changes: List<Change>, project: Project): String {
@@ -59,47 +76,47 @@ object AICommitsUtils {
     }
 
     fun computeDiff(
-            includedChanges: List<Change>,
-            reversePatch: Boolean,
-            project: Project
+        includedChanges: List<Change>,
+        reversePatch: Boolean,
+        project: Project
     ): String {
 
         val gitRepositoryManager = GitRepositoryManager.getInstance(project)
 
         // go through included changes, create a map of repository to changes and discard nulls
         val changesByRepository = includedChanges
-                .filter {
-                    it.virtualFile?.path?.let { path ->
-                        AICommitsUtils.isPathExcluded(path, project)
-                    } ?: false
+            .filter {
+                it.virtualFile?.path?.let { path ->
+                    AICommitsUtils.isPathExcluded(path, project)
+                } ?: false
+            }
+            .mapNotNull { change ->
+                change.virtualFile?.let { file ->
+                    gitRepositoryManager.getRepositoryForFileQuick(
+                        file
+                    ) to change
                 }
-                .mapNotNull { change ->
-                    change.virtualFile?.let { file ->
-                        gitRepositoryManager.getRepositoryForFileQuick(
-                                file
-                        ) to change
-                    }
-                }
-                .groupBy({ it.first }, { it.second })
+            }
+            .groupBy({ it.first }, { it.second })
 
 
         // compute diff for each repository
         return changesByRepository
-                .map { (repository, changes) ->
-                    repository?.let {
-                        val filePatches = IdeaTextPatchBuilder.buildPatch(
-                                project,
-                                changes,
-                                repository.root.toNioPath(), reversePatch, true
-                        )
+            .map { (repository, changes) ->
+                repository?.let {
+                    val filePatches = IdeaTextPatchBuilder.buildPatch(
+                        project,
+                        changes,
+                        repository.root.toNioPath(), reversePatch, true
+                    )
 
-                        val stringWriter = StringWriter()
-                        stringWriter.write("Repository: ${repository.root.path}\n")
-                        UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
-                        stringWriter.toString()
-                    }
+                    val stringWriter = StringWriter()
+                    stringWriter.write("Repository: ${repository.root.path}\n")
+                    UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
+                    stringWriter.toString()
                 }
-                .joinToString("\n")
+            }
+            .joinToString("\n")
     }
 
     fun isPromptTooLarge(prompt: String): Boolean {
