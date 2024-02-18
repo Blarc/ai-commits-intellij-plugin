@@ -13,9 +13,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.vcs.VcsDataKeys
+import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import com.knuddels.jtokkit.Encodings
-import com.knuddels.jtokkit.api.ModelType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -30,7 +29,7 @@ class AICommitAction : AnAction(), DumbAware {
         }
 
         val includedChanges = commitWorkflowHandler.ui.getIncludedChanges()
-        val commitMessage = VcsDataKeys.COMMIT_MESSAGE_CONTROL.getData(e.dataContext)
+        val commitMessage = VcsDataKeys.COMMIT_MESSAGE_CONTROL.getData(e.dataContext) as CommitMessage?
 
         runBackgroundableTask(message("action.background"), project) {
             val diff = computeDiff(includedChanges, false, project)
@@ -40,7 +39,8 @@ class AICommitAction : AnAction(), DumbAware {
             }
 
             val branch = commonBranch(includedChanges, project)
-            val prompt = constructPrompt(AppSettings.instance.currentPrompt.content, diff, branch)
+            val hint = commitMessage?.text
+            val prompt = constructPrompt(AppSettings.instance.currentPrompt.content, diff, branch, hint)
             if (isPromptTooLarge(prompt)) {
                 sendNotification(Notification.promptTooLarge())
                 return@runBackgroundableTask

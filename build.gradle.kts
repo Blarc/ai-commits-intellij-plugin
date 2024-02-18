@@ -97,6 +97,10 @@ tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 }
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation("com.aallam.openai:openai-client:3.7.0") {
         exclude(group = "org.slf4j", module = "slf4j-api")
@@ -116,4 +120,9 @@ dependencies {
     }
 
     implementation("com.knuddels:jtokkit:1.0.0")
+
+    // tests
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

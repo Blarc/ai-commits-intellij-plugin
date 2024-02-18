@@ -5,7 +5,6 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.commonBranch
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.isPromptTooLarge
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
@@ -19,10 +18,8 @@ import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.text
 import com.intellij.ui.table.TableView
-import com.intellij.ui.util.minimumWidth
-import com.intellij.ui.util.preferredHeight
-import com.intellij.ui.util.preferredWidth
 import com.intellij.util.ui.ListTableModel
 import git4idea.branch.GitBranchWorker
 import java.awt.event.MouseAdapter
@@ -109,6 +106,7 @@ class PromptTable {
         val prompt = newPrompt ?: Prompt("")
         val promptNameTextField = JBTextField()
         val promptDescriptionTextField = JBTextField()
+        val promptHintTextField = JBTextField()
         val promptContentTextArea = JBTextArea()
         val promptPreviewTextArea = JBTextArea()
         lateinit var branch: String
@@ -146,7 +144,7 @@ class PromptTable {
 
                 branch = commonBranch(changes, project)
                 diff = computeDiff(changes, true, project)
-                setPreview(prompt.content)
+                setPreview(prompt.content, promptHintTextField.text)
             }
 
             init()
@@ -167,6 +165,13 @@ class PromptTable {
                         .bindText(prompt::description)
                         .validationOnApply { notBlank(it.text) }
             }
+            row(message("settings.prompt.hint")) {
+                cell(promptHintTextField)
+                    .align(Align.FILL)
+                    .text("This is a hint.")
+                    .onChanged { setPreview(promptContentTextArea.text, it.text) }
+                    .comment(message("settings.prompt.hint.comment"))
+            }
             row {
                 label(message("settings.prompt.content"))
             }
@@ -174,7 +179,7 @@ class PromptTable {
                 scrollCell(promptContentTextArea)
                         .bindText(prompt::content)
                         .validationOnApply { notBlank(it.text) }
-                        .onChanged { setPreview(it.text)}
+                        .onChanged { setPreview(it.text, promptHintTextField.text)}
                         .align(Align.FILL)
             }
             row {
@@ -189,8 +194,8 @@ class PromptTable {
             }
         }
 
-        private fun setPreview(promptContent: String) {
-            val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch)
+        private fun setPreview(promptContent: String, hint: String) {
+            val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch, hint)
             promptPreviewTextArea.text = constructPrompt.substring(0, constructPrompt.length.coerceAtMost(10000))
             promptPreviewTextArea.caretPosition = max(0, promptContentTextArea.caretPosition - 10)
         }

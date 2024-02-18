@@ -62,16 +62,16 @@ jobs:
           ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
 
       # Run tests
-#      - name: Run Tests
-#        run: ./gradlew test
+      - name: Run Tests
+        run: ./gradlew test
 
       # Collect Tests Result of failed tests
-#      - name: Collect Tests Result
-#        if: ${{ failure() }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: tests-result
-#          path: ${{ github.workspace }}/build/reports/tests
+      - name: Collect Tests Result
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-result
+          path: ${{ github.workspace }}/build/reports/tests
 
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache

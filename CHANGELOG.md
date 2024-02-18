@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Variable `{hint}' for prompt customization that is filled with content from commit message dialog.
+
 ### Fixed
 
 - Selected prompt resets after editing custom prompt.
