@@ -32,6 +32,7 @@ plugin and set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > 
 - Generate commit message from diff using OpenAI API
 - Compute diff only from the selected files and lines in the commit dialog
 - Create your own prompt for commit message generation
+- Use predefined variables and hint to customize your prompt
 - Choose any of the models available in OpenAI API
 - Set OpenAI network proxy
 - Set custom OpenAI compatible API endpoint
