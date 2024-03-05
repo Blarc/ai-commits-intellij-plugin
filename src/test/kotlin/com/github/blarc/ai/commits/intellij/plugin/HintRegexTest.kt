@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.DefaultPrompts
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

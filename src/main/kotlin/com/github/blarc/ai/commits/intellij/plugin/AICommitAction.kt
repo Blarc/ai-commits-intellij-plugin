@@ -54,7 +54,7 @@ class AICommitAction : AnAction(), DumbAware {
             val openAIService = OpenAIService.instance
             runBlocking(Dispatchers.Main) {
                 try {
-                    val generatedCommitMessage = openAIService.generateCommitMessage(prompt, 1)
+                    val generatedCommitMessage = openAIService.generateCommitMessage(prompt)
                     commitMessage.setCommitMessage(generatedCommitMessage)
                     AppSettings.instance.recordHit()
                 } catch (e: Exception) {

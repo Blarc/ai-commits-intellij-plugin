@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.prompt
+package com.github.blarc.ai.commits.intellij.plugin.settings.prompts
 
 import ai.grazie.utils.applyIf
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
