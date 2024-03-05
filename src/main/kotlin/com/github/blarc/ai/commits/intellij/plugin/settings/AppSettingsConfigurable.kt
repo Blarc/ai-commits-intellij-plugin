@@ -3,8 +3,8 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.aallam.openai.api.exception.OpenAIAPIException
 import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
-import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.PromptTable
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.progress.runBackgroundableTask
@@ -65,7 +65,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             row {
                 label(message("settings.openAISocketTimeout")).widthGroup("label")
                 cell(socketTimeoutTextField)
-                    .bindText(AppSettings.instance::openAISocketTimeout)
+                    .bindIntText(AppSettings.instance::openAISocketTimeout)
                     .applyToComponent { minimumWidth = 400 }
                     .resizableColumn()
                     .widthGroup("input")

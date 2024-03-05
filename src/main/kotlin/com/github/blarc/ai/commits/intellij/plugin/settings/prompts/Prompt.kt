@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.prompt
+package com.github.blarc.ai.commits.intellij.plugin.settings.prompts
 
 data class Prompt(
         var name: String = "",

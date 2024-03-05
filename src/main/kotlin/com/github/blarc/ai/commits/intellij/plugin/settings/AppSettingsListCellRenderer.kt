@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.aallam.openai.api.model.ModelId
-import com.github.blarc.ai.commits.intellij.plugin.settings.prompt.Prompt
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import java.awt.Component
 import java.util.*
 import javax.swing.DefaultListCellRenderer
