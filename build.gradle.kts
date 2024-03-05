@@ -122,7 +122,7 @@ dependencies {
     implementation("com.knuddels:jtokkit:1.0.0")
 
     // tests
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
