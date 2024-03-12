@@ -4,6 +4,9 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
+import com.intellij.credentialStore.CredentialAttributes
+import com.intellij.credentialStore.Credentials
+import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
 import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
@@ -127,11 +130,25 @@ object AICommitsUtils {
          * If no model type matches, let the request go through and let the OpenAI API handle it
          */
         val modelType = ModelType.entries
-            .filter { AppSettings.instance.openAIModelId.contains(it.name) }
+            .filter { AppSettings.instance.currentLlmProvider.modelId.contains(it.name) }
             .maxByOrNull { it.name.length }
             ?: return false
 
         val encoding = registry.getEncoding(modelType.encodingType)
         return encoding.countTokens(prompt) > modelType.maxContextLength
+    }
+
+    fun retrieveToken(title: String): String? {
+        val credentials: Credentials? = PasswordSafe.instance.get(getCredentialAttributes(title))
+        return credentials?.getPasswordAsString()
+    }
+
+    fun getCredentialAttributes(title: String): CredentialAttributes {
+        return CredentialAttributes(
+            title,
+            null,
+            this.javaClass,
+            false
+        )
     }
 }

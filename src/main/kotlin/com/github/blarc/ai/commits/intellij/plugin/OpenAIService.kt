@@ -15,15 +15,15 @@ class OpenAIService {
     }
 
     suspend fun generateCommitMessage(prompt: String): String {
-        return AppSettings.instance.AIProvider.generateCommitMessage(prompt)
+        return AppSettings.instance.currentLlmProvider.generateCommitMessage(prompt)
     }
 
     suspend fun refreshOpenAIModelIds() {
-        AppSettings.instance.AIProvider.refreshModels()
+        AppSettings.instance.currentLlmProvider.refreshModels()
     }
 
     @Throws(Exception::class)
     suspend fun verifyOpenAIConfiguration(host: String, proxy: String?, timeout: String, token: String){
-        AppSettings.instance.AIProvider.verifyConfiguration(host, proxy, timeout, token)
+        AppSettings.instance.currentLlmProvider.verifyConfiguration(host, proxy, timeout, token)
     }
 }

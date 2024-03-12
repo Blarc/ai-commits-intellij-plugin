@@ -35,8 +35,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
     init {
         hostComboBox.isEditable = true
-        hostComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIHosts.naturalSorted()))
-        modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIModelIds.naturalSorted()))
+        hostComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.currentLlmProvider.hosts.naturalSorted()))
+        modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.currentLlmProvider.modelIds.naturalSorted()))
         modelComboBox.renderer = AppSettingsListCellRenderer()
     }
 
@@ -45,19 +45,19 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
         group(JBLabel("OpenAI")) {
             row {
                 label(message("settings.openAIHost"))
-                        .widthGroup("label")
+                    .widthGroup("label")
 
                 cell(hostComboBox)
-                        .bindItem(AppSettings.instance::openAIHost.toNullableProperty())
-                        .widthGroup("input")
+                    .bindItem(AppSettings.instance.currentLlmProvider::host.toNullableProperty())
+                    .widthGroup("input")
             }
             row {
                 label(message("settings.openAIProxy")).widthGroup("label")
                 cell(proxyTextField)
-                        .bindText(AppSettings.instance::proxyUrl.toNonNullableProperty(""))
-                        .applyToComponent { minimumWidth = 400 }
-                        .resizableColumn()
-                        .widthGroup("input")
+                    .bindText(AppSettings.instance.currentLlmProvider::proxyUrl.toNonNullableProperty(""))
+                    .applyToComponent { minimumWidth = 400 }
+                    .resizableColumn()
+                    .widthGroup("input")
             }
             row {
                 comment(message("settings.openAIProxyComment"))
@@ -65,7 +65,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             row {
                 label(message("settings.openAISocketTimeout")).widthGroup("label")
                 cell(socketTimeoutTextField)
-                    .bindIntText(AppSettings.instance::openAISocketTimeout)
+                    .bindIntText(AppSettings.instance.currentLlmProvider::timeout)
                     .applyToComponent { minimumWidth = 400 }
                     .resizableColumn()
                     .widthGroup("input")
@@ -73,67 +73,67 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             }
             row {
                 label(message("settings.openAIToken"))
-                        .widthGroup("label")
+                    .widthGroup("label")
                 cell(tokenPasswordField)
-                        .bindText(
-                                { AppSettings.instance.getOpenAIToken().orEmpty() },
-                                { AppSettings.instance.saveOpenAIToken(it) }
-                        )
-                        .emptyText(message("settings.openAITokenExample"))
-                        .align(Align.FILL)
-                        .resizableColumn()
-                        .focused()
+                    .bindText(
+                        { AppSettings.instance.currentLlmProvider.token.orEmpty() },
+                        { AppSettings.instance.currentLlmProvider.token = it }
+                    )
+                    .emptyText(message("settings.openAITokenExample"))
+                    .align(Align.FILL)
+                    .resizableColumn()
+                    .focused()
                 button(message("settings.verifyToken")) { verifyToken() }
-                        .align(AlignX.RIGHT)
-                        .widthGroup("button")
+                    .align(AlignX.RIGHT)
+                    .widthGroup("button")
             }
             row {
                 comment(message("settings.openAITokenComment"))
-                        .align(AlignX.LEFT)
+                    .align(AlignX.LEFT)
                 cell(verifyLabel)
-                        .align(AlignX.RIGHT)
+                    .align(AlignX.RIGHT)
             }
             row {
                 label(message("settings.openAIModel")).widthGroup("label")
 
                 cell(modelComboBox)
-                        .bindItem({ AppSettings.instance.openAIModelId }, {
-                            if (it != null) {
-                                AppSettings.instance.openAIModelId = it
-                            }
-                        })
-                        .resizableColumn()
-                        .align(Align.FILL)
+                    .bindItem({ AppSettings.instance.currentLlmProvider.modelId }, {
+                        if (it != null) {
+                            AppSettings.instance.currentLlmProvider.modelId = it
+                        }
+                    })
+                    .resizableColumn()
+                    .align(Align.FILL)
                 button(message("settings.refreshModels")) {
                     runBackgroundableTask(message("settings.loadingModels")) {
                         runBlocking(Dispatchers.IO) {
                             OpenAIService.instance.refreshOpenAIModelIds()
-                            modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.openAIModelIds.naturalSorted()))
-                            modelComboBox.item = AppSettings.instance.openAIModelId
+                            modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.currentLlmProvider.modelIds.naturalSorted()))
+                            modelComboBox.item = AppSettings.instance.currentLlmProvider.modelId
                         }
                     }
                 }
-                        .align(AlignX.RIGHT)
-                        .widthGroup("button")
+                    .align(AlignX.RIGHT)
+                    .widthGroup("button")
             }
 
             row {
                 label(message("settings.openAITemperature"))
-                        .widthGroup("label")
+                    .widthGroup("label")
 
                 textField()
-                        .bindText(AppSettings.instance::openAITemperature)
-                        .applyToComponent { minimumWidth = 400 }
-                        .resizableColumn()
-                        .widthGroup("input")
-                        .validationOnInput { temperatureValid(it.text) }
+                    .bindText(AppSettings.instance.currentLlmProvider::temperature)
+                    .applyToComponent { minimumWidth = 400 }
+                    .resizableColumn()
+                    .widthGroup("input")
+                    .validationOnInput { temperatureValid(it.text) }
 
                 contextHelp(message("settings.openAITemperatureComment"))
             }
 
             row {
                 cell(verifyLabel)
-                        .align(AlignX.RIGHT)
+                    .align(AlignX.RIGHT)
             }
         }
 
@@ -141,54 +141,54 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             row {
                 label(message("settings.locale")).widthGroup("labelPrompt")
                 comboBox(Locale.getAvailableLocales()
-                        .distinctBy { it.displayLanguage }
-                        .sortedBy { it.displayLanguage },
-                        AppSettingsListCellRenderer()
+                    .distinctBy { it.displayLanguage }
+                    .sortedBy { it.displayLanguage },
+                    AppSettingsListCellRenderer()
                 )
-                        .bindItem(AppSettings.instance::locale.toNullableProperty())
+                    .bindItem(AppSettings.instance::locale.toNullableProperty())
                 browserLink(message("settings.more-prompts"), AICommitsBundle.URL_PROMPTS_DISCUSSION.toString())
-                        .align(AlignX.RIGHT)
+                    .align(AlignX.RIGHT)
             }
             row {
                 label(message("settings.prompt")).widthGroup("labelPrompt")
                 promptComboBox = comboBox(AppSettings.instance.prompts.values, AppSettingsListCellRenderer())
-                        .bindItem(AppSettings.instance::currentPrompt.toNullableProperty())
+                    .bindItem(AppSettings.instance::currentPrompt.toNullableProperty())
             }
             row {
                 toolbarDecorator = ToolbarDecorator.createDecorator(promptTable.table)
-                        .setAddAction {
-                            promptTable.addPrompt().let {
-                                promptComboBox.component.addItem(it)
-                            }
+                    .setAddAction {
+                        promptTable.addPrompt().let {
+                            promptComboBox.component.addItem(it)
                         }
-                        .setEditAction {
-                            promptTable.editPrompt()?.let {
-                                val editingSelected = promptComboBox.component.selectedItem == it.first
-                                promptComboBox.component.removeItem(it.first)
-                                promptComboBox.component.addItem(it.second)
+                    }
+                    .setEditAction {
+                        promptTable.editPrompt()?.let {
+                            val editingSelected = promptComboBox.component.selectedItem == it.first
+                            promptComboBox.component.removeItem(it.first)
+                            promptComboBox.component.addItem(it.second)
 
-                                if (editingSelected) {
-                                    promptComboBox.component.selectedItem = it.second
-                                }
+                            if (editingSelected) {
+                                promptComboBox.component.selectedItem = it.second
                             }
                         }
-                        .setEditActionUpdater {
-                            updateActionAvailability(CommonActionsPanel.Buttons.EDIT)
-                            true
+                    }
+                    .setEditActionUpdater {
+                        updateActionAvailability(CommonActionsPanel.Buttons.EDIT)
+                        true
+                    }
+                    .setRemoveAction {
+                        promptTable.removePrompt()?.let {
+                            promptComboBox.component.removeItem(it)
                         }
-                        .setRemoveAction {
-                            promptTable.removePrompt()?.let {
-                                promptComboBox.component.removeItem(it)
-                            }
-                        }
-                        .setRemoveActionUpdater {
-                            updateActionAvailability(CommonActionsPanel.Buttons.REMOVE)
-                            true
-                        }
-                        .disableUpDownActions()
+                    }
+                    .setRemoveActionUpdater {
+                        updateActionAvailability(CommonActionsPanel.Buttons.REMOVE)
+                        true
+                    }
+                    .disableUpDownActions()
 
                 cell(toolbarDecorator.createPanel())
-                        .align(Align.FILL)
+                    .align(Align.FILL)
             }.resizableRow()
         }.resizableRow()
 
@@ -208,7 +208,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     }
 
     override fun apply() {
-        AppSettings.instance.openAIHosts.add(hostComboBox.item)
+        AppSettings.instance.currentLlmProvider.hosts.add(hostComboBox.item)
         promptTable.apply()
         super.apply()
     }
