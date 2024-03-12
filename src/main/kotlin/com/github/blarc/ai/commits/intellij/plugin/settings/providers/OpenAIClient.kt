@@ -12,18 +12,18 @@ import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
 import kotlin.time.Duration.Companion.seconds
 
-class OpenAIProvider(
+data class OpenAIClient(
     override var host: String = OpenAIHost.OpenAI.baseUrl,
-    override var hosts: Set<String> = setOf(OpenAIHost.OpenAI.baseUrl),
+    override var hosts: MutableSet<String> = mutableSetOf(OpenAIHost.OpenAI.baseUrl),
     override var proxyUrl: String? = null,
     override var timeout: Int = 30,
     override var modelId: String = "gpt-3.5-turbo",
     override var modelIds: List<String> =  listOf("gpt-3.5-turbo", "gpt-4"),
     override var temperature: String = "0.7"
-) : AIProvider {
+) : LLMClient {
 
     companion object {
-        val instance = OpenAIProvider()
+        val instance = OpenAIClient()
     }
 
     override fun displayName() = "OpenAI"
