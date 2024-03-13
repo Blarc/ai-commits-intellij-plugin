@@ -7,7 +7,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.commonBranch
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
-import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.unique
 import com.intellij.dvcs.repo.VcsRepositoryManager
 import com.intellij.ide.DataManager
@@ -28,7 +28,7 @@ import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import kotlin.math.max
 
 class PromptTable {
-    private var prompts = AppSettings.instance.prompts
+    private var prompts = AppSettings2.instance.prompts
     private val tableModel = createTableModel()
 
     val table = TableView(tableModel).apply {
@@ -91,14 +91,14 @@ class PromptTable {
     }
 
     fun reset() {
-        prompts = AppSettings.instance.prompts
+        prompts = AppSettings2.instance.prompts
         refreshTableModel()
     }
 
-    fun isModified() = prompts != AppSettings.instance.prompts
+    fun isModified() = prompts != AppSettings2.instance.prompts
 
     fun apply() {
-        AppSettings.instance.prompts = prompts
+        AppSettings2.instance.prompts = prompts
     }
 
     private class PromptDialog(val prompts: Set<String>, val newPrompt: Prompt? = null) : DialogWrapper(true) {

@@ -35,8 +35,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
     init {
         hostComboBox.isEditable = true
-        hostComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.currentLlmProvider.hosts.naturalSorted()))
-        modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.currentLlmProvider.modelIds.naturalSorted()))
+        hostComboBox.model = DefaultComboBoxModel(Vector(AppSettings2.instance.getActiveLLMClient().hosts.naturalSorted()))
+        modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings2.instance.getActiveLLMClient().modelIds.naturalSorted()))
         modelComboBox.renderer = AppSettingsListCellRenderer()
     }
 
@@ -48,13 +48,13 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     .widthGroup("label")
 
                 cell(hostComboBox)
-                    .bindItem(AppSettings.instance.currentLlmProvider::host.toNullableProperty())
+                    .bindItem(AppSettings2.instance.getActiveLLMClient()::host.toNullableProperty())
                     .widthGroup("input")
             }
             row {
                 label(message("settings.openAIProxy")).widthGroup("label")
                 cell(proxyTextField)
-                    .bindText(AppSettings.instance.currentLlmProvider::proxyUrl.toNonNullableProperty(""))
+                    .bindText(AppSettings2.instance.getActiveLLMClient()::proxyUrl.toNonNullableProperty(""))
                     .applyToComponent { minimumWidth = 400 }
                     .resizableColumn()
                     .widthGroup("input")
@@ -65,7 +65,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             row {
                 label(message("settings.openAISocketTimeout")).widthGroup("label")
                 cell(socketTimeoutTextField)
-                    .bindIntText(AppSettings.instance.currentLlmProvider::timeout)
+                    .bindIntText(AppSettings2.instance.getActiveLLMClient()::timeout)
                     .applyToComponent { minimumWidth = 400 }
                     .resizableColumn()
                     .widthGroup("input")
@@ -76,8 +76,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     .widthGroup("label")
                 cell(tokenPasswordField)
                     .bindText(
-                        { AppSettings.instance.currentLlmProvider.token.orEmpty() },
-                        { AppSettings.instance.currentLlmProvider.token = it }
+                        { AppSettings2.instance.getActiveLLMClient().token.orEmpty() },
+                        { AppSettings2.instance.getActiveLLMClient().token = it }
                     )
                     .emptyText(message("settings.openAITokenExample"))
                     .align(Align.FILL)
@@ -97,9 +97,9 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 label(message("settings.openAIModel")).widthGroup("label")
 
                 cell(modelComboBox)
-                    .bindItem({ AppSettings.instance.currentLlmProvider.modelId }, {
+                    .bindItem({ AppSettings2.instance.getActiveLLMClient().modelId }, {
                         if (it != null) {
-                            AppSettings.instance.currentLlmProvider.modelId = it
+                            AppSettings2.instance.getActiveLLMClient().modelId = it
                         }
                     })
                     .resizableColumn()
@@ -108,8 +108,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     runBackgroundableTask(message("settings.loadingModels")) {
                         runBlocking(Dispatchers.IO) {
                             OpenAIService.instance.refreshOpenAIModelIds()
-                            modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings.instance.currentLlmProvider.modelIds.naturalSorted()))
-                            modelComboBox.item = AppSettings.instance.currentLlmProvider.modelId
+                            modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings2.instance.getActiveLLMClient().modelIds.naturalSorted()))
+                            modelComboBox.item = AppSettings2.instance.getActiveLLMClient().modelId
                         }
                     }
                 }
@@ -122,7 +122,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     .widthGroup("label")
 
                 textField()
-                    .bindText(AppSettings.instance.currentLlmProvider::temperature)
+                    .bindText(AppSettings2.instance.getActiveLLMClient()::temperature)
                     .applyToComponent { minimumWidth = 400 }
                     .resizableColumn()
                     .widthGroup("input")
@@ -145,14 +145,14 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     .sortedBy { it.displayLanguage },
                     AppSettingsListCellRenderer()
                 )
-                    .bindItem(AppSettings.instance::locale.toNullableProperty())
+                    .bindItem(AppSettings2.instance::locale.toNullableProperty())
                 browserLink(message("settings.more-prompts"), AICommitsBundle.URL_PROMPTS_DISCUSSION.toString())
                     .align(AlignX.RIGHT)
             }
             row {
                 label(message("settings.prompt")).widthGroup("labelPrompt")
-                promptComboBox = comboBox(AppSettings.instance.prompts.values, AppSettingsListCellRenderer())
-                    .bindItem(AppSettings.instance::currentPrompt.toNullableProperty())
+                promptComboBox = comboBox(AppSettings2.instance.prompts.values, AppSettingsListCellRenderer())
+                    .bindItem(AppSettings2.instance::currentPrompt.toNullableProperty())
             }
             row {
                 toolbarDecorator = ToolbarDecorator.createDecorator(promptTable.table)
@@ -208,7 +208,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     }
 
     override fun apply() {
-        AppSettings.instance.currentLlmProvider.hosts.add(hostComboBox.item)
+        AppSettings2.instance.getActiveLLMClient().hosts.add(hostComboBox.item)
         promptTable.apply()
         super.apply()
     }

@@ -3,7 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.notifications
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.openPluginSettings
-import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.intellij.ide.browsers.BrowserLauncher
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -31,10 +31,10 @@ data class Notification(
             """.trimIndent(),
             actions = setOf(
                 NotificationAction.openRepository() {
-                    service<AppSettings>().requestSupport = false;
+                    service<AppSettings2>().requestSupport = false;
                 },
                 NotificationAction.doNotAskAgain() {
-                    service<AppSettings>().requestSupport = false;
+                    service<AppSettings2>().requestSupport = false;
                 }
             )
         )

@@ -3,7 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.listeners
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
 
@@ -14,7 +14,7 @@ class ApplicationStartupListener : ProjectActivity {
         showVersionNotification(project)
     }
     private fun showVersionNotification(project: Project) {
-        val settings = AppSettings.instance
+        val settings = AppSettings2.instance
         val version = AICommitsBundle.plugin()?.version
 
         if (version == settings.lastVersion) {
