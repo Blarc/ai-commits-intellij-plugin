@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
@@ -21,7 +21,7 @@ import java.nio.file.FileSystems
 object AICommitsUtils {
 
     fun isPathExcluded(path: String, project: Project): Boolean {
-        return !AppSettings.instance.isPathExcluded(path) && !project.service<ProjectSettings>().isPathExcluded(path)
+        return !AppSettings2.instance.isPathExcluded(path) && !project.service<ProjectSettings>().isPathExcluded(path)
     }
 
     fun matchesGlobs(text: String, globs: Set<String>): Boolean {
@@ -37,7 +37,7 @@ object AICommitsUtils {
 
     fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?): String {
         var content = promptContent
-        content = content.replace("{locale}", AppSettings.instance.locale.displayLanguage)
+        content = content.replace("{locale}", AppSettings2.instance.locale.displayLanguage)
         content = content.replace("{branch}", branch)
         content = replaceHint(content, hint)
 
@@ -130,7 +130,7 @@ object AICommitsUtils {
          * If no model type matches, let the request go through and let the OpenAI API handle it
          */
         val modelType = ModelType.entries
-            .filter { AppSettings.instance.currentLlmProvider.modelId.contains(it.name) }
+            .filter { AppSettings2.instance.getActiveLLMClient().modelId.contains(it.name) }
             .maxByOrNull { it.name.length }
             ?: return false
 

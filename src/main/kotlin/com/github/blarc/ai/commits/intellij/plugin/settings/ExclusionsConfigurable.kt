@@ -17,7 +17,7 @@ import javax.swing.ListSelectionModel
 
 class ExclusionsConfigurable(val project: Project) : BoundConfigurable(message("settings.exclusions.group.title")) {
 
-    private var appExclusions = AppSettings.instance.appExclusions.toMutableSet()
+    private var appExclusions = AppSettings2.instance.appExclusions.toMutableSet()
     private var projectExclusions = project.service<ProjectSettings>().projectExclusions.toMutableSet()
 
     private val appTableModel = createTableModel()
@@ -104,19 +104,19 @@ class ExclusionsConfigurable(val project: Project) : BoundConfigurable(message("
 
     override fun reset() {
         super.reset()
-        appExclusions = AppSettings.instance.appExclusions.toMutableSet()
+        appExclusions = AppSettings2.instance.appExclusions.toMutableSet()
         projectExclusions = project.service<ProjectSettings>().projectExclusions.toMutableSet()
         refreshTableModel()
     }
 
     override fun apply() {
         super.apply()
-        AppSettings.instance.appExclusions = appExclusions
+        AppSettings2.instance.appExclusions = appExclusions
         project.service<ProjectSettings>().projectExclusions = projectExclusions
     }
     override fun isModified(): Boolean {
         return super.isModified() ||
-                appExclusions != AppSettings.instance.appExclusions.toList() ||
+                appExclusions != AppSettings2.instance.appExclusions.toList() ||
                 projectExclusions != project.service<ProjectSettings>().projectExclusions.toList()
     }
 

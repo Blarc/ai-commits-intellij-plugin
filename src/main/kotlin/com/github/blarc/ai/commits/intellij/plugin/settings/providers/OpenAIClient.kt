@@ -10,6 +10,7 @@ import com.aallam.openai.client.OpenAI
 import com.aallam.openai.client.OpenAIConfig
 import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
+import com.intellij.util.xmlb.annotations.Tag
 import kotlin.time.Duration.Companion.seconds
 
 data class OpenAIClient(
@@ -18,13 +19,9 @@ data class OpenAIClient(
     override var proxyUrl: String? = null,
     override var timeout: Int = 30,
     override var modelId: String = "gpt-3.5-turbo",
-    override var modelIds: List<String> =  listOf("gpt-3.5-turbo", "gpt-4"),
+    override var modelIds: List<String> = listOf("gpt-3.5-turbo", "gpt-4"),
     override var temperature: String = "0.7"
 ) : LLMClient {
-
-    companion object {
-        val instance = OpenAIClient()
-    }
 
     override fun displayName() = "OpenAI"
 

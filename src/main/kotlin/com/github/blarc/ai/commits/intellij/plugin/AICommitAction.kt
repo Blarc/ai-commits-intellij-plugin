@@ -7,7 +7,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.constructPromp
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.isPromptTooLarge
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.progress.runBackgroundableTask
@@ -40,7 +40,7 @@ class AICommitAction : AnAction(), DumbAware {
 
             val branch = commonBranch(includedChanges, project)
             val hint = commitMessage?.text
-            val prompt = constructPrompt(AppSettings.instance.currentPrompt.content, diff, branch, hint)
+            val prompt = constructPrompt(AppSettings2.instance.currentPrompt.content, diff, branch, hint)
             if (isPromptTooLarge(prompt)) {
                 sendNotification(Notification.promptTooLarge())
                 return@runBackgroundableTask
@@ -56,7 +56,7 @@ class AICommitAction : AnAction(), DumbAware {
                 try {
                     val generatedCommitMessage = openAIService.generateCommitMessage(prompt)
                     commitMessage.setCommitMessage(generatedCommitMessage)
-                    AppSettings.instance.recordHit()
+                    AppSettings2.instance.recordHit()
                 } catch (e: Exception) {
                     commitMessage.setCommitMessage(e.message ?: message("action.error"))
                     sendNotification(Notification.unsuccessfulRequest(e.message ?: message("action.unknown-error")))

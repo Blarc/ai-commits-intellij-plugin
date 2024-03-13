@@ -59,9 +59,6 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings"/>
-
-
         <applicationConfigurable
                 parentId="tools"
                 instance="com.github.blarc.ai.commits.intellij.plugin.settings.AppSettingsConfigurable"
