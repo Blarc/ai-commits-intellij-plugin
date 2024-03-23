@@ -43,13 +43,10 @@ data class Notification(
         fun promptTooLarge() = Notification(DEFAULT_TITLE, message = message("notifications.prompt-too-large"))
         fun unsuccessfulRequest(message: String) = Notification(message = message("notifications.unsuccessful-request", message))
         fun noCommitMessage() = Notification(message = message("notifications.no-commit-message"))
-        fun unableToSaveToken() = Notification(message = message("notifications.unable-to-save-token"))
+        fun unableToSaveToken(message: String?) = Notification(message = message("notifications.unable-to-save-token", message ?: "Unknown error"))
         fun noCommonBranch() = Notification(message = message("notifications.no-common-branch"))
 
     }
-
-    fun isTransient() = type == Type.TRANSIENT
-    fun isPersistent() = !isTransient();
 }
 
 data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) -> Unit) {
