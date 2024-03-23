@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.providers
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.aallam.openai.api.chat.ChatCompletion
 import com.aallam.openai.api.chat.ChatCompletionRequest
@@ -10,21 +10,18 @@ import com.aallam.openai.client.OpenAI
 import com.aallam.openai.client.OpenAIConfig
 import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
-import com.intellij.util.xmlb.annotations.Tag
 import kotlin.time.Duration.Companion.seconds
 
-data class OpenAIClient(
-    override var host: String = OpenAIHost.OpenAI.baseUrl,
-    override var hosts: MutableSet<String> = mutableSetOf(OpenAIHost.OpenAI.baseUrl),
-    override var proxyUrl: String? = null,
-    override var timeout: Int = 30,
-    override var modelId: String = "gpt-3.5-turbo",
-    override var modelIds: List<String> = listOf("gpt-3.5-turbo", "gpt-4"),
-    override var temperature: String = "0.7"
-) : LLMClient {
-
-    override fun displayName() = "OpenAI"
-
+class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
+    displayName,
+    OpenAIHost.OpenAI.baseUrl,
+    mutableSetOf(OpenAIHost.OpenAI.baseUrl),
+    null,
+    30,
+    "gpt-3.5-turbo",
+    listOf("gpt-3.5-turbo", "gpt-4"),
+    "0.7"
+) {
     override suspend fun generateCommitMessage(
         prompt: String
     ): String {

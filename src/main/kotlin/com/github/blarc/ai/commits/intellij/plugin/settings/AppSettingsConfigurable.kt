@@ -152,7 +152,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             row {
                 label(message("settings.prompt")).widthGroup("labelPrompt")
                 promptComboBox = comboBox(AppSettings2.instance.prompts.values, AppSettingsListCellRenderer())
-                    .bindItem(AppSettings2.instance::currentPrompt.toNullableProperty())
+                    .bindItem(AppSettings2.instance::activePrompt.toNullableProperty())
             }
             row {
                 toolbarDecorator = ToolbarDecorator.createDecorator(promptTable.table)

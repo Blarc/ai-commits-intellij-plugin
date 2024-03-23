@@ -40,7 +40,7 @@ class AICommitAction : AnAction(), DumbAware {
 
             val branch = commonBranch(includedChanges, project)
             val hint = commitMessage?.text
-            val prompt = constructPrompt(AppSettings2.instance.currentPrompt.content, diff, branch, hint)
+            val prompt = constructPrompt(AppSettings2.instance.activePrompt.content, diff, branch, hint)
             if (isPromptTooLarge(prompt)) {
                 sendNotification(Notification.promptTooLarge())
                 return@runBackgroundableTask

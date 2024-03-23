@@ -3,9 +3,10 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.OpenAIClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.TestAIClient
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
-import com.github.blarc.ai.commits.intellij.plugin.settings.providers.LLMClient
-import com.github.blarc.ai.commits.intellij.plugin.settings.providers.OpenAIClient
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
@@ -14,6 +15,8 @@ import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.OptionTag
+import com.intellij.util.xmlb.annotations.XCollection
+import com.intellij.util.xmlb.annotations.XMap
 import java.util.*
 
 @State(
@@ -38,13 +41,24 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     @OptionTag(converter = LocaleConverter::class)
     var locale: Locale = Locale.ENGLISH
 
-    private var activeLlmClient = "OpenAI"
-    var llmClients = mapOf(
-        "OpenAI" to OpenAIClient()
-    )
 
+    @XCollection(
+        elementTypes = [
+            OpenAIClient::class,
+            TestAIClient::class
+        ],
+        style = XCollection.Style.v2
+    )
+    var llmClients = setOf(
+        OpenAIClient(),
+        TestAIClient(),
+        TestAIClient("TestAI2")
+    )
+    private var activeLlmClient = "OpenAI"
+
+    @XMap
     var prompts = DefaultPrompts.toPromptsMap()
-    var currentPrompt = prompts["basic"]!!
+    var activePrompt = prompts["basic"]!!
 
     var appExclusions: Set<String> = setOf()
 
@@ -56,27 +70,32 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
 
     override fun noStateLoaded() {
         val appSettings = AppSettings.instance
+        migrateSettingsFromVersion1(appSettings)
+        val openAiLlmClient = llmClients.find { it.displayName == "OpenAI" }
+        migrateOpenAiClientFromVersion1(openAiLlmClient, appSettings)
+    }
 
-        // Migration from old settings
+    private fun migrateSettingsFromVersion1(appSettings: AppSettings) {
         hits = appSettings.hits
         locale = appSettings.locale
         lastVersion = appSettings.lastVersion
         requestSupport = appSettings.requestSupport
-
         prompts = appSettings.prompts
-        currentPrompt = appSettings.currentPrompt
-
+        activePrompt = appSettings.currentPrompt
         appExclusions = appSettings.appExclusions
+    }
 
-        // TODO: currentLlmClient vs OpenAIClient.instance()
-        llmClients["OpenAI"]?.host = appSettings.openAIHost
-        llmClients["OpenAI"]?.hosts = appSettings.openAIHosts
-        appSettings.openAISocketTimeout.toIntOrNull()?.let { llmClients["OpenAI"]?.timeout = it }
-        appSettings.proxyUrl?.let { llmClients["OpenAI"]?.proxyUrl = it }
-        llmClients["OpenAI"]?.modelId = appSettings.openAIModelId
-        llmClients["OpenAI"]?.modelIds = appSettings.openAIModelIds
-        llmClients["OpenAI"]?.temperature = appSettings.openAITemperature
-        AICommitsUtils.retrieveToken( appSettings.openAITokenTitle)?.let { llmClients["OpenAI"]?.token = it }
+    private fun migrateOpenAiClientFromVersion1(openAiLlmClient: LLMClient?, appSettings: AppSettings) {
+        openAiLlmClient?.apply {
+            host = appSettings.openAIHost
+            hosts = appSettings.openAIHosts
+            appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
+            proxyUrl = appSettings.proxyUrl
+            modelId = appSettings.openAIModelId
+            modelIds = appSettings.openAIModelIds
+            temperature = appSettings.openAITemperature
+            AICommitsUtils.retrieveToken(appSettings.openAITokenTitle)?.let { token = it }
+        }
     }
 
     fun recordHit() {
@@ -91,12 +110,12 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     }
 
     fun getActiveLLMClient(): LLMClient {
-        return llmClients[activeLlmClient]!!
+        return llmClients.find { it.displayName == activeLlmClient }!!
     }
 
     fun setActiveLlmClient(llmClientName: String) {
         // TODO @Blarc: Throw exception if llm client name is not valid
-        llmClients[llmClientName]?.let {
+        llmClients.find { it.displayName == llmClientName }?.let {
             activeLlmClient = llmClientName
         }
     }
