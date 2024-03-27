@@ -1,6 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.aallam.openai.api.model.ModelId
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import java.awt.Component
 import java.util.*
@@ -16,14 +17,22 @@ class AppSettingsListCellRenderer : DefaultListCellRenderer() {
         cellHasFocus: Boolean
     ): Component {
         val component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
-        if (value is Locale) {
-            text = value.displayLanguage
-        }
-        if (value is Prompt) {
-            text = value.name
-        }
-        if (value is ModelId) {
-            text = value.id
+        when (value) {
+            is Locale -> {
+                text = value.displayLanguage
+            }
+
+            is Prompt -> {
+                text = value.name
+            }
+
+            is ModelId -> {
+                text = value.id
+            }
+
+            is LLMClient -> {
+                text = value.displayName
+            }
         }
         return component
     }

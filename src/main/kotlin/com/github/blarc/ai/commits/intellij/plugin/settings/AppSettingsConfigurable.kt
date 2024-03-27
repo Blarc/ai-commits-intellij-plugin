@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.aallam.openai.api.exception.OpenAIAPIException
 import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
 import com.intellij.icons.AllIcons
@@ -29,7 +30,9 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     private val proxyTextField = JBTextField()
     private val socketTimeoutTextField = JBTextField()
     private var modelComboBox = ComboBox<String>()
+    private val llmClientTable = LLMClientTable()
     private val promptTable = PromptTable()
+    private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: Cell<ComboBox<Prompt>>
 
@@ -135,7 +138,20 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 cell(verifyLabel)
                     .align(AlignX.RIGHT)
             }
+
+            row {
+                llmClientToolbarDecorator = ToolbarDecorator.createDecorator(llmClientTable.table)
+                    .setAddAction {
+                        llmClientTable.addLlmClient()
+                    }
+                    .disableUpDownActions()
+
+                cell(llmClientToolbarDecorator.createPanel())
+                    .align(Align.FILL)
+            }
         }
+
+
 
         group(JBLabel("Prompt")) {
             row {

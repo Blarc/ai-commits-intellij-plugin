@@ -20,4 +20,7 @@ class TestAIClient(displayName: String = "TestAI") : LLMClient(
     override suspend fun verifyConfiguration(newHost: String, newProxy: String?, newTimeout: String, newToken: String) {
     }
 
+    override fun panel(): LLMClientPanel {
+        return TestAIClientPanel(this)
+    }
 }
