@@ -39,6 +39,8 @@ abstract class LLMClient(
         newToken: String
     )
 
+    abstract fun panel(): LLMClientPanel
+
     private fun saveToken(token: String) {
         try {
             PasswordSafe.instance.setPassword(getCredentialAttributes(displayName), token)

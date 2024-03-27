@@ -70,6 +70,10 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
         openAI.models()
     }
 
+    override fun panel(): LLMClientPanel {
+        return OpenAIClientPanel(this)
+    }
+
     private fun openAIConfig() = OpenAIConfig(
         token,
         host = host.takeIf { it.isNotBlank() }?.let { OpenAIHost(it) } ?: OpenAIHost.OpenAI,
