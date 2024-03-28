@@ -10,18 +10,34 @@ import com.aallam.openai.client.OpenAI
 import com.aallam.openai.client.OpenAIConfig
 import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
+import com.intellij.util.xmlb.annotations.Attribute
 import kotlin.time.Duration.Companion.seconds
 
 class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     displayName,
     OpenAIHost.OpenAI.baseUrl,
-    mutableSetOf(OpenAIHost.OpenAI.baseUrl),
     null,
     30,
     "gpt-3.5-turbo",
-    listOf("gpt-3.5-turbo", "gpt-4"),
     "0.7"
 ) {
+
+    companion object {
+        // TODO @Blarc: Static fields probably can't be attributes...
+        @Attribute
+        val hosts = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
+        @Attribute
+        val modelIds = mutableSetOf("gpt-3.5-turbo", "gpt-4")
+    }
+
+    override fun getHosts(): Set<String> {
+        return hosts
+    }
+
+    override fun getModelIds(): Set<String> {
+        return modelIds
+    }
+
     override suspend fun generateCommitMessage(
         prompt: String
     ): String {
@@ -49,7 +65,9 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
 
     override suspend fun refreshModels() {
         val openAI = OpenAI(openAIConfig())
-        modelIds = openAI.models().map { it.id.id }
+        openAI.models()
+            .map { it.id.id }
+            .forEach { modelIds.add(it) }
     }
 
     @Throws(Exception::class)

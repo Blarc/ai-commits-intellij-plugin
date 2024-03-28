@@ -7,7 +7,7 @@ import com.intellij.ui.dsl.builder.toNullableProperty
 
 class TestAIClientPanel(private val client: TestAIClient): LLMClientPanel {
 
-    private val hostComboBox = ComboBox(client.hosts.toTypedArray())
+    private val hostComboBox = ComboBox(client.getHosts().toTypedArray())
 
     override fun create() = panel {
         row {
