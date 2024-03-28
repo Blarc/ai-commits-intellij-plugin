@@ -7,18 +7,13 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotificatio
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
-import com.intellij.util.xmlb.annotations.XCollection
 
 abstract class LLMClient(
     @Attribute var displayName: String,
     @Attribute var host: String,
-    @XCollection(style = XCollection.Style.v2, elementName = "host")
-    var hosts: MutableSet<String>,
     @Attribute var proxyUrl: String?,
     @Attribute var timeout: Int,
     @Attribute var modelId: String,
-    @XCollection(style = XCollection.Style.v2, elementName = "modelId")
-    var modelIds: List<String>,
     @Attribute var temperature: String
 ) {
 
@@ -26,6 +21,10 @@ abstract class LLMClient(
     var token: String
         get() = retrieveToken(displayName) ?: ""
         set(token) = saveToken(token)
+
+    abstract fun getHosts(): Set<String>
+
+    abstract fun getModelIds(): Set<String>
 
     abstract suspend fun generateCommitMessage(prompt: String): String
 

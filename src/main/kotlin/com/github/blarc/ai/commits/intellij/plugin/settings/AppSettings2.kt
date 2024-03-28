@@ -88,14 +88,14 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     private fun migrateOpenAiClientFromVersion1(openAiLlmClient: LLMClient?, appSettings: AppSettings) {
         openAiLlmClient?.apply {
             host = appSettings.openAIHost
-            hosts = appSettings.openAIHosts
             appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
             proxyUrl = appSettings.proxyUrl
             modelId = appSettings.openAIModelId
-            modelIds = appSettings.openAIModelIds
             temperature = appSettings.openAITemperature
             AICommitsUtils.retrieveToken(appSettings.openAITokenTitle)?.let { token = it }
         }
+        OpenAIClient.hosts.addAll(appSettings.openAIHosts)
+        OpenAIClient.modelIds.addAll(appSettings.openAIModelIds)
     }
 
     fun recordHit() {

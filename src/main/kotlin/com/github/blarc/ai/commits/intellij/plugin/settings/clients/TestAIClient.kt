@@ -3,13 +3,19 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 class TestAIClient(displayName: String = "TestAI") : LLMClient(
     displayName,
     "testAiBaseUrl",
-    mutableSetOf("testAiBaseUrl"),
     null,
     30,
     "gpt-3.5-turbo",
-    listOf("gpt-3.5-turbo", "gpt-4"),
     "0.7"
 ) {
+    override fun getHosts(): Set<String> {
+        return mutableSetOf()
+    }
+
+    override fun getModelIds(): Set<String> {
+        return mutableSetOf()
+    }
+
     override suspend fun generateCommitMessage(prompt: String): String {
         return "hello world"
     }

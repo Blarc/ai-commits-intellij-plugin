@@ -1,144 +1,29 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
-import com.aallam.openai.api.exception.OpenAIAPIException
-import com.github.blarc.ai.commits.intellij.plugin.*
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.BoundConfigurable
-import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.openapi.ui.naturalSorted
 import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
-import com.intellij.ui.components.JBPasswordField
-import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.util.minimumWidth
-import kotlinx.coroutines.*
 import java.util.*
-import javax.swing.DefaultComboBoxModel
 
 class AppSettingsConfigurable : BoundConfigurable(message("settings.general.group.title")) {
 
-    private val hostComboBox = ComboBox<String>()
-    private val tokenPasswordField = JBPasswordField()
-    private val verifyLabel = JBLabel()
-    private val proxyTextField = JBTextField()
-    private val socketTimeoutTextField = JBTextField()
-    private var modelComboBox = ComboBox<String>()
     private val llmClientTable = LLMClientTable()
     private val promptTable = PromptTable()
     private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: Cell<ComboBox<Prompt>>
 
-    init {
-        hostComboBox.isEditable = true
-        hostComboBox.model = DefaultComboBoxModel(Vector(AppSettings2.instance.getActiveLLMClient().hosts.naturalSorted()))
-        modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings2.instance.getActiveLLMClient().modelIds.naturalSorted()))
-        modelComboBox.renderer = AppSettingsListCellRenderer()
-    }
-
     override fun createPanel() = panel {
 
         group(JBLabel("OpenAI")) {
-            row {
-                label(message("settings.openAIHost"))
-                    .widthGroup("label")
-
-                cell(hostComboBox)
-                    .bindItem(AppSettings2.instance.getActiveLLMClient()::host.toNullableProperty())
-                    .widthGroup("input")
-            }
-            row {
-                label(message("settings.openAIProxy")).widthGroup("label")
-                cell(proxyTextField)
-                    .bindText(AppSettings2.instance.getActiveLLMClient()::proxyUrl.toNonNullableProperty(""))
-                    .applyToComponent { minimumWidth = 400 }
-                    .resizableColumn()
-                    .widthGroup("input")
-            }
-            row {
-                comment(message("settings.openAIProxyComment"))
-            }
-            row {
-                label(message("settings.openAISocketTimeout")).widthGroup("label")
-                cell(socketTimeoutTextField)
-                    .bindIntText(AppSettings2.instance.getActiveLLMClient()::timeout)
-                    .applyToComponent { minimumWidth = 400 }
-                    .resizableColumn()
-                    .widthGroup("input")
-                    .validationOnInput { isInt(it.text) }
-            }
-            row {
-                label(message("settings.openAIToken"))
-                    .widthGroup("label")
-                cell(tokenPasswordField)
-                    .bindText(
-                        { AppSettings2.instance.getActiveLLMClient().token.orEmpty() },
-                        { AppSettings2.instance.getActiveLLMClient().token = it }
-                    )
-                    .emptyText(message("settings.openAITokenExample"))
-                    .align(Align.FILL)
-                    .resizableColumn()
-                    .focused()
-                button(message("settings.verifyToken")) { verifyToken() }
-                    .align(AlignX.RIGHT)
-                    .widthGroup("button")
-            }
-            row {
-                comment(message("settings.openAITokenComment"))
-                    .align(AlignX.LEFT)
-                cell(verifyLabel)
-                    .align(AlignX.RIGHT)
-            }
-            row {
-                label(message("settings.openAIModel")).widthGroup("label")
-
-                cell(modelComboBox)
-                    .bindItem({ AppSettings2.instance.getActiveLLMClient().modelId }, {
-                        if (it != null) {
-                            AppSettings2.instance.getActiveLLMClient().modelId = it
-                        }
-                    })
-                    .resizableColumn()
-                    .align(Align.FILL)
-                button(message("settings.refreshModels")) {
-                    runBackgroundableTask(message("settings.loadingModels")) {
-                        runBlocking(Dispatchers.IO) {
-                            OpenAIService.instance.refreshOpenAIModelIds()
-                            modelComboBox.model = DefaultComboBoxModel(Vector(AppSettings2.instance.getActiveLLMClient().modelIds.naturalSorted()))
-                            modelComboBox.item = AppSettings2.instance.getActiveLLMClient().modelId
-                        }
-                    }
-                }
-                    .align(AlignX.RIGHT)
-                    .widthGroup("button")
-            }
-
-            row {
-                label(message("settings.openAITemperature"))
-                    .widthGroup("label")
-
-                textField()
-                    .bindText(AppSettings2.instance.getActiveLLMClient()::temperature)
-                    .applyToComponent { minimumWidth = 400 }
-                    .resizableColumn()
-                    .widthGroup("input")
-                    .validationOnInput { temperatureValid(it.text) }
-
-                contextHelp(message("settings.openAITemperatureComment"))
-            }
-
-            row {
-                cell(verifyLabel)
-                    .align(AlignX.RIGHT)
-            }
-
             row {
                 llmClientToolbarDecorator = ToolbarDecorator.createDecorator(llmClientTable.table)
                     .setAddAction {
@@ -150,8 +35,6 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     .align(Align.FILL)
             }
         }
-
-
 
         group(JBLabel("Prompt")) {
             row {
@@ -224,7 +107,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     }
 
     override fun apply() {
-        AppSettings2.instance.getActiveLLMClient().hosts.add(hostComboBox.item)
+        // TODO @Blarc
+        // AppSettings2.instance.getActiveLLMClient().hosts.add(hostComboBox.item)
         promptTable.apply()
         super.apply()
     }
@@ -234,34 +118,4 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
         super.reset()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun verifyToken() {
-        runBackgroundableTask(message("settings.verify.running")) {
-            if (tokenPasswordField.password.isEmpty()) {
-                verifyLabel.icon = AllIcons.General.InspectionsError
-                verifyLabel.text = message("settings.verify.token-is-empty")
-            } else {
-                verifyLabel.icon = AllIcons.General.InlineRefreshHover
-                verifyLabel.text = message("settings.verify.running")
-
-                GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        OpenAIService.instance.verifyOpenAIConfiguration(hostComboBox.item, String(tokenPasswordField.password), proxyTextField.text, socketTimeoutTextField.text)
-                        verifyLabel.text = message("settings.verify.valid")
-                        verifyLabel.icon = AllIcons.General.InspectionsOK
-                    } catch (e: OpenAIAPIException) {
-                        verifyLabel.text = message("settings.verify.invalid", e.statusCode)
-                        verifyLabel.icon = AllIcons.General.InspectionsError
-                    } catch (e: NumberFormatException) {
-                        verifyLabel.text = message("settings.verify.invalid", e.localizedMessage)
-                        verifyLabel.icon = AllIcons.General.InspectionsError
-                    } catch (e: Exception) {
-                        verifyLabel.text = message("settings.verify.invalid", "Unknown")
-                        verifyLabel.icon = AllIcons.General.InspectionsError
-                    }
-                }
-            }
-        }
-
-    }
 }
