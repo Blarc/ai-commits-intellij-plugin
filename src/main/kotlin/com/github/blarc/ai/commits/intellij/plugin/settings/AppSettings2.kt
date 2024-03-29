@@ -54,6 +54,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         TestAIClient(),
         TestAIClient("TestAI2")
     )
+
     private var activeLlmClient = "OpenAI"
 
     @XMap
@@ -113,10 +114,10 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         return llmClients.find { it.displayName == activeLlmClient }!!
     }
 
-    fun setActiveLlmClient(llmClientName: String) {
+    fun setActiveLlmClient(llmClient: LLMClient) {
         // TODO @Blarc: Throw exception if llm client name is not valid
-        llmClients.find { it.displayName == llmClientName }?.let {
-            activeLlmClient = llmClientName
+        llmClients.find { it.displayName == llmClient.displayName }?.let {
+            activeLlmClient = llmClient.displayName
         }
     }
 

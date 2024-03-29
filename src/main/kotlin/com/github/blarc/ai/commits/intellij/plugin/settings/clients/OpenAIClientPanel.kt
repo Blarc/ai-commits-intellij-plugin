@@ -64,9 +64,9 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
             cell(tokenPasswordField)
                 .bindText(client::token)
                 .emptyText(message("settings.openAITokenExample"))
-                .align(Align.FILL)
                 .resizableColumn()
                 .focused()
+                .widthGroup("input")
             button(message("settings.verifyToken")) { verifyToken() }
                 .align(AlignX.RIGHT)
                 .widthGroup("button")
@@ -87,8 +87,8 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
                         client.modelId = it
                     }
                 })
+                .widthGroup("input")
                 .resizableColumn()
-                .align(Align.FILL)
             button(message("settings.refreshModels")) {
                 runBackgroundableTask(message("settings.loadingModels")) {
                     runBlocking(Dispatchers.IO) {
@@ -114,6 +114,8 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
                 .validationOnInput { temperatureValid(it.text) }
 
             contextHelp(message("settings.openAITemperatureComment"))
+                .resizableColumn()
+                .align(AlignX.LEFT)
         }
 
         row {
