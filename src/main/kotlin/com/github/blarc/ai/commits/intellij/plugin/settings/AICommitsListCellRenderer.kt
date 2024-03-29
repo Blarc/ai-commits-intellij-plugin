@@ -8,7 +8,7 @@ import java.util.*
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JList
 
-class AppSettingsListCellRenderer : DefaultListCellRenderer() {
+class AICommitsListCellRenderer : DefaultListCellRenderer() {
     override fun getListCellRendererComponent(
         list: JList<*>?,
         value: Any?,
