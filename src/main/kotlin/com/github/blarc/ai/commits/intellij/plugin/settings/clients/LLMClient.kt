@@ -15,8 +15,7 @@ abstract class LLMClient(
     @Attribute var timeout: Int,
     @Attribute var modelId: String,
     @Attribute var temperature: String
-) {
-
+) : Cloneable {
     @get:Transient
     var token: String
         get() = retrieveToken(displayName) ?: ""
@@ -29,6 +28,8 @@ abstract class LLMClient(
     abstract suspend fun generateCommitMessage(prompt: String): String
 
     abstract suspend fun refreshModels()
+
+    public abstract override fun clone(): LLMClient
 
     @Throws(Exception::class)
     abstract suspend fun verifyConfiguration(

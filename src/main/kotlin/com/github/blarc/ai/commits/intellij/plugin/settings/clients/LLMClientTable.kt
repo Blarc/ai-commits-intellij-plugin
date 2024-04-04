@@ -4,7 +4,9 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AICommitsListCellRenderer
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
+import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.JBCardLayout
 import com.intellij.ui.components.Panel
 import com.intellij.ui.dsl.builder.Align
@@ -12,6 +14,7 @@ import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.toNullableProperty
 import com.intellij.ui.table.TableView
+import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.ui.ListTableModel
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -65,13 +68,15 @@ class LLMClientTable {
 
     }
 
-    fun editLlmClient(): LLMClient? {
+    fun editLlmClient(): Pair<LLMClient, LLMClient>? {
         val selectedLlmClient = table.selectedObject ?: return null
-        val dialog = LLMClientDialog(selectedLlmClient)
+        val dialog = LLMClientDialog(selectedLlmClient.clone())
 
         if (dialog.showAndGet()) {
+            llmClients = llmClients.minus(selectedLlmClient)
+            llmClients = llmClients.plus(dialog.llmClient)
             refreshTableModel()
-            return selectedLlmClient
+            return selectedLlmClient to dialog.llmClient
         }
         return null
     }
@@ -95,6 +100,7 @@ class LLMClientTable {
         private val cardLayout = JBCardLayout()
         private val cardPanel = Panel(null, cardLayout)
         private val llmClients: List<LLMClient> = getLlmClients(newLlmClient)
+        private var currentLlmClientDisplayName: String = llmClients[0].displayName
         var llmClient = newLlmClient ?: llmClients[0]
 
         init {
@@ -104,8 +110,17 @@ class LLMClientTable {
             llmClients.forEach {
                 cardPanel.add(it.displayName, it.panel().create())
             }
-            cardLayout.show(cardPanel, llmClients[0].displayName)
+            cardLayout.show(cardPanel, currentLlmClientDisplayName)
+            (cardLayout.findComponentById(currentLlmClientDisplayName) as DialogPanel).registerValidators(myDisposable) {
+                isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
+            }
+
             init()
+        }
+
+        override fun doOKAction() {
+            (cardLayout.findComponentById(currentLlmClientDisplayName) as DialogPanel).apply()
+            super.doOKAction()
         }
 
         override fun createCenterPanel() = panel {
@@ -113,7 +128,10 @@ class LLMClientTable {
                 comboBox(llmClients, AICommitsListCellRenderer())
                     .align(Align.FILL)
                     .applyToComponent {
-                        addItemListener { cardLayout.show(cardPanel, (it.item as LLMClient).displayName) }
+                        addItemListener {
+                            currentLlmClientDisplayName = (it.item as LLMClient).displayName
+                            cardLayout.show(cardPanel, currentLlmClientDisplayName)
+                        }
                     }
                     .applyToComponent {
                         isEnabled = newLlmClient == null
