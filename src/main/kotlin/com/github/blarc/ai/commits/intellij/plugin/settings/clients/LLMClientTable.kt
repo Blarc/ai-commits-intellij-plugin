@@ -2,22 +2,21 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
-import com.github.blarc.ai.commits.intellij.plugin.settings.AICommitsListCellRenderer
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.openapi.ui.Splitter
+import com.intellij.openapi.ui.popup.ListItemDescriptorAdapter
 import com.intellij.ui.JBCardLayout
-import com.intellij.ui.components.Panel
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.bindItem
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toNullableProperty
+import com.intellij.ui.components.JBList
+import com.intellij.ui.popup.list.GroupedItemsListRenderer
 import com.intellij.ui.table.TableView
-import com.intellij.util.containers.ContainerUtil
+import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.ListTableModel
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import javax.swing.JComponent
+import javax.swing.JPanel
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class LLMClientTable {
@@ -97,50 +96,32 @@ class LLMClientTable {
     }
 
     private class LLMClientDialog(val newLlmClient: LLMClient? = null) : DialogWrapper(true) {
-        private val cardLayout = JBCardLayout()
-        private val cardPanel = Panel(null, cardLayout)
+
         private val llmClients: List<LLMClient> = getLlmClients(newLlmClient)
-        private var currentLlmClientDisplayName: String = llmClients[0].displayName
         var llmClient = newLlmClient ?: llmClients[0]
+
+        private val cardLayout = JBCardLayout().apply {
+            // Register validators of the currently active cards
+//            (findComponentById(llmClient.displayName) as DialogPanel).registerValidators(myDisposable) {
+//                isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
+//            }
+        }
 
         init {
             title = newLlmClient?.let { "Edit LLM Client" } ?: "Add LLM Client"
             setOKButtonText(newLlmClient?.let { message("actions.update") } ?: message("actions.add"))
-
-            llmClients.forEach {
-                cardPanel.add(it.displayName, it.panel().create())
-            }
-            cardLayout.show(cardPanel, currentLlmClientDisplayName)
-            (cardLayout.findComponentById(currentLlmClientDisplayName) as DialogPanel).registerValidators(myDisposable) {
-                isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
-            }
-
             init()
         }
 
         override fun doOKAction() {
-            (cardLayout.findComponentById(currentLlmClientDisplayName) as DialogPanel).apply()
+            (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).apply()
             super.doOKAction()
         }
 
-        override fun createCenterPanel() = panel {
-            row("Client") {
-                comboBox(llmClients, AICommitsListCellRenderer())
-                    .align(Align.FILL)
-                    .applyToComponent {
-                        addItemListener {
-                            currentLlmClientDisplayName = (it.item as LLMClient).displayName
-                            cardLayout.show(cardPanel, currentLlmClientDisplayName)
-                        }
-                    }
-                    .applyToComponent {
-                        isEnabled = newLlmClient == null
-                    }
-                    .bindItem(::llmClient.toNullableProperty())
-            }
-            row {
-                cell(cardPanel)
-            }
+        override fun createCenterPanel() = if (newLlmClient == null) {
+            createCardSplitter()
+        } else {
+            llmClient.panel().create()
         }
 
         private fun getLlmClients(newLLMClient: LLMClient?): List<LLMClient> {
@@ -152,6 +133,37 @@ class LLMClientTable {
                 )
             } else {
                 listOf(newLLMClient)
+            }
+        }
+
+        private fun createCardSplitter(): JComponent {
+            return Splitter(false, 0.25f).apply {
+
+                val cardPanel = JPanel(cardLayout).apply {
+                    preferredSize = JBUI.size(640, 480)
+                    llmClients.forEach {
+                        add(it.displayName, it.panel().create())
+                    }
+                }
+
+                val cardsList = JBList(llmClients).apply {
+                    val descriptor = object : ListItemDescriptorAdapter<LLMClient>() {
+                        override fun getTextFor(value: LLMClient) = value.displayName
+                        override fun getIconFor(value: LLMClient) = value.getIcon()
+                    }
+                    cellRenderer = object : GroupedItemsListRenderer<LLMClient>(descriptor) {
+                        override fun createItemComponent() = super.createItemComponent().apply {
+                            border = JBUI.Borders.empty(4, 4, 4, 10)
+                        }
+                    }
+                    addListSelectionListener {
+                        llmClient = selectedValue
+                        cardLayout.show(cardPanel, llmClient.displayName)
+                    }
+                }
+
+                firstComponent = cardsList
+                secondComponent = cardPanel
             }
         }
     }

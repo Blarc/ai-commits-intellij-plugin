@@ -1,5 +1,8 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
+import com.github.blarc.ai.commits.intellij.plugin.Icons
+import javax.swing.Icon
+
 data class TestAIClient(var name: String = "TestAI") : LLMClient(
     name,
     "testAiBaseUrl",
@@ -8,6 +11,11 @@ data class TestAIClient(var name: String = "TestAI") : LLMClient(
     "gpt-3.5-turbo",
     "0.7"
 ) {
+
+    override fun getIcon(): Icon {
+        return Icons.AI_COMMITS
+    }
+
     override fun getHosts(): Set<String> {
         return mutableSetOf()
     }

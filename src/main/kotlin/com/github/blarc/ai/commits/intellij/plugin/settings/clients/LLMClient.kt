@@ -7,6 +7,7 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotificatio
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
+import javax.swing.Icon
 
 abstract class LLMClient(
     @Attribute var displayName: String,
@@ -14,12 +15,14 @@ abstract class LLMClient(
     @Attribute var proxyUrl: String?,
     @Attribute var timeout: Int,
     @Attribute var modelId: String,
-    @Attribute var temperature: String
+    @Attribute var temperature: String,
 ) : Cloneable {
     @get:Transient
     var token: String
         get() = retrieveToken(displayName) ?: ""
         set(token) = saveToken(token)
+
+    abstract fun getIcon(): Icon
 
     abstract fun getHosts(): Set<String>
 
