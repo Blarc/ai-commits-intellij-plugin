@@ -70,6 +70,16 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
             .forEach { modelIds.add(it) }
     }
 
+    override fun clone(): LLMClient {
+        val copy = OpenAIClient(displayName)
+        copy.host = host
+        copy.proxyUrl = proxyUrl
+        copy.timeout = timeout
+        copy.modelId = modelId
+        copy.temperature = temperature
+        return copy
+    }
+
     @Throws(Exception::class)
     override suspend fun verifyConfiguration(
         newHost: String,

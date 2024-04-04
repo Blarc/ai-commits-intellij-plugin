@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
-class TestAIClient(displayName: String = "TestAI") : LLMClient(
-    displayName,
+data class TestAIClient(var name: String = "TestAI") : LLMClient(
+    name,
     "testAiBaseUrl",
     null,
     30,
@@ -21,6 +21,10 @@ class TestAIClient(displayName: String = "TestAI") : LLMClient(
     }
 
     override suspend fun refreshModels() {
+    }
+
+    override fun clone(): TestAIClient {
+        return copy()
     }
 
     override suspend fun verifyConfiguration(newHost: String, newProxy: String?, newTimeout: String, newToken: String) {

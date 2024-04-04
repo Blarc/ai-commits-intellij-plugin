@@ -40,7 +40,15 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                     llmClientTable.addLlmClient()
                 }
                 .setEditAction {
-                    llmClientTable.editLlmClient()
+                    llmClientTable.editLlmClient()?.let {
+                        val editingActive = llmClientComboBox.selectedItem == it.first
+                        llmClientComboBox.removeItem(it.first)
+                        llmClientComboBox.addItem(it.second)
+
+                        if (editingActive) {
+                            llmClientComboBox.selectedItem = it.second
+                        }
+                    }
                 }
                 .setRemoveAction {
                     llmClientTable.removeLlmClient()?.let {
