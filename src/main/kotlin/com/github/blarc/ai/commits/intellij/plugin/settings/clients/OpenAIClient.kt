@@ -10,7 +10,9 @@ import com.aallam.openai.client.OpenAI
 import com.aallam.openai.client.OpenAIConfig
 import com.aallam.openai.client.OpenAIHost
 import com.aallam.openai.client.ProxyConfig
+import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.intellij.util.xmlb.annotations.Attribute
+import javax.swing.Icon
 import kotlin.time.Duration.Companion.seconds
 
 class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
@@ -28,6 +30,10 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
         val hosts = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
         @Attribute
         val modelIds = mutableSetOf("gpt-3.5-turbo", "gpt-4")
+    }
+
+    override fun getIcon(): Icon {
+        return Icons.AI_COMMITS
     }
 
     override fun getHosts(): Set<String> {
