@@ -6,16 +6,19 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Splitter
+import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.ui.popup.ListItemDescriptorAdapter
 import com.intellij.ui.JBCardLayout
 import com.intellij.ui.components.JBList
 import com.intellij.ui.popup.list.GroupedItemsListRenderer
 import com.intellij.ui.table.TableView
+import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.ListTableModel
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
+import javax.swing.JList
 import javax.swing.JPanel
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
@@ -100,12 +103,7 @@ class LLMClientTable {
         private val llmClients: List<LLMClient> = getLlmClients(newLlmClient)
         var llmClient = newLlmClient ?: llmClients[0]
 
-        private val cardLayout = JBCardLayout().apply {
-            // Register validators of the currently active cards
-//            (findComponentById(llmClient.displayName) as DialogPanel).registerValidators(myDisposable) {
-//                isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
-//            }
-        }
+        private val cardLayout = JBCardLayout()
 
         init {
             title = newLlmClient?.let { "Edit LLM Client" } ?: "Add LLM Client"
@@ -146,20 +144,26 @@ class LLMClientTable {
                     }
                 }
 
+                // Register validators of the currently active cards
+                (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).registerValidators(myDisposable) {
+                    isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
+                }
+
                 val cardsList = JBList(llmClients).apply {
                     val descriptor = object : ListItemDescriptorAdapter<LLMClient>() {
                         override fun getTextFor(value: LLMClient) = value.displayName
                         override fun getIconFor(value: LLMClient) = value.getIcon()
                     }
                     cellRenderer = object : GroupedItemsListRenderer<LLMClient>(descriptor) {
-                        override fun createItemComponent() = super.createItemComponent().apply {
-                            border = JBUI.Borders.empty(4, 4, 4, 10)
+                        override fun customizeComponent(list: JList<out LLMClient>?, value: LLMClient?, isSelected: Boolean) {
+                            myTextLabel.border = JBUI.Borders.empty(4)
                         }
                     }
                     addListSelectionListener {
                         llmClient = selectedValue
                         cardLayout.show(cardPanel, llmClient.displayName)
                     }
+                    setSelectedValue(llmClient, true)
                 }
 
                 firstComponent = cardsList

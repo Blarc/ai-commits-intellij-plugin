@@ -4,4 +4,5 @@ import com.intellij.openapi.util.IconLoader
 
 object Icons {
     val AI_COMMITS = IconLoader.getIcon("/icons/aiCommits15.svg", javaClass)
+    val OPEN_AI = IconLoader.getIcon("/icons/openai.svg", javaClass)
 }
