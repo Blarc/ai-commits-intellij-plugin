@@ -33,7 +33,7 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     }
 
     override fun getIcon(): Icon {
-        return Icons.AI_COMMITS
+        return Icons.OPEN_AI
     }
 
     override fun getHosts(): Set<String> {
