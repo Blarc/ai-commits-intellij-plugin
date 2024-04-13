@@ -6,6 +6,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.0.0"
     id("org.jetbrains.intellij") version "1.17.3"
+    kotlin("plugin.serialization") version "1.9.23"
 
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.2.0"
@@ -102,18 +103,27 @@ tasks.test {
 }
 
 dependencies {
-    implementation("com.aallam.openai:openai-client:3.7.2") {
-        exclude(group = "org.slf4j", module = "slf4j-api")
-        // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation:when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-    }
-    implementation("io.ktor:ktor-client-cio:2.3.11") {
-        exclude(group = "org.slf4j", module = "slf4j-api")
-        // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation: when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-    }
+//    implementation("com.aallam.openai:openai-client:3.7.2") {
+//        exclude(group = "org.slf4j", module = "slf4j-api")
+//        // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation:when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
+//        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
+//    }
+//    implementation("io.ktor:ktor-client-cio:2.3.11") {
+//        exclude(group = "org.slf4j", module = "slf4j-api")
+//        // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation: when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
+//        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
+//    }
+//
+//    implementation("com.knuddels:jtokkit:1.0.0")
 
-    implementation("com.knuddels:jtokkit:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // langchain4j integrations
+    implementation("dev.langchain4j:langchain4j-open-ai:0.29.1")
+    implementation("dev.langchain4j:langchain4j-ollama:0.29.1")
+//    implementation("dev.langchain4j:langchain4j-hugging-face:0.28.0")
+//    implementation("dev.langchain4j:langchain4j-milvus:0.28.0")
+//    implementation("dev.langchain4j:langchain4j-local-ai:0.28.0")
 
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.2")

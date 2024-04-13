@@ -112,7 +112,9 @@ class LLMClientTable {
         }
 
         override fun doOKAction() {
-            (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).apply()
+            if (newLlmClient == null) {
+                (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).apply()
+            }
             super.doOKAction()
         }
 
@@ -120,11 +122,13 @@ class LLMClientTable {
             createCardSplitter()
         } else {
             llmClient.panel().create()
+        }.apply {
+            isResizable = false
         }
 
         private fun getLlmClients(newLLMClient: LLMClient?): List<LLMClient> {
             return if (newLLMClient == null) {
-                // TODO: Find a better way to create the list of all possible LLM Clients that implement LLMClient abstract class
+                // TODO(@Blarc): Is there a better way to create the list of all possible LLM Clients that implement LLMClient abstract class
                 listOf(
                     OpenAIClient(),
                     TestAIClient()

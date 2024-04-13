@@ -1,23 +1,20 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
-import com.aallam.openai.api.chat.ChatCompletion
-import com.aallam.openai.api.chat.ChatCompletionRequest
-import com.aallam.openai.api.chat.ChatMessage
-import com.aallam.openai.api.chat.ChatRole
-import com.aallam.openai.api.http.Timeout
-import com.aallam.openai.api.model.ModelId
-import com.aallam.openai.client.OpenAI
-import com.aallam.openai.client.OpenAIConfig
-import com.aallam.openai.client.OpenAIHost
-import com.aallam.openai.client.ProxyConfig
 import com.github.blarc.ai.commits.intellij.plugin.Icons
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.intellij.util.xmlb.annotations.Attribute
+import dev.langchain4j.data.message.UserMessage
+import dev.langchain4j.model.openai.OpenAiChatModel
+import dev.langchain4j.model.openai.OpenAiChatModelName
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.net.URI
+import java.time.Duration
 import javax.swing.Icon
-import kotlin.time.Duration.Companion.seconds
 
 class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     displayName,
-    OpenAIHost.OpenAI.baseUrl,
+    "https://api.openai.com/v1",
     null,
     30,
     "gpt-3.5-turbo",
@@ -27,9 +24,12 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     companion object {
         // TODO @Blarc: Static fields probably can't be attributes...
         @Attribute
-        val hosts = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
+        val hosts = mutableSetOf("https://api.openai.com/v1")
         @Attribute
-        val modelIds = mutableSetOf("gpt-3.5-turbo", "gpt-4")
+        val modelIds = OpenAiChatModelName.entries.stream()
+            .map { it.toString() }
+            .toList()
+            .toMutableSet()
     }
 
     override fun getIcon(): Icon {
@@ -47,33 +47,28 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     override suspend fun generateCommitMessage(
         prompt: String
     ): String {
+        val openAI = OpenAiChatModel.builder()
+            .apiKey(token)
+            .modelName(modelId)
+            .temperature(temperature.toDouble())
+            .timeout(Duration.ofSeconds(timeout.toLong()))
+            .baseUrl(AppSettings.instance.openAIHost)
+            .build()
 
-        val openAI = OpenAI(openAIConfig())
-        val chatCompletionRequest = ChatCompletionRequest(
-            ModelId(modelId),
+        val response = openAI.generate(
             listOf(
-                ChatMessage(
-                    role = ChatRole.User,
-                    content = prompt
+                UserMessage.from(
+                    "user",
+                    prompt
                 )
-            ),
-            temperature = temperature.toDouble(),
-            topP = 1.0,
-            frequencyPenalty = 0.0,
-            presencePenalty = 0.0,
-            maxTokens = 200,
-            n = 1
+            )
         )
-
-        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-        return completion.choices[0].message.content ?: "API returned an empty response."
+        return response.content().text()
     }
 
-    override suspend fun refreshModels() {
-        val openAI = OpenAI(openAIConfig())
-        openAI.models()
-            .map { it.id.id }
-            .forEach { modelIds.add(it) }
+    override fun getRefreshModelFunction(): (suspend () -> Unit)? {
+        // Model names are retrieved from Enum and do not need to be refreshed.
+        return null
     }
 
     override fun clone(): LLMClient {
@@ -86,32 +81,38 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
         return copy
     }
 
-    @Throws(Exception::class)
     override suspend fun verifyConfiguration(
         newHost: String,
         newProxy: String?,
         newTimeout: String,
+        newModelId: String,
         newToken: String
     ) {
 
-        val newConfig = OpenAIConfig(
-            newToken,
-            host = newHost.takeIf { it.isNotBlank() }?.let { OpenAIHost(it) } ?: OpenAIHost.OpenAI,
-            proxy = newProxy?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) },
-            timeout = Timeout(socket = newTimeout.toInt().seconds)
+        val openAiBuilder = OpenAiChatModel.builder()
+            .apiKey(newToken)
+            .modelName(newModelId)
+            .temperature(temperature.toDouble())
+            .timeout(Duration.ofSeconds(newTimeout.toLong()))
+
+        newHost.takeIf { it.isNotBlank() }?.let { openAiBuilder.baseUrl(it) }
+        newProxy?.takeIf { it.isNotBlank() }?.let {
+            val uri = URI(it)
+            openAiBuilder.proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(uri.host, uri.port)))
+        }
+
+        val openAi = openAiBuilder.build()
+        openAi.generate(
+            listOf(
+                UserMessage.from(
+                    "user",
+                    "t"
+                )
+            )
         )
-        val openAI = OpenAI(newConfig)
-        openAI.models()
     }
 
     override fun panel(): LLMClientPanel {
         return OpenAIClientPanel(this)
     }
-
-    private fun openAIConfig() = OpenAIConfig(
-        token,
-        host = host.takeIf { it.isNotBlank() }?.let { OpenAIHost(it) } ?: OpenAIHost.OpenAI,
-        proxy = proxyUrl?.takeIf { it.isNotBlank() }?.let { ProxyConfig.Http(it) },
-        timeout = Timeout(socket = timeout.seconds)
-    )
 }

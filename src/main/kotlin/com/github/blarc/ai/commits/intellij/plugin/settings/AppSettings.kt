@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
-import com.aallam.openai.client.OpenAIHost
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
@@ -29,8 +28,8 @@ class AppSettings : PersistentStateComponent<AppSettings> {
 
     var requestSupport = true
     var lastVersion: String? = null
-    var openAIHost = OpenAIHost.OpenAI.baseUrl
-    var openAIHosts = mutableSetOf(OpenAIHost.OpenAI.baseUrl)
+    var openAIHost = "https://api.openai.com/v1"
+    var openAIHosts = mutableSetOf("https://api.openai.com/v1")
     var openAISocketTimeout = "30"
     var proxyUrl: String? = null
 

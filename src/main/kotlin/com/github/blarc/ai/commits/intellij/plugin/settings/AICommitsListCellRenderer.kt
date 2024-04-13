@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
-import com.aallam.openai.api.model.ModelId
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import java.awt.Component
@@ -24,10 +23,6 @@ class AICommitsListCellRenderer : DefaultListCellRenderer() {
 
             is Prompt -> {
                 text = value.name
-            }
-
-            is ModelId -> {
-                text = value.id
             }
 
             is LLMClient -> {
