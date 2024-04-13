@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
-import com.aallam.openai.api.exception.OpenAIAPIException
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.isInt
@@ -14,7 +13,10 @@ import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
+import dev.ai4j.openai4j.OpenAiHttpException
 import kotlinx.coroutines.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import javax.swing.DefaultComboBoxModel
 
 class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
@@ -24,7 +26,7 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
     private val verifyLabel = JBLabel()
     private val proxyTextField = JBTextField()
     private val socketTimeoutTextField = JBTextField()
-    private var modelComboBox = ComboBox<String>()
+    private var modelComboBox = ComboBox(client.getModelIds().toTypedArray())
 
     override fun create() = panel {
         row {
@@ -74,8 +76,6 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
         row {
             comment(message("settings.openAITokenComment"))
                 .align(AlignX.LEFT)
-            cell(verifyLabel)
-                .align(AlignX.RIGHT)
         }
         row {
             label(message("settings.openAIModel"))
@@ -89,17 +89,21 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
                 })
                 .widthGroup("input")
                 .resizableColumn()
-            button(message("settings.refreshModels")) {
-                runBackgroundableTask(message("settings.loadingModels")) {
-                    runBlocking(Dispatchers.IO) {
-                        client.refreshModels()
-                        modelComboBox.model = DefaultComboBoxModel(client.getModelIds().naturalSorted().toTypedArray())
-                        modelComboBox.item = client.modelId
+
+
+            client.getRefreshModelFunction()?.let { f ->
+                button(message("settings.refreshModels")) {
+                    runBackgroundableTask(message("settings.loadingModels")) {
+                        runBlocking(Dispatchers.IO) {
+                            f.invoke()
+                            modelComboBox.model = DefaultComboBoxModel(client.getModelIds().naturalSorted().toTypedArray())
+                            modelComboBox.item = client.modelId
+                        }
                     }
                 }
+                    .align(AlignX.RIGHT)
+                    .widthGroup("button")
             }
-                .align(AlignX.RIGHT)
-                .widthGroup("button")
         }
 
         row {
@@ -120,8 +124,10 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
 
         row {
             cell(verifyLabel)
+                .applyToComponent { setAllowAutoWrapping(true) }
                 .align(AlignX.RIGHT)
         }
+
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -136,21 +142,25 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        client.verifyConfiguration(hostComboBox.item, proxyTextField.text, socketTimeoutTextField.text, String(tokenPasswordField.password))
+                        client.verifyConfiguration(hostComboBox.item, proxyTextField.text, socketTimeoutTextField.text, modelComboBox.item, String(tokenPasswordField.password))
                         verifyLabel.text = message("settings.verify.valid")
                         verifyLabel.icon = AllIcons.General.InspectionsOK
-                    } catch (e: OpenAIAPIException) {
-                        verifyLabel.text = message("settings.verify.invalid", e.statusCode)
-                        verifyLabel.icon = AllIcons.General.InspectionsError
-                    } catch (e: NumberFormatException) {
-                        verifyLabel.text = message("settings.verify.invalid", e.localizedMessage)
-                        verifyLabel.icon = AllIcons.General.InspectionsError
                     } catch (e: Exception) {
-                        verifyLabel.text = message("settings.verify.invalid", "Unknown")
+                        var errorMessage = e.localizedMessage
+                        if (e.cause is OpenAiHttpException) {
+                            val openAiError = Json.decodeFromString<OpenAiErrorWrapper>((e.cause as OpenAiHttpException).message!!).error
+                            errorMessage = openAiError.code
+                        }
+                        verifyLabel.text = message("settings.verify.invalid", errorMessage)
                         verifyLabel.icon = AllIcons.General.InspectionsError
                     }
                 }
             }
         }
     }
+
+    @Serializable
+    data class OpenAiError(val message: String?, val type: String?, val param: String?, val code: String?)
+    @Serializable
+    data class OpenAiErrorWrapper(val error: OpenAiError)
 }

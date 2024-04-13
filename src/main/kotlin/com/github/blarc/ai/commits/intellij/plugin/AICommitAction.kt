@@ -51,10 +51,10 @@ class AICommitAction : AnAction(), DumbAware {
                 return@runBackgroundableTask
             }
 
-            val openAIService = OpenAIService.instance
+            val llmClient = AppSettings2.instance.getActiveLLMClient()
             runBlocking(Dispatchers.Main) {
                 try {
-                    val generatedCommitMessage = openAIService.generateCommitMessage(prompt)
+                    val generatedCommitMessage = llmClient.generateCommitMessage(prompt)
                     commitMessage.setCommitMessage(generatedCommitMessage)
                     AppSettings2.instance.recordHit()
                 } catch (e: Exception) {

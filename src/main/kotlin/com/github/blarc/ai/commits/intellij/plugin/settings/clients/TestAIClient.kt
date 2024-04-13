@@ -28,14 +28,15 @@ data class TestAIClient(var name: String = "TestAI") : LLMClient(
         return "hello world"
     }
 
-    override suspend fun refreshModels() {
+    override fun getRefreshModelFunction(): (suspend () -> Unit)? {
+        return null
     }
 
     override fun clone(): TestAIClient {
         return copy()
     }
 
-    override suspend fun verifyConfiguration(newHost: String, newProxy: String?, newTimeout: String, newToken: String) {
+    override suspend fun verifyConfiguration(newHost: String, newProxy: String?, newTimeout: String, newModelId: String, newToken: String) {
     }
 
     override fun panel(): LLMClientPanel {

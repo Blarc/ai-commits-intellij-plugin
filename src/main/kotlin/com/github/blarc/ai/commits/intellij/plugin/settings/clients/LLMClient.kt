@@ -30,7 +30,7 @@ abstract class LLMClient(
 
     abstract suspend fun generateCommitMessage(prompt: String): String
 
-    abstract suspend fun refreshModels()
+    abstract fun getRefreshModelFunction(): (suspend () -> Unit)?
 
     public abstract override fun clone(): LLMClient
 
@@ -39,6 +39,7 @@ abstract class LLMClient(
         newHost: String,
         newProxy: String?,
         newTimeout: String,
+        newModelId: String,
         newToken: String
     )
 
