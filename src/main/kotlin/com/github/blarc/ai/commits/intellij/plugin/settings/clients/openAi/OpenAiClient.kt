@@ -1,18 +1,18 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
-import com.intellij.util.xmlb.annotations.Attribute
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
+import com.intellij.openapi.components.service
 import dev.langchain4j.data.message.UserMessage
 import dev.langchain4j.model.openai.OpenAiChatModel
-import dev.langchain4j.model.openai.OpenAiChatModelName
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.URI
 import java.time.Duration
 import javax.swing.Icon
 
-class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
+class OpenAiClient(displayName: String = "OpenAI") : LLMClient(
     displayName,
     "https://api.openai.com/v1",
     null,
@@ -20,28 +20,16 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     "gpt-3.5-turbo",
     "0.7"
 ) {
-
-    companion object {
-        // TODO @Blarc: Static fields probably can't be attributes...
-        @Attribute
-        val hosts = mutableSetOf("https://api.openai.com/v1")
-        @Attribute
-        val modelIds = OpenAiChatModelName.entries.stream()
-            .map { it.toString() }
-            .toList()
-            .toMutableSet()
-    }
-
     override fun getIcon(): Icon {
         return Icons.OPEN_AI
     }
 
     override fun getHosts(): Set<String> {
-        return hosts
+        return service<OpenAiClientService>().hosts
     }
 
     override fun getModelIds(): Set<String> {
-        return modelIds
+        return service<OpenAiClientService>().modelIds
     }
 
     override suspend fun generateCommitMessage(
@@ -72,7 +60,7 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
     }
 
     override fun clone(): LLMClient {
-        val copy = OpenAIClient(displayName)
+        val copy = OpenAiClient(displayName)
         copy.host = host
         copy.proxyUrl = proxyUrl
         copy.timeout = timeout
@@ -112,7 +100,5 @@ class OpenAIClient(displayName: String = "OpenAI") : LLMClient(
         )
     }
 
-    override fun panel(): LLMClientPanel {
-        return OpenAIClientPanel(this)
-    }
+    override fun panel() = OpenAiClientPanel(this)
 }

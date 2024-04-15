@@ -89,6 +89,11 @@ tasks {
     buildPlugin {
         exclude { "coroutines" in it.name }
     }
+
+    buildSearchableOptions {
+        enabled = false
+    }
+
     prepareSandbox {
         exclude { "coroutines" in it.name }
     }
