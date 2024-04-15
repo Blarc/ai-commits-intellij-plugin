@@ -4,14 +4,11 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.OpenAIClient
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.TestAIClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientService
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.OptionTag
@@ -44,15 +41,12 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
 
     @XCollection(
         elementTypes = [
-            OpenAIClient::class,
-            TestAIClient::class
+            OpenAiClient::class
         ],
         style = XCollection.Style.v2
     )
-    var llmClients = setOf(
-        OpenAIClient(),
-        TestAIClient(),
-        TestAIClient("TestAI2")
+    var llmClients = setOf<LLMClient>(
+        OpenAiClient()
     )
 
     private var activeLlmClient = "OpenAI"
@@ -95,8 +89,9 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             temperature = appSettings.openAITemperature
             AICommitsUtils.retrieveToken(appSettings.openAITokenTitle)?.let { token = it }
         }
-        OpenAIClient.hosts.addAll(appSettings.openAIHosts)
-        OpenAIClient.modelIds.addAll(appSettings.openAIModelIds)
+
+        service<OpenAiClientService>().hosts.addAll(appSettings.openAIHosts)
+        service<OpenAiClientService>().modelIds.addAll(appSettings.openAIModelIds)
     }
 
     fun recordHit() {

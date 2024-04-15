@@ -1,10 +1,12 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.isInt
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.naturalSorted
@@ -19,9 +21,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import javax.swing.DefaultComboBoxModel
 
-class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
+class OpenAiClientPanel(private val client: OpenAiClient) : LLMClientPanel {
 
-    private val hostComboBox =  ComboBox(client.getHosts().toTypedArray())
+    private val hostComboBox = ComboBox(client.getHosts().toTypedArray())
     private val tokenPasswordField = JBPasswordField()
     private val verifyLabel = JBLabel()
     private val proxyTextField = JBTextField()
@@ -43,8 +45,8 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
             label(message("settings.openAIProxy"))
                 .widthGroup("label")
             cell(proxyTextField)
-                .bindText(client::proxyUrl.toNonNullableProperty(""))
                 .applyToComponent { minimumWidth = 400 }
+                .bindText(client::proxyUrl.toNonNullableProperty(""))
                 .resizableColumn()
                 .widthGroup("input")
         }
@@ -54,8 +56,8 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
         row {
             label(message("settings.openAISocketTimeout")).widthGroup("label")
             cell(socketTimeoutTextField)
-                .bindIntText(client::timeout)
                 .applyToComponent { minimumWidth = 400 }
+                .bindIntText(client::timeout)
                 .resizableColumn()
                 .widthGroup("input")
                 .validationOnInput { isInt(it.text) }
@@ -82,6 +84,9 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
                 .widthGroup("label")
 
             cell(modelComboBox)
+                .applyToComponent {
+                    isEditable = true
+                }
                 .bindItem({ client.modelId }, {
                     if (it != null) {
                         client.modelId = it
@@ -89,7 +94,7 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
                 })
                 .widthGroup("input")
                 .resizableColumn()
-
+                .onApply { service<OpenAiClientService>().modelIds.add(modelComboBox.item) }
 
             client.getRefreshModelFunction()?.let { f ->
                 button(message("settings.refreshModels")) {
@@ -161,6 +166,7 @@ class OpenAIClientPanel(private val client: OpenAIClient) : LLMClientPanel {
 
     @Serializable
     data class OpenAiError(val message: String?, val type: String?, val param: String?, val code: String?)
+
     @Serializable
     data class OpenAiErrorWrapper(val error: OpenAiError)
 }
