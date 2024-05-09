@@ -107,7 +107,7 @@ dependencies {
         // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation:when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
     }
-    implementation("io.ktor:ktor-client-cio:2.3.10") {
+    implementation("io.ktor:ktor-client-cio:2.3.11") {
         exclude(group = "org.slf4j", module = "slf4j-api")
         // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation: when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
