@@ -9,17 +9,18 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.openapi.ui.naturalSorted
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 import dev.ai4j.openai4j.OpenAiHttpException
-import kotlinx.coroutines.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import javax.swing.DefaultComboBoxModel
 
 class OpenAiClientPanel(private val client: OpenAiClient) : LLMClientPanel {
 
@@ -95,20 +96,6 @@ class OpenAiClientPanel(private val client: OpenAiClient) : LLMClientPanel {
                 .widthGroup("input")
                 .resizableColumn()
                 .onApply { service<OpenAiClientService>().modelIds.add(modelComboBox.item) }
-
-            client.getRefreshModelFunction()?.let { f ->
-                button(message("settings.refreshModels")) {
-                    runBackgroundableTask(message("settings.loadingModels")) {
-                        runBlocking(Dispatchers.IO) {
-                            f.invoke()
-                            modelComboBox.model = DefaultComboBoxModel(client.getModelIds().naturalSorted().toTypedArray())
-                            modelComboBox.item = client.modelId
-                        }
-                    }
-                }
-                    .align(AlignX.RIGHT)
-                    .widthGroup("button")
-            }
         }
 
         row {

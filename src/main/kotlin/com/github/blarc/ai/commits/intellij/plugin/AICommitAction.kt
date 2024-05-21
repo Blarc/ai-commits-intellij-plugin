@@ -31,6 +31,7 @@ class AICommitAction : AnAction(), DumbAware {
         val includedChanges = commitWorkflowHandler.ui.getIncludedChanges()
         val commitMessage = VcsDataKeys.COMMIT_MESSAGE_CONTROL.getData(e.dataContext) as CommitMessage?
 
+        // FIXME @Blarc: Use coroutine with Dispatchers.IO!!!!!!!!!!!
         runBackgroundableTask(message("action.background"), project) {
             val diff = computeDiff(includedChanges, false, project)
             if (diff.isBlank()) {

@@ -16,7 +16,7 @@ abstract class LLMClient(
     @Attribute var timeout: Int,
     @Attribute var modelId: String,
     @Attribute var temperature: String,
-) : Cloneable {
+) : Cloneable, Comparable<LLMClient> {
     @get:Transient
     var token: String
         get() = retrieveToken(displayName) ?: ""
@@ -51,5 +51,9 @@ abstract class LLMClient(
         } catch (e: Exception) {
             sendNotification(Notification.unableToSaveToken(e.message))
         }
+    }
+
+    override fun compareTo(other: LLMClient): Int {
+        return displayName.compareTo(other.displayName)
     }
 }
