@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClient
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClient
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
@@ -132,7 +133,8 @@ class LLMClientTable {
             return if (newLLMClient == null) {
                 // TODO(@Blarc): Is there a better way to create the list of all possible LLM Clients that implement LLMClient abstract class
                 listOf(
-                    OpenAiClient()
+                    OpenAiClient(),
+                    OllamaClient()
                 )
             } else {
                 listOf(newLLMClient)
