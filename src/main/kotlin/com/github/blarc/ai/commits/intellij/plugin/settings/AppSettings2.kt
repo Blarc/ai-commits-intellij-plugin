@@ -4,6 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClient
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClient
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientService
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
@@ -41,7 +42,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
 
     @XCollection(
         elementTypes = [
-            OpenAiClient::class
+            OpenAiClient::class,
+            OllamaClient::class,
         ],
         style = XCollection.Style.v2
     )
