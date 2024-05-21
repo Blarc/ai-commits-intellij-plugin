@@ -1,7 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
 import com.intellij.openapi.components.service
 import dev.langchain4j.data.message.UserMessage
@@ -40,7 +39,7 @@ class OpenAiClient(displayName: String = "OpenAI") : LLMClient(
             .modelName(modelId)
             .temperature(temperature.toDouble())
             .timeout(Duration.ofSeconds(timeout.toLong()))
-            .baseUrl(AppSettings.instance.openAIHost)
+            .baseUrl(host)
             .build()
 
         val response = openAI.generate(
@@ -54,10 +53,8 @@ class OpenAiClient(displayName: String = "OpenAI") : LLMClient(
         return response.content().text()
     }
 
-    override fun getRefreshModelFunction(): (suspend () -> Unit)? {
-        // Model names are retrieved from Enum and do not need to be refreshed.
-        return null
-    }
+    // Model names are retrieved from Enum and do not need to be refreshed.
+    override fun getRefreshModelFunction() = null
 
     override fun clone(): LLMClient {
         val copy = OpenAiClient(displayName)
