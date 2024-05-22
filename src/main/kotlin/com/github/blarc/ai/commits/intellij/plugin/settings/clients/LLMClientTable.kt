@@ -3,8 +3,8 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClient
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Splitter
@@ -25,7 +25,7 @@ import javax.swing.JPanel
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
 class LLMClientTable {
-    private var llmClients = AppSettings2.instance.llmClients
+    private var llmClients = AppSettings2.instance.llmClientConfigurations
     private val tableModel = createTableModel()
 
     val table = TableView(tableModel).apply {
@@ -44,16 +44,16 @@ class LLMClientTable {
         })
     }
 
-    private fun createTableModel(): ListTableModel<LLMClient> = ListTableModel(
+    private fun createTableModel(): ListTableModel<LLMClientConfiguration> = ListTableModel(
         arrayOf(
-            createColumn<LLMClient>(message("settings.llmClient.name")) { llmClient -> llmClient.displayName },
+            createColumn<LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient.displayName },
             createColumn(message("settings.llmClient.host")) { llmClient -> llmClient.host },
             createColumn(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId }
         ),
         llmClients.toList()
     )
 
-    fun addLlmClient(): LLMClient? {
+    fun addLlmClient(): LLMClientConfiguration? {
         val dialog = LLMClientDialog()
 
         if (dialog.showAndGet()) {
@@ -64,7 +64,7 @@ class LLMClientTable {
         return null
     }
 
-    fun removeLlmClient(): LLMClient? {
+    fun removeLlmClient(): LLMClientConfiguration? {
         val selectedLlmClient = table.selectedObject ?: return null
         llmClients = llmClients.minus(selectedLlmClient)
         refreshTableModel()
@@ -72,7 +72,7 @@ class LLMClientTable {
 
     }
 
-    fun editLlmClient(): Pair<LLMClient, LLMClient>? {
+    fun editLlmClient(): Pair<LLMClientConfiguration, LLMClientConfiguration>? {
         val selectedLlmClient = table.selectedObject ?: return null
         val dialog = LLMClientDialog(selectedLlmClient.clone())
 
@@ -90,38 +90,38 @@ class LLMClientTable {
     }
 
     fun reset() {
-        llmClients = AppSettings2.instance.llmClients
+        llmClients = AppSettings2.instance.llmClientConfigurations
         refreshTableModel()
     }
 
-    fun isModified() = llmClients != AppSettings2.instance.llmClients
+    fun isModified() = llmClients != AppSettings2.instance.llmClientConfigurations
 
     fun apply() {
-        AppSettings2.instance.llmClients = llmClients
+        AppSettings2.instance.llmClientConfigurations = llmClients
     }
 
-    private class LLMClientDialog(val newLlmClient: LLMClient? = null) : DialogWrapper(true) {
+    private class LLMClientDialog(val newLlmClientConfiguration: LLMClientConfiguration? = null) : DialogWrapper(true) {
 
-        private val llmClients: List<LLMClient> = getLlmClients(newLlmClient)
-        var llmClient = newLlmClient ?: llmClients[0]
+        private val llmClientConfigurations: List<LLMClientConfiguration> = getLlmClients(newLlmClientConfiguration)
+        var llmClient = newLlmClientConfiguration ?: llmClientConfigurations[0]
 
         private val cardLayout = JBCardLayout()
 
         init {
-            title = newLlmClient?.let { "Edit LLM Client" } ?: "Add LLM Client"
-            setOKButtonText(newLlmClient?.let { message("actions.update") } ?: message("actions.add"))
+            title = newLlmClientConfiguration?.let { "Edit LLM Client" } ?: "Add LLM Client"
+            setOKButtonText(newLlmClientConfiguration?.let { message("actions.update") } ?: message("actions.add"))
             init()
         }
 
         override fun doOKAction() {
-            if (newLlmClient == null) {
+            if (newLlmClientConfiguration == null) {
                 (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).apply()
             }
             // TODO: Figure out how to call apply of the currently active panel
             super.doOKAction()
         }
 
-        override fun createCenterPanel() = if (newLlmClient == null) {
+        override fun createCenterPanel() = if (newLlmClientConfiguration == null) {
             createCardSplitter()
         } else {
             llmClient.panel().create()
@@ -129,15 +129,15 @@ class LLMClientTable {
             isResizable = false
         }
 
-        private fun getLlmClients(newLLMClient: LLMClient?): List<LLMClient> {
-            return if (newLLMClient == null) {
+        private fun getLlmClients(newLLMClientConfiguration: LLMClientConfiguration?): List<LLMClientConfiguration> {
+            return if (newLLMClientConfiguration == null) {
                 // TODO(@Blarc): Is there a better way to create the list of all possible LLM Clients that implement LLMClient abstract class
                 listOf(
-                    OpenAiClient(),
-                    OllamaClient()
+                    OpenAiClientConfiguration(),
+                    OllamaClientConfiguration()
                 )
             } else {
-                listOf(newLLMClient)
+                listOf(newLLMClientConfiguration)
             }
         }
 
@@ -146,7 +146,7 @@ class LLMClientTable {
 
                 val cardPanel = JPanel(cardLayout).apply {
                     preferredSize = JBUI.size(640, 480)
-                    llmClients.forEach {
+                    llmClientConfigurations.forEach {
                         add(it.displayName, it.panel().create())
                     }
                 }
@@ -156,13 +156,13 @@ class LLMClientTable {
                     isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
                 }
 
-                val cardsList = JBList(llmClients).apply {
-                    val descriptor = object : ListItemDescriptorAdapter<LLMClient>() {
-                        override fun getTextFor(value: LLMClient) = value.displayName
-                        override fun getIconFor(value: LLMClient) = value.getIcon()
+                val cardsList = JBList(llmClientConfigurations).apply {
+                    val descriptor = object : ListItemDescriptorAdapter<LLMClientConfiguration>() {
+                        override fun getTextFor(value: LLMClientConfiguration) = value.displayName
+                        override fun getIconFor(value: LLMClientConfiguration) = value.getIcon()
                     }
-                    cellRenderer = object : GroupedItemsListRenderer<LLMClient>(descriptor) {
-                        override fun customizeComponent(list: JList<out LLMClient>?, value: LLMClient?, isSelected: Boolean) {
+                    cellRenderer = object : GroupedItemsListRenderer<LLMClientConfiguration>(descriptor) {
+                        override fun customizeComponent(list: JList<out LLMClientConfiguration>?, value: LLMClientConfiguration?, isSelected: Boolean) {
                             myTextLabel.border = JBUI.Borders.empty(4)
                         }
                     }

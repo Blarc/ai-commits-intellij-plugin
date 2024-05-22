@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import java.awt.Component
 import java.util.*
@@ -25,7 +25,8 @@ class AICommitsListCellRenderer : DefaultListCellRenderer() {
                 text = value.name
             }
 
-            is LLMClient -> {
+            is LLMClientConfiguration -> {
+                icon = value.getIcon()
                 text = value.displayName
             }
         }

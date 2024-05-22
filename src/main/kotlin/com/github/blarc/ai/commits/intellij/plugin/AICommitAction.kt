@@ -55,10 +55,9 @@ class AICommitAction : AnAction(), DumbAware {
             val llmClient = AppSettings2.instance.getActiveLLMClient()
             runBlocking(Dispatchers.Main) {
                 try {
-                    val generatedCommitMessage = llmClient.generateCommitMessage(prompt)
-                    commitMessage.setCommitMessage(generatedCommitMessage)
-                    AppSettings2.instance.recordHit()
+                    llmClient.generateCommitMessage(prompt, commitMessage)
                 } catch (e: Exception) {
+                    // TODO @Blarc: This will never happen, commit message generating is called in a suspended function
                     commitMessage.setCommitMessage(e.message ?: message("action.error"))
                     sendNotification(Notification.unsuccessfulRequest(e.message ?: message("action.unknown-error")))
                 }
