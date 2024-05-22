@@ -5,18 +5,20 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.intellij.ide.passwordSafe.PasswordSafe
+import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import javax.swing.Icon
 
-abstract class LLMClient(
+abstract class LLMClientConfiguration(
     @Attribute var displayName: String,
     @Attribute var host: String,
     @Attribute var proxyUrl: String?,
     @Attribute var timeout: Int,
     @Attribute var modelId: String,
     @Attribute var temperature: String,
-) : Cloneable, Comparable<LLMClient> {
+) : Cloneable, Comparable<LLMClientConfiguration> {
     @get:Transient
     var token: String
         get() = retrieveToken(displayName) ?: ""
@@ -28,20 +30,11 @@ abstract class LLMClient(
 
     abstract fun getModelIds(): Set<String>
 
-    abstract suspend fun generateCommitMessage(prompt: String): String
+    abstract fun generateCommitMessage(prompt: String, commitMessage: CommitMessage)
 
-    abstract fun getRefreshModelFunction(): (suspend () -> Unit)?
+    abstract fun getRefreshModelsFunction(): ((ComboBox<String>) -> Unit)?
 
-    public abstract override fun clone(): LLMClient
-
-    @Throws(Exception::class)
-    abstract suspend fun verifyConfiguration(
-        newHost: String,
-        newProxy: String?,
-        newTimeout: String,
-        newModelId: String,
-        newToken: String
-    )
+    public abstract override fun clone(): LLMClientConfiguration
 
     abstract fun panel(): LLMClientPanel
 
@@ -53,7 +46,7 @@ abstract class LLMClient(
         }
     }
 
-    override fun compareTo(other: LLMClient): Int {
+    override fun compareTo(other: LLMClientConfiguration): Int {
         return displayName.compareTo(other.displayName)
     }
 }

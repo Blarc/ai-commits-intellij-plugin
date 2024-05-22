@@ -3,9 +3,9 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClient
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientService
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.intellij.openapi.application.ApplicationManager
@@ -42,13 +42,13 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
 
     @XCollection(
         elementTypes = [
-            OpenAiClient::class,
-            OllamaClient::class,
+            OpenAiClientConfiguration::class,
+            OllamaClientConfiguration::class,
         ],
         style = XCollection.Style.v2
     )
-    var llmClients = setOf<LLMClient>(
-        OpenAiClient()
+    var llmClientConfigurations = setOf<LLMClientConfiguration>(
+        OpenAiClientConfiguration()
     )
 
     private var activeLlmClient = "OpenAI"
@@ -68,7 +68,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     override fun noStateLoaded() {
         val appSettings = AppSettings.instance
         migrateSettingsFromVersion1(appSettings)
-        val openAiLlmClient = llmClients.find { it.displayName == "OpenAI" }
+        val openAiLlmClient = llmClientConfigurations.find { it.displayName == "OpenAI" }
         migrateOpenAiClientFromVersion1(openAiLlmClient, appSettings)
     }
 
@@ -82,8 +82,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         appExclusions = appSettings.appExclusions
     }
 
-    private fun migrateOpenAiClientFromVersion1(openAiLlmClient: LLMClient?, appSettings: AppSettings) {
-        openAiLlmClient?.apply {
+    private fun migrateOpenAiClientFromVersion1(openAiLlmClientConfiguration: LLMClientConfiguration?, appSettings: AppSettings) {
+        openAiLlmClientConfiguration?.apply {
             host = appSettings.openAIHost
             appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
             proxyUrl = appSettings.proxyUrl
@@ -107,14 +107,14 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         return AICommitsUtils.matchesGlobs(path, appExclusions)
     }
 
-    fun getActiveLLMClient(): LLMClient {
-        return llmClients.find { it.displayName == activeLlmClient }!!
+    fun getActiveLLMClient(): LLMClientConfiguration {
+        return llmClientConfigurations.find { it.displayName == activeLlmClient }!!
     }
 
-    fun setActiveLlmClient(llmClient: LLMClient) {
+    fun setActiveLlmClient(llmClientConfiguration: LLMClientConfiguration) {
         // TODO @Blarc: Throw exception if llm client name is not valid
-        llmClients.find { it.displayName == llmClient.displayName }?.let {
-            activeLlmClient = llmClient.displayName
+        llmClientConfigurations.find { it.displayName == llmClientConfiguration.displayName }?.let {
+            activeLlmClient = llmClientConfiguration.displayName
         }
     }
 

@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClient
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
@@ -17,7 +17,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
     private val llmClientTable = LLMClientTable()
     private lateinit var llmClientToolbarDecorator: ToolbarDecorator
-    private lateinit var llmClientComboBox: ComboBox<LLMClient>
+    private lateinit var llmClientConfigurationComboBox: ComboBox<LLMClientConfiguration>
     private val promptTable = PromptTable()
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: ComboBox<Prompt>
@@ -26,7 +26,8 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
         row {
             label(message("settings.llmClient")).widthGroup("labelPrompt")
-            llmClientComboBox = comboBox(AppSettings2.instance.llmClients, AICommitsListCellRenderer())
+            // TODO @Blarc: add icon next to LLMClient name
+            llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations, AICommitsListCellRenderer())
                 .bindItem(getter = AppSettings2.instance::getActiveLLMClient) {
                     it?.let {
                         AppSettings2.instance.setActiveLlmClient(it)
@@ -41,18 +42,18 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
                 }
                 .setEditAction {
                     llmClientTable.editLlmClient()?.let {
-                        val editingActive = llmClientComboBox.selectedItem == it.first
-                        llmClientComboBox.removeItem(it.first)
-                        llmClientComboBox.addItem(it.second)
+                        val editingActive = llmClientConfigurationComboBox.selectedItem == it.first
+                        llmClientConfigurationComboBox.removeItem(it.first)
+                        llmClientConfigurationComboBox.addItem(it.second)
 
                         if (editingActive) {
-                            llmClientComboBox.selectedItem = it.second
+                            llmClientConfigurationComboBox.selectedItem = it.second
                         }
                     }
                 }
                 .setRemoveAction {
                     llmClientTable.removeLlmClient()?.let {
-                        llmClientComboBox.removeItem(it)
+                        llmClientConfigurationComboBox.removeItem(it)
                     }
                 }
                 .disableUpDownActions()
