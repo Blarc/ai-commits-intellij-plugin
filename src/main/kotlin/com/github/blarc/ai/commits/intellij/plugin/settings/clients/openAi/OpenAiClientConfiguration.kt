@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.intellij.openapi.components.service
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.vcs.ui.CommitMessage
 import javax.swing.Icon
 
@@ -18,12 +18,8 @@ class OpenAiClientConfiguration(displayName: String = "OpenAI") : LLMClientConfi
         return Icons.OPEN_AI
     }
 
-    override fun getHosts(): Set<String> {
-        return service<OpenAiClientService>().hosts
-    }
-
-    override fun getModelIds(): Set<String> {
-        return service<OpenAiClientService>().modelIds
+    override fun getSharedState(): LLMClientSharedState {
+        return OpenAiClientSharedState.getInstance()
     }
 
     override fun generateCommitMessage(prompt: String, commitMessage: CommitMessage) {

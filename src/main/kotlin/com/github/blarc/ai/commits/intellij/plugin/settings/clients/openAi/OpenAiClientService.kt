@@ -1,12 +1,10 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
-import com.intellij.openapi.components.*
-import com.intellij.util.xmlb.XmlSerializerUtil
-import com.intellij.util.xmlb.annotations.XCollection
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
 import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.model.openai.OpenAiChatModel
-import dev.langchain4j.model.openai.OpenAiChatModelName
 import kotlinx.coroutines.CoroutineScope
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -14,29 +12,11 @@ import java.net.URI
 import java.time.Duration
 
 @Service(Service.Level.APP)
-@State(name = "OpenAiClientService", storages = [Storage("AICommitsOpenAi.xml")])
-class OpenAiClientService(@Transient private val cs: CoroutineScope?) :
-    PersistentStateComponent<OpenAiClientService>,
-    LLMClientService<OpenAiClientConfiguration>(cs) {
+class OpenAiClientService(cs: CoroutineScope) : LLMClientService<OpenAiClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic
         fun getInstance(): OpenAiClientService = service()
-    }
-
-    @XCollection(style = XCollection.Style.v2)
-    val hosts = mutableSetOf("https://api.openai.com/v1")
-
-    @XCollection(style = XCollection.Style.v2)
-    val modelIds = OpenAiChatModelName.entries.stream()
-        .map { it.toString() }
-        .toList()
-        .toMutableSet()
-
-    override fun getState(): OpenAiClientService = this
-
-    override fun loadState(state: OpenAiClientService) {
-        XmlSerializerUtil.copyBean(state, this)
     }
 
     override fun buildChatModel(client: OpenAiClientConfiguration): ChatLanguageModel {

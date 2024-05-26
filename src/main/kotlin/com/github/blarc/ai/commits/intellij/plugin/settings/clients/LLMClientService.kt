@@ -15,7 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: CoroutineScope?) {
+abstract class LLMClientService <T: LLMClientConfiguration>(private val cs: CoroutineScope) {
+
     abstract fun buildChatModel(client: T): ChatLanguageModel
 
     fun generateCommitMessage(client: T, prompt: String, commitMessage: CommitMessage) {
@@ -63,7 +64,7 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
 //    data class OpenAiErrorWrapper(val error: OpenAiError)
 
     private fun sendRequest(model: ChatLanguageModel, text: String, onResponse: suspend (r: Response<AiMessage>) -> Unit ) {
-        cs!!.launch(Dispatchers.Default) {
+        cs.launch(Dispatchers.Default) {
             val response = withContext(Dispatchers.IO) {
                 model.generate(
                     listOf(

@@ -6,10 +6,13 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotificatio
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.*
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.OptionTag
@@ -92,8 +95,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             AICommitsUtils.retrieveToken(appSettings.openAITokenTitle)?.let { token = it }
         }
 
-        service<OpenAiClientService>().hosts.addAll(appSettings.openAIHosts)
-        service<OpenAiClientService>().modelIds.addAll(appSettings.openAIModelIds)
+        OpenAiClientSharedState.getInstance().hosts.addAll(appSettings.openAIHosts)
+        OpenAiClientSharedState.getInstance().modelIds.addAll(appSettings.openAIModelIds)
     }
 
     fun recordHit() {
