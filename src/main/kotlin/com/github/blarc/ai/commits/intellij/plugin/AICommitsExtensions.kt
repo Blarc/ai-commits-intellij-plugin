@@ -53,3 +53,21 @@ fun <T>Cell<T>.emptyText(emptyText: String) : Cell<T> where T : JComponent, T : 
     this.component.emptyText.text = emptyText
     return this
 }
+
+fun String.wrap(length: Int): String {
+    var input = this
+    val wrapped = StringBuilder()
+
+    while (input.length > length) {
+        var index = input.lastIndexOf(' ', length)
+
+        if (index == -1) index = length
+        wrapped.append(input.substring(0, index)).append("<br>")
+
+        input = input.substring(index).trimStart()
+    }
+
+    wrapped.append(input)
+
+    return wrapped.toString()
+}
