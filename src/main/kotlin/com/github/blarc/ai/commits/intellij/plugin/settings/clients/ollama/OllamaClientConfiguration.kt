@@ -2,6 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import javax.swing.Icon
@@ -18,13 +19,8 @@ class OllamaClientConfiguration(displayName: String = "Ollama") : LLMClientConfi
         return Icons.OLLAMA
     }
 
-    override fun getHosts(): Set<String> {
-        return OllamaClientService.getInstance().hosts
-    }
-
-    override fun getModelIds(): Set<String> {
-        return OllamaClientService.getInstance().modelIds
-
+    override fun getSharedState(): LLMClientSharedState {
+        return OllamaClientSharedState.getInstance()
     }
 
     override fun generateCommitMessage(prompt: String, commitMessage: CommitMessage) {

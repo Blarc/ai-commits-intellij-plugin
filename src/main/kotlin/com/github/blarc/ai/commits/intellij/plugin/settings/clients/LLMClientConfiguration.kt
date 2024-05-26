@@ -26,9 +26,23 @@ abstract class LLMClientConfiguration(
 
     abstract fun getIcon(): Icon
 
-    abstract fun getHosts(): Set<String>
+    abstract fun getSharedState(): LLMClientSharedState
 
-    abstract fun getModelIds(): Set<String>
+    fun getHosts(): Set<String> {
+        return getSharedState().hosts
+    }
+
+    fun getModelIds(): Set<String> {
+        return getSharedState().modelIds
+    }
+
+    fun addHost(host: String) {
+        getSharedState().hosts.add(host)
+    }
+
+    fun addModelId(modelId: String) {
+        getSharedState().modelIds.add(modelId)
+    }
 
     abstract fun generateCommitMessage(prompt: String, commitMessage: CommitMessage)
 
@@ -49,4 +63,5 @@ abstract class LLMClientConfiguration(
     override fun compareTo(other: LLMClientConfiguration): Int {
         return displayName.compareTo(other.displayName)
     }
+
 }

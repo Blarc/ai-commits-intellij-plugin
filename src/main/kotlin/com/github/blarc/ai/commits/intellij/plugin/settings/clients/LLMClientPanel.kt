@@ -2,9 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.isInt
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientService
 import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
-import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
@@ -12,12 +10,14 @@ import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 
 
-abstract class LLMClientPanel(private val client: LLMClientConfiguration) {
+abstract class LLMClientPanel(
+    private val clientConfiguration: LLMClientConfiguration,
+) {
 
-    val hostComboBox = ComboBox(client.getHosts().toTypedArray())
+    val hostComboBox = ComboBox(clientConfiguration.getHosts().toTypedArray())
     val proxyTextField = JBTextField()
     val socketTimeoutTextField = JBTextField()
-    val modelComboBox = ComboBox(client.getModelIds().toTypedArray())
+    val modelComboBox = ComboBox(clientConfiguration.getModelIds().toTypedArray())
     val temperatureTextField = JBTextField()
     val verifyLabel = JBLabel()
 
@@ -37,8 +37,9 @@ abstract class LLMClientPanel(private val client: LLMClientConfiguration) {
                 .applyToComponent {
                     isEditable = true
                 }
-                .bindItem(client::host.toNullableProperty())
+                .bindItem(clientConfiguration::host.toNullableProperty())
                 .widthGroup("input")
+                .onApply { clientConfiguration.addHost(hostComboBox.item) }
         }
     }
 
@@ -48,7 +49,7 @@ abstract class LLMClientPanel(private val client: LLMClientConfiguration) {
                 .widthGroup("label")
             cell(proxyTextField)
                 .applyToComponent { minimumWidth = 400 }
-                .bindText(client::proxyUrl.toNonNullableProperty(""))
+                .bindText(clientConfiguration::proxyUrl.toNonNullableProperty(""))
                 .resizableColumn()
                 .widthGroup("input")
         }
@@ -62,7 +63,7 @@ abstract class LLMClientPanel(private val client: LLMClientConfiguration) {
             label(message("settings.llmClient.timeout")).widthGroup("label")
             cell(socketTimeoutTextField)
                 .applyToComponent { minimumWidth = 400 }
-                .bindIntText(client::timeout)
+                .bindIntText(clientConfiguration::timeout)
                 .resizableColumn()
                 .widthGroup("input")
                 .validationOnInput { isInt(it.text) }
@@ -78,16 +79,16 @@ abstract class LLMClientPanel(private val client: LLMClientConfiguration) {
                 .applyToComponent {
                     isEditable = true
                 }
-                .bindItem({ client.modelId }, {
+                .bindItem({ clientConfiguration.modelId }, {
                     if (it != null) {
-                        client.modelId = it
+                        clientConfiguration.modelId = it
                     }
                 })
                 .widthGroup("input")
                 .resizableColumn()
-                .onApply { service<OllamaClientService>().modelIds.add(modelComboBox.item) }
+                .onApply { clientConfiguration.addModelId(modelComboBox.item) }
 
-            client.getRefreshModelsFunction()?.let { f ->
+            clientConfiguration.getRefreshModelsFunction()?.let { f ->
                 button(message("settings.refreshModels")) {
                     f.invoke(modelComboBox)
                 }
@@ -103,7 +104,7 @@ abstract class LLMClientPanel(private val client: LLMClientConfiguration) {
                 .widthGroup("label")
 
             cell(temperatureTextField)
-                .bindText(client::temperature)
+                .bindText(clientConfiguration::temperature)
                 .applyToComponent { minimumWidth = 400 }
                 .resizableColumn()
                 .widthGroup("input")
