@@ -20,6 +20,7 @@ class OpenAiClientService(cs: CoroutineScope) : LLMClientService<OpenAiClientCon
     }
 
     override fun buildChatModel(client: OpenAiClientConfiguration): ChatLanguageModel {
+        // TODO @Blarc: Add OPENAI_ORG
         val builder = OpenAiChatModel.builder()
             .apiKey(client.token)
             .modelName(client.modelId)
