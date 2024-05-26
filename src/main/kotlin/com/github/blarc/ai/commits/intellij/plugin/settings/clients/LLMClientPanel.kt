@@ -119,7 +119,10 @@ abstract class LLMClientPanel(
     open fun Panel.verifyRow() {
         row {
             cell(verifyLabel)
-                .applyToComponent { setAllowAutoWrapping(true) }
+                .applyToComponent {
+                    setAllowAutoWrapping(true)
+                    setCopyable(true)
+                }
                 .align(AlignX.LEFT)
 
             button(message("settings.verifyToken")) { verifyConfiguration() }

@@ -1,7 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
-import com.intellij.openapi.application.EDT
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
@@ -38,10 +37,11 @@ class OllamaClientService(private val cs: CoroutineScope) : LLMClientService<Oll
             OllamaClientSharedState.getInstance().modelIds.addAll(availableModels.content()
                 .map { it.name }
             )
-            withContext(Dispatchers.EDT) {
-                comboBox.model = DefaultComboBoxModel(client.getModelIds().naturalSorted().toTypedArray())
-                comboBox.item = client.modelId
-            }
+
+            // This can't be called from EDT thread, because dialog blocks the EDT thread
+            val modelItems = client.getModelIds().naturalSorted().toTypedArray()
+            comboBox.model = DefaultComboBoxModel(modelItems)
+            comboBox.item = client.modelId
         }
     }
 
