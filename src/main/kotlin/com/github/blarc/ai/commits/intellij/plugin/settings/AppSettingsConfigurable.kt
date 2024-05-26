@@ -26,7 +26,6 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
         row {
             label(message("settings.llmClient")).widthGroup("labelPrompt")
-            // TODO @Blarc: add icon next to LLMClient name
             llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations, AICommitsListCellRenderer())
                 .bindItem(getter = AppSettings2.instance::getActiveLLMClient) {
                     it?.let {
