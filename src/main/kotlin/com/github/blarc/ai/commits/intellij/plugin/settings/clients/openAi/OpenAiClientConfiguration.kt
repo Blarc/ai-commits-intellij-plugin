@@ -2,11 +2,13 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.vcs.ui.CommitMessage
 import javax.swing.Icon
 
-class OpenAiClientConfiguration(displayName: String = "OpenAI") : LLMClientConfiguration(
+class OpenAiClientConfiguration(
+    displayName: String = "OpenAI",
+    var organizationId: String? = null
+) : LLMClientConfiguration(
     displayName,
     "https://api.openai.com/v1",
     null,
@@ -18,7 +20,7 @@ class OpenAiClientConfiguration(displayName: String = "OpenAI") : LLMClientConfi
         return Icons.OPEN_AI
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): OpenAiClientSharedState {
         return OpenAiClientSharedState.getInstance()
     }
 
@@ -35,6 +37,7 @@ class OpenAiClientConfiguration(displayName: String = "OpenAI") : LLMClientConfi
         copy.proxyUrl = proxyUrl
         copy.timeout = timeout
         copy.modelId = modelId
+        copy.organizationId = organizationId
         copy.temperature = temperature
         return copy
     }
