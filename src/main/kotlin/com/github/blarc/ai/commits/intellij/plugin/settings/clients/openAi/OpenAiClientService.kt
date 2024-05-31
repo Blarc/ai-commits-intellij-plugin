@@ -20,7 +20,6 @@ class OpenAiClientService(cs: CoroutineScope) : LLMClientService<OpenAiClientCon
     }
 
     override fun buildChatModel(client: OpenAiClientConfiguration): ChatLanguageModel {
-        // TODO @Blarc: Add OPENAI_ORG
         val builder = OpenAiChatModel.builder()
             .apiKey(client.token)
             .modelName(client.modelId)
@@ -32,6 +31,11 @@ class OpenAiClientService(cs: CoroutineScope) : LLMClientService<OpenAiClientCon
             val uri = URI(it)
             builder.proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(uri.host, uri.port)))
         }
+
+        client.organizationId?.takeIf { it.isNotBlank() }?.let {
+            builder.organizationId(it)
+        }
+
         return builder.build()
     }
 

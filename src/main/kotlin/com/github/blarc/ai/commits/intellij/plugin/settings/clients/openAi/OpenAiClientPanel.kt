@@ -7,8 +7,9 @@ import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.toNonNullableProperty
 
-class OpenAiClientPanel(private val client: OpenAiClientConfiguration) : LLMClientPanel(client) {
+class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfiguration) : LLMClientPanel(clientConfiguration) {
 
     private val tokenPasswordField = JBPasswordField()
 
@@ -21,7 +22,7 @@ class OpenAiClientPanel(private val client: OpenAiClientConfiguration) : LLMClie
             label(message("settings.llmClient.token"))
                 .widthGroup("label")
             cell(tokenPasswordField)
-                .bindText(client::token)
+                .bindText(clientConfiguration::token)
                 .emptyText(message("settings.openAI.token.example"))
                 .resizableColumn()
                 .focused()
@@ -33,6 +34,15 @@ class OpenAiClientPanel(private val client: OpenAiClientConfiguration) : LLMClie
         }
 
         modelIdRow()
+
+        row {
+            label(message("settings.openAi.organizationId"))
+                .widthGroup("label")
+            textField()
+                .bindText(clientConfiguration::organizationId.toNonNullableProperty(""))
+                .widthGroup("input")
+        }
+
         temperatureRow()
         verifyRow()
 
