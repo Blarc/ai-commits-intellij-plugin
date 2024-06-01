@@ -18,6 +18,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.XmlSerializerUtil
+import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.OptionTag
 import com.intellij.util.xmlb.annotations.XCollection
 import com.intellij.util.xmlb.annotations.XMap
@@ -45,7 +46,6 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     @OptionTag(converter = LocaleConverter::class)
     var locale: Locale = Locale.ENGLISH
 
-
     @XCollection(
         elementTypes = [
             OpenAiClientConfiguration::class,
@@ -57,7 +57,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         OpenAiClientConfiguration()
     )
 
-    private var activeLlmClient = "OpenAI"
+    @Attribute
+    var activeLlmClientId: String? = null
 
     @XMap
     var prompts = DefaultPrompts.toPromptsMap()
@@ -74,7 +75,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     override fun noStateLoaded() {
         val appSettings = AppSettings.instance
         migrateSettingsFromVersion1(appSettings)
-        val openAiLlmClient = llmClientConfigurations.find { it.displayName == "OpenAI" }
+        val openAiLlmClient = llmClientConfigurations.find { it.getClientName() == OpenAiClientConfiguration.CLIENT_NAME }
         migrateOpenAiClientFromVersion1(openAiLlmClient as OpenAiClientConfiguration, appSettings)
     }
 
@@ -100,7 +101,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             PasswordSafe.instance.getAsync(credentialAttributes)
                 .onSuccess {
                     it?.password?.let { token ->
-                        saveToken(displayName, token.toString(false))
+                        saveToken(id, token.toString(false))
                         tokenIsStored = true
                     }
                 }
@@ -121,14 +122,15 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         return AICommitsUtils.matchesGlobs(path, appExclusions)
     }
 
-    fun getActiveLLMClient(): LLMClientConfiguration {
-        return llmClientConfigurations.find { it.displayName == activeLlmClient }!!
+    fun getActiveLLMClient(): LLMClientConfiguration? {
+        return llmClientConfigurations.find { it.id == activeLlmClientId }
+            ?: llmClientConfigurations.firstOrNull()
     }
 
-    fun setActiveLlmClient(llmClientConfiguration: LLMClientConfiguration) {
-        // TODO @Blarc: Throw exception if llm client name is not valid
-        llmClientConfigurations.find { it.displayName == llmClientConfiguration.displayName }?.let {
-            activeLlmClient = llmClientConfiguration.displayName
+    fun setActiveLlmClient(newId: String) {
+        // TODO @Blarc: Throw exception if llm client id is not valid
+        llmClientConfigurations.find { it.id == newId }?.let {
+            activeLlmClientId = newId
         }
     }
 

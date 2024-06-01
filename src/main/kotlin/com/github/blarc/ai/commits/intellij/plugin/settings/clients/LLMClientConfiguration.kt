@@ -3,10 +3,11 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
+import java.util.*
 import javax.swing.Icon
 
 abstract class LLMClientConfiguration(
-    @Attribute var displayName: String,
+    @Attribute var name: String,
     @Attribute var host: String,
     @Attribute var proxyUrl: String?,
     @Attribute var timeout: Int,
@@ -14,7 +15,12 @@ abstract class LLMClientConfiguration(
     @Attribute var temperature: String,
 ) : Cloneable, Comparable<LLMClientConfiguration> {
 
-    abstract fun getIcon(): Icon
+    @Attribute
+    var id: String = UUID.randomUUID().toString()
+
+    abstract fun getClientName(): String
+
+    abstract fun getClientIcon(): Icon
 
     abstract fun getSharedState(): LLMClientSharedState
 
@@ -43,7 +49,14 @@ abstract class LLMClientConfiguration(
     abstract fun panel(): LLMClientPanel
 
     override fun compareTo(other: LLMClientConfiguration): Int {
-        return displayName.compareTo(other.displayName)
+        return name.compareTo(other.name)
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is LLMClientConfiguration && other.id == id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }

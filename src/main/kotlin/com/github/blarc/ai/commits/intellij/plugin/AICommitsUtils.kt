@@ -12,8 +12,6 @@ import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
 import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.changes.Change
-import com.knuddels.jtokkit.Encodings
-import com.knuddels.jtokkit.api.ModelType
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -124,21 +122,22 @@ object AICommitsUtils {
             .joinToString("\n")
     }
 
-    fun isPromptTooLarge(prompt: String): Boolean {
-        val registry = Encodings.newDefaultEncodingRegistry()
-
-        /*
-         * Try to find the model type based on the model id by finding the longest matching model type
-         * If no model type matches, let the request go through and let the OpenAI API handle it
-         */
-        val modelType = ModelType.entries
-            .filter { AppSettings2.instance.getActiveLLMClient().modelId.contains(it.name) }
-            .maxByOrNull { it.name.length }
-            ?: return false
-
-        val encoding = registry.getEncoding(modelType.encodingType)
-        return encoding.countTokens(prompt) > modelType.maxContextLength
-    }
+    // TODO @Blarc: This only works for OpenAI
+//    fun isPromptTooLarge(prompt: String): Boolean {
+//        val registry = Encodings.newDefaultEncodingRegistry()
+//
+//        /*
+//         * Try to find the model type based on the model id by finding the longest matching model type
+//         * If no model type matches, let the request go through and let the OpenAI API handle it
+//         */
+//        val modelType = ModelType.entries
+//            .filter { AppSettings2.instance.getActiveLLMClient().modelId.contains(it.name) }
+//            .maxByOrNull { it.name.length }
+//            ?: return false
+//
+//        val encoding = registry.getEncoding(modelType.encodingType)
+//        return encoding.countTokens(prompt) > modelType.maxContextLength
+//    }
 
     // TODO @Blarc: Slow operations are prohibited on EDT
     fun saveToken(title: String, token: String) {

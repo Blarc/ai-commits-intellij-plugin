@@ -45,6 +45,7 @@ data class Notification(
         fun noCommitMessage() = Notification(message = message("notifications.no-commit-message"))
         fun unableToSaveToken(message: String?) = Notification(message = message("notifications.unable-to-save-token", message ?: "Unknown error"))
         fun noCommonBranch() = Notification(message = message("notifications.no-common-branch"))
+        fun clientNotSet() = Notification(message = message("notifications.client-not-set"), type = Type.TRANSIENT)
 
     }
 }
