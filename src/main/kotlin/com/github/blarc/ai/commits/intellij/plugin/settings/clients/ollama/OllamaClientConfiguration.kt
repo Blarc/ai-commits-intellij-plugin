@@ -7,15 +7,24 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import javax.swing.Icon
 
-class OllamaClientConfiguration(displayName: String = "Ollama") : LLMClientConfiguration(
-    displayName,
+class OllamaClientConfiguration : LLMClientConfiguration(
+    "Ollama",
     "http://localhost:11434/",
     null,
     30,
     "llama3",
     "0.7"
 ) {
-    override fun getIcon(): Icon {
+
+    companion object {
+        const val CLIENT_NAME = "Ollama"
+    }
+
+    override fun getClientName(): String {
+        return CLIENT_NAME
+    }
+
+    override fun getClientIcon(): Icon {
         return Icons.OLLAMA
     }
 
@@ -32,7 +41,9 @@ class OllamaClientConfiguration(displayName: String = "Ollama") : LLMClientConfi
     }
 
     override fun clone(): LLMClientConfiguration {
-        val copy = OllamaClientConfiguration(displayName)
+        val copy = OllamaClientConfiguration()
+        copy.id = id
+        copy.name = name
         copy.host = host
         copy.proxyUrl = proxyUrl
         copy.timeout = timeout

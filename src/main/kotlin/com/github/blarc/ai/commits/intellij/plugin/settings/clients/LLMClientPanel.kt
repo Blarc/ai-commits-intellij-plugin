@@ -2,6 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.isInt
+import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.components.JBLabel
@@ -22,11 +23,23 @@ abstract class LLMClientPanel(
     val verifyLabel = JBLabel()
 
     open fun create() = panel {
+        nameRow()
         hostRow()
         timeoutRow()
         modelIdRow()
         temperatureRow()
         verifyRow()
+    }
+
+    open fun Panel.nameRow() {
+        row {
+            label(message("settings.llmClient.name"))
+                .widthGroup("label")
+            textField()
+                .bindText(clientConfiguration::name)
+                .widthGroup("input")
+                .validationOnInput { notBlank(it.text) }
+        }
     }
 
     open fun Panel.hostRow() {

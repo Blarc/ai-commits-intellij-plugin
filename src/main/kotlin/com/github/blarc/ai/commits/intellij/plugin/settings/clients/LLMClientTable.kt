@@ -46,7 +46,7 @@ class LLMClientTable {
 
     private fun createTableModel(): ListTableModel<LLMClientConfiguration> = ListTableModel(
         arrayOf(
-            createColumn<LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient.displayName },
+            createColumn<LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient.name },
             createColumn(message("settings.llmClient.host")) { llmClient -> llmClient.host },
             createColumn(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId }
         ),
@@ -115,7 +115,7 @@ class LLMClientTable {
 
         override fun doOKAction() {
             if (newLlmClientConfiguration == null) {
-                (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).apply()
+                (cardLayout.findComponentById(llmClient.getClientName()) as DialogPanel).apply()
             }
             // TODO: Figure out how to call apply of the currently active panel
             super.doOKAction()
@@ -147,19 +147,20 @@ class LLMClientTable {
                 val cardPanel = JPanel(cardLayout).apply {
                     preferredSize = JBUI.size(640, 480)
                     llmClientConfigurations.forEach {
-                        add(it.displayName, it.panel().create())
+                        add(it.getClientName(), it.panel().create())
                     }
                 }
 
                 // Register validators of the currently active cards
-                (cardLayout.findComponentById(llmClient.displayName) as DialogPanel).registerValidators(myDisposable) {
+                val dialogPanel = cardLayout.findComponentById(llmClient.getClientName()) as DialogPanel
+                dialogPanel.registerValidators(myDisposable) {
                     isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
                 }
 
                 val cardsList = JBList(llmClientConfigurations).apply {
                     val descriptor = object : ListItemDescriptorAdapter<LLMClientConfiguration>() {
-                        override fun getTextFor(value: LLMClientConfiguration) = value.displayName
-                        override fun getIconFor(value: LLMClientConfiguration) = value.getIcon()
+                        override fun getTextFor(value: LLMClientConfiguration) = value.getClientName()
+                        override fun getIconFor(value: LLMClientConfiguration) = value.getClientIcon()
                     }
                     cellRenderer = object : GroupedItemsListRenderer<LLMClientConfiguration>(descriptor) {
                         override fun customizeComponent(list: JList<out LLMClientConfiguration>?, value: LLMClientConfiguration?, isSelected: Boolean) {
@@ -168,7 +169,7 @@ class LLMClientTable {
                     }
                     addListSelectionListener {
                         llmClient = selectedValue
-                        cardLayout.show(cardPanel, llmClient.displayName)
+                        cardLayout.show(cardPanel, llmClient.getClientName())
                     }
                     setSelectedValue(llmClient, true)
                 }

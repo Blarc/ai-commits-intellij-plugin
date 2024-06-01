@@ -22,7 +22,7 @@ class OpenAiClientService(cs: CoroutineScope) : LLMClientService<OpenAiClientCon
     }
 
     override suspend fun buildChatModel(client: OpenAiClientConfiguration): ChatLanguageModel {
-        val token = client.token.nullize(true) ?: retrieveToken(client.displayName)?.toString(true)
+        val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = OpenAiChatModel.builder()
             .apiKey(token ?: "")
             .modelName(client.modelId)

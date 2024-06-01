@@ -29,7 +29,7 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
             llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations, AICommitsListCellRenderer())
                 .bindItem(getter = AppSettings2.instance::getActiveLLMClient) {
                     it?.let {
-                        AppSettings2.instance.setActiveLlmClient(it)
+                        AppSettings2.instance.setActiveLlmClient(it.id)
                     }
                 }.widthGroup("input")
                 .component

@@ -15,6 +15,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
     private val tokenPasswordField = JBPasswordField()
 
     override fun create() = panel {
+        nameRow()
         hostRow()
         proxyRow()
         timeoutRow()
@@ -24,7 +25,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 .widthGroup("label")
             cell(tokenPasswordField)
                 .bindText(getter = {""}, setter = {
-                    saveToken(clientConfiguration.displayName, it)
+                    saveToken(clientConfiguration.id, it)
                 })
                 .emptyText(if (clientConfiguration.tokenIsStored) message("settings.openAI.token.stored") else message("settings.openAI.token.example"))
                 .resizableColumn()

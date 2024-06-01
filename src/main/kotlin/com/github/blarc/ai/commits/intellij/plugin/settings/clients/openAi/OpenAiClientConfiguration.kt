@@ -6,10 +6,8 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Transient
 import javax.swing.Icon
 
-class OpenAiClientConfiguration(
-    displayName: String = "OpenAI"
-) : LLMClientConfiguration(
-    displayName,
+class OpenAiClientConfiguration : LLMClientConfiguration(
+    "OpenAI",
     "https://api.openai.com/v1",
     null,
     30,
@@ -21,7 +19,15 @@ class OpenAiClientConfiguration(
     @Transient
     var token: String? = null
 
-    override fun getIcon(): Icon {
+    companion object {
+        const val CLIENT_NAME = "OpenAI"
+    }
+
+    override fun getClientName(): String {
+        return CLIENT_NAME
+    }
+
+    override fun getClientIcon(): Icon {
         return Icons.OPEN_AI
     }
 
@@ -37,7 +43,9 @@ class OpenAiClientConfiguration(
     override fun getRefreshModelsFunction() = null
 
     override fun clone(): LLMClientConfiguration {
-        val copy = OpenAiClientConfiguration(displayName)
+        val copy = OpenAiClientConfiguration()
+        copy.id = id
+        copy.name = name
         copy.host = host
         copy.proxyUrl = proxyUrl
         copy.timeout = timeout

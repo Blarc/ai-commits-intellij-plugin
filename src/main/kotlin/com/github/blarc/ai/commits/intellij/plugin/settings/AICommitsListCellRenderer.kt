@@ -25,9 +25,10 @@ class AICommitsListCellRenderer : DefaultListCellRenderer() {
                 text = value.name
             }
 
+            // This is used for combo box in settings dialog
             is LLMClientConfiguration -> {
-                icon = value.getIcon()
-                text = value.displayName
+                text = value.name
+                icon = value.getClientIcon()
             }
         }
         return component
