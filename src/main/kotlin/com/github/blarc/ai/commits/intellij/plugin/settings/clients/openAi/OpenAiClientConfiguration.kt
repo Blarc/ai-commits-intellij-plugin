@@ -3,11 +3,11 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.intellij.openapi.vcs.ui.CommitMessage
+import com.intellij.util.xmlb.annotations.Transient
 import javax.swing.Icon
 
 class OpenAiClientConfiguration(
-    displayName: String = "OpenAI",
-    var organizationId: String? = null
+    displayName: String = "OpenAI"
 ) : LLMClientConfiguration(
     displayName,
     "https://api.openai.com/v1",
@@ -16,6 +16,11 @@ class OpenAiClientConfiguration(
     "gpt-3.5-turbo",
     "0.7"
 ) {
+    var organizationId: String? = null
+    var tokenIsStored: Boolean = false
+    @Transient
+    var token: String? = null
+
     override fun getIcon(): Icon {
         return Icons.OPEN_AI
     }
@@ -39,6 +44,7 @@ class OpenAiClientConfiguration(
         copy.modelId = modelId
         copy.organizationId = organizationId
         copy.temperature = temperature
+        copy.tokenIsStored = tokenIsStored
         return copy
     }
 

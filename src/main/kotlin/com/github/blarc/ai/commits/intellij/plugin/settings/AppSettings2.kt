@@ -1,6 +1,8 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.saveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -8,6 +10,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.Ollam
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
+import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
@@ -72,7 +75,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         val appSettings = AppSettings.instance
         migrateSettingsFromVersion1(appSettings)
         val openAiLlmClient = llmClientConfigurations.find { it.displayName == "OpenAI" }
-        migrateOpenAiClientFromVersion1(openAiLlmClient, appSettings)
+        migrateOpenAiClientFromVersion1(openAiLlmClient as OpenAiClientConfiguration, appSettings)
     }
 
     private fun migrateSettingsFromVersion1(appSettings: AppSettings) {
@@ -85,14 +88,22 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         appExclusions = appSettings.appExclusions
     }
 
-    private fun migrateOpenAiClientFromVersion1(openAiLlmClientConfiguration: LLMClientConfiguration?, appSettings: AppSettings) {
+    private fun migrateOpenAiClientFromVersion1(openAiLlmClientConfiguration: OpenAiClientConfiguration?, appSettings: AppSettings) {
         openAiLlmClientConfiguration?.apply {
             host = appSettings.openAIHost
             appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
             proxyUrl = appSettings.proxyUrl
             modelId = appSettings.openAIModelId
             temperature = appSettings.openAITemperature
-            AICommitsUtils.retrieveToken(appSettings.openAITokenTitle)?.let { token = it }
+
+            val credentialAttributes = getCredentialAttributes(appSettings.openAITokenTitle)
+            PasswordSafe.instance.getAsync(credentialAttributes)
+                .onSuccess {
+                    it?.password?.let { token ->
+                        saveToken(displayName, token.toString(false))
+                        tokenIsStored = true
+                    }
+                }
         }
 
         OpenAiClientSharedState.getInstance().hosts.addAll(appSettings.openAIHosts)

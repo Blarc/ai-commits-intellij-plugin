@@ -5,7 +5,7 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotificatio
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.intellij.credentialStore.CredentialAttributes
-import com.intellij.credentialStore.Credentials
+import com.intellij.credentialStore.OneTimeString
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
@@ -15,6 +15,8 @@ import com.intellij.openapi.vcs.changes.Change
 import com.knuddels.jtokkit.Encodings
 import com.knuddels.jtokkit.api.ModelType
 import git4idea.repo.GitRepositoryManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.StringWriter
 import java.nio.file.FileSystems
 
@@ -138,9 +140,21 @@ object AICommitsUtils {
         return encoding.countTokens(prompt) > modelType.maxContextLength
     }
 
-    fun retrieveToken(title: String): String? {
-        val credentials: Credentials? = PasswordSafe.instance.get(getCredentialAttributes(title))
-        return credentials?.getPasswordAsString()
+    // TODO @Blarc: Slow operations are prohibited on EDT
+    fun saveToken(title: String, token: String) {
+        try {
+            PasswordSafe.instance.setPassword(getCredentialAttributes(title), token)
+        } catch (e: Exception) {
+            sendNotification(Notification.unableToSaveToken(e.message))
+        }
+    }
+
+    suspend fun retrieveToken(title: String): OneTimeString? {
+        val credentialAttributes = getCredentialAttributes(title)
+        val credentials = withContext(Dispatchers.IO) {
+            PasswordSafe.instance.get(credentialAttributes)
+        }
+        return credentials?.password
     }
 
     fun getCredentialAttributes(title: String): CredentialAttributes {
