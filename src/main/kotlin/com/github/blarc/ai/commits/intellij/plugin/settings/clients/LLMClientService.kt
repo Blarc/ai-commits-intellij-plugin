@@ -15,46 +15,51 @@ import kotlinx.coroutines.withContext
 
 abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: CoroutineScope) {
 
-    abstract fun buildChatModel(client: T): ChatLanguageModel
+    abstract suspend fun buildChatModel(client: T): ChatLanguageModel
 
     fun generateCommitMessage(client: T, prompt: String, commitMessage: CommitMessage) {
-        val model = buildChatModel(client)
-        sendRequest(model, prompt, onSuccess = {
-            commitMessage.setCommitMessage(it)
-            AppSettings2.instance.recordHit()
-        }, onError = {
-            commitMessage.setCommitMessage(it)
-        })
+        cs.launch(Dispatchers.Default) {
+            sendRequest(client, prompt, onSuccess = {
+                commitMessage.setCommitMessage(it)
+                AppSettings2.instance.recordHit()
+            }, onError = {
+                commitMessage.setCommitMessage(it)
+            })
+        }
     }
 
     fun verifyConfiguration(client: T, label: JBLabel) {
-        val model = buildChatModel(client)
-        sendRequest(model, "test", onSuccess = {
-            label.text = message("settings.verify.valid")
-            label.icon = AllIcons.General.InspectionsOK
-        }, onError = {
-            label.text = it.wrap(80)
-            label.icon = AllIcons.General.InspectionsError
-        })
+        // TODO @Blarc: Can you make this better?
+        label.text = "Verifying configuration..."
+        cs.launch(Dispatchers.Default) {
+            sendRequest(client, "test", onSuccess = {
+                label.text = message("settings.verify.valid")
+                label.icon = AllIcons.General.InspectionsOK
+            }, onError = {
+                label.text = it.wrap(80)
+                label.icon = AllIcons.General.InspectionsError
+            })
+        }
     }
 
-    private fun sendRequest(model: ChatLanguageModel, text: String, onSuccess: suspend (r: String) -> Unit, onError: suspend (r: String) -> Unit) {
-        cs.launch(Dispatchers.Default) {
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    model.generate(
-                        listOf(
-                            UserMessage.from(
-                                "user",
-                                text
-                            )
+    private suspend fun sendRequest(client: T, text: String, onSuccess: suspend (r: String) -> Unit, onError: suspend (r: String) -> Unit) {
+        try {
+            val model = buildChatModel(client)
+            val response = withContext(Dispatchers.IO) {
+                model.generate(
+                    listOf(
+                        UserMessage.from(
+                            "user",
+                            text
                         )
-                    ).content().text()
-                }
-                onSuccess(response)
-            } catch (e: Exception) {
-                onError(e.message ?: "Unknown error.")
+                    )
+                ).content().text()
             }
+            onSuccess(response)
+        } catch (e: IllegalArgumentException) {
+            onError("Invalid configuration: ${e.message ?: "unknown"}.")
+        } catch (e: Exception) {
+            onError(e.message ?: "Unknown error.")
         }
     }
 }

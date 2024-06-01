@@ -45,7 +45,7 @@ class OllamaClientService(private val cs: CoroutineScope) : LLMClientService<Oll
         }
     }
 
-    override fun buildChatModel(client: OllamaClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: OllamaClientConfiguration): ChatLanguageModel {
         return OllamaChatModel.builder()
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
