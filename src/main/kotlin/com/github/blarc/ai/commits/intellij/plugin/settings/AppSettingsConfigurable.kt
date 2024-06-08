@@ -37,7 +37,9 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
         row {
             llmClientToolbarDecorator = ToolbarDecorator.createDecorator(llmClientTable.table)
                 .setAddAction {
-                    llmClientTable.addLlmClient()
+                    llmClientTable.addLlmClient().let {
+                        llmClientConfigurationComboBox.addItem(it)
+                    }
                 }
                 .setEditAction {
                     llmClientTable.editLlmClient()?.let {
@@ -134,8 +136,6 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
     }
 
     override fun apply() {
-        // TODO @Blarc
-        // AppSettings2.instance.getActiveLLMClient().hosts.add(hostComboBox.item)
         promptTable.apply()
         llmClientTable.apply()
         super.apply()
