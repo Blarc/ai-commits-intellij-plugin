@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin
 
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.commonBranch
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.constructPrompt
@@ -9,7 +8,6 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotificatio
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.progress.runBackgroundableTask
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.openapi.vcs.ui.CommitMessage
@@ -33,30 +31,27 @@ class AICommitAction : AnAction(), DumbAware {
         val includedChanges = commitWorkflowHandler.ui.getIncludedChanges()
         val commitMessage = VcsDataKeys.COMMIT_MESSAGE_CONTROL.getData(e.dataContext) as CommitMessage?
 
-        // FIXME @Blarc: Use coroutine with Dispatchers.IO!!!!!!!!!!!
-        runBackgroundableTask(message("action.background"), project) {
-            val diff = computeDiff(includedChanges, false, project)
-            if (diff.isBlank()) {
-                sendNotification(Notification.emptyDiff())
-                return@runBackgroundableTask
-            }
+        val diff = computeDiff(includedChanges, false, project)
+        if (diff.isBlank()) {
+            sendNotification(Notification.emptyDiff())
+            return
+        }
 
-            val branch = commonBranch(includedChanges, project)
-            val hint = commitMessage?.text
-            val prompt = constructPrompt(AppSettings2.instance.activePrompt.content, diff, branch, hint)
+        val branch = commonBranch(includedChanges, project)
+        val hint = commitMessage?.text
+        val prompt = constructPrompt(AppSettings2.instance.activePrompt.content, diff, branch, hint)
 
-            // TODO @Blarc: add support for different clients
+        // TODO @Blarc: add support for different clients
 //            if (isPromptTooLarge(prompt)) {
 //                sendNotification(Notification.promptTooLarge())
 //                return@runBackgroundableTask
 //            }
 
-            if (commitMessage == null) {
-                sendNotification(Notification.noCommitMessage())
-                return@runBackgroundableTask
-            }
-
-            llmClient.generateCommitMessage(prompt, commitMessage)
+        if (commitMessage == null) {
+            sendNotification(Notification.noCommitMessage())
+            return
         }
+
+        llmClient.generateCommitMessage(prompt, project, commitMessage)
     }
 }

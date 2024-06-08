@@ -5,7 +5,9 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
+import com.intellij.platform.ide.progress.withBackgroundProgress
 import com.intellij.ui.components.JBLabel
 import dev.langchain4j.data.message.UserMessage
 import dev.langchain4j.model.chat.ChatLanguageModel
@@ -18,18 +20,20 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
 
     abstract suspend fun buildChatModel(client: T): ChatLanguageModel
 
-    fun generateCommitMessage(client: T, prompt: String, commitMessage: CommitMessage) {
+    fun generateCommitMessage(client: T, prompt: String, project: Project, commitMessage: CommitMessage) {
         cs.launch(Dispatchers.Default) {
-            sendRequest(client, prompt, onSuccess = {
-                withContext(Dispatchers.EDT) {
-                    commitMessage.setCommitMessage(it)
-                }
-                AppSettings2.instance.recordHit()
-            }, onError = {
-                withContext(Dispatchers.EDT) {
-                    commitMessage.setCommitMessage(it)
-                }
-            })
+            withBackgroundProgress(project, "Generating commit") {
+                sendRequest(client, prompt, onSuccess = {
+                    withContext(Dispatchers.EDT) {
+                        commitMessage.setCommitMessage(it)
+                    }
+                    AppSettings2.instance.recordHit()
+                }, onError = {
+                    withContext(Dispatchers.EDT) {
+                        commitMessage.setCommitMessage(it)
+                    }
+                })
+            }
         }
     }
 

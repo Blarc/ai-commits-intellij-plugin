@@ -2,6 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Transient
 import javax.swing.Icon
@@ -35,8 +36,8 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
         return OpenAiClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, commitMessage: CommitMessage) {
-        return OpenAiClientService.getInstance().generateCommitMessage(this, prompt, commitMessage)
+    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
+        return OpenAiClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
     }
 
     // Model names are retrieved from Enum and do not need to be refreshed.

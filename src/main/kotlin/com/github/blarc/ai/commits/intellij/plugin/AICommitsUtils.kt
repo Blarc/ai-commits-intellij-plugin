@@ -90,7 +90,7 @@ object AICommitsUtils {
         val changesByRepository = includedChanges
             .filter {
                 it.virtualFile?.path?.let { path ->
-                    AICommitsUtils.isPathExcluded(path, project)
+                    isPathExcluded(path, project)
                 } ?: false
             }
             .mapNotNull { change ->
