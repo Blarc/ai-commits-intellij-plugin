@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Added
+
+- LLM clients table for saving multiple clients configurations.
+- Support for Ollama.
+- Setting for Open AI's organization ID.
+- New persistent state settings component for saving multiple LLM clients.
+
+### Changed
+
+- Replace `com.aallam.openai:openai-client` with `langchain4j`.
+- Refactor the code with generic implementation of LLM clients that makes adding new clients easier.
+- Use Kotlin's coroutines to prevent blocking of EDT thread.
+
 ### Fixed
 
 - Language Pack plugin makes the AI commits plugin unusable.
