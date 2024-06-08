@@ -1,5 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
@@ -40,7 +41,7 @@ abstract class LLMClientConfiguration(
         getSharedState().modelIds.add(modelId)
     }
 
-    abstract fun generateCommitMessage(prompt: String, commitMessage: CommitMessage)
+    abstract fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage)
 
     abstract fun getRefreshModelsFunction(): ((ComboBox<String>) -> Unit)?
 

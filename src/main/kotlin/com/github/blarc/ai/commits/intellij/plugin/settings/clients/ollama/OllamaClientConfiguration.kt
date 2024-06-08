@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import javax.swing.Icon
@@ -32,8 +33,8 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         return OllamaClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, commitMessage: CommitMessage) {
-        return OllamaClientService.getInstance().generateCommitMessage(this, prompt, commitMessage)
+    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
+        return OllamaClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
     }
 
     override fun getRefreshModelsFunction() = fun (cb: ComboBox<String>) {
