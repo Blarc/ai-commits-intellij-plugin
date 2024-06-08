@@ -5,6 +5,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPan
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.toNullableProperty
 
 class QianfanClientPanel(private val clientConfiguration: QianfanClientConfiguration) : LLMClientPanel(clientConfiguration) {
 
@@ -13,7 +14,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
 
     override fun create() = panel {
         nameRow()
-        hostRow()
+        hostRow(clientConfiguration::host.toNullableProperty())
         modelIdRow()
 
         row {
@@ -46,8 +47,6 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
     override fun verifyConfiguration() {
 
         clientConfiguration.host = hostComboBox.item
-//        clientConfiguration.proxyUrl = proxyTextField.text
-//        clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.apiKey = String(apiKeyField.password)

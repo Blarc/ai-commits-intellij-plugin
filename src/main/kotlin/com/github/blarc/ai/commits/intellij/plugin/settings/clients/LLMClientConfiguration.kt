@@ -9,9 +9,6 @@ import javax.swing.Icon
 
 abstract class LLMClientConfiguration(
     @Attribute var name: String,
-    @Attribute var host: String,
-    @Attribute var proxyUrl: String?,
-    @Attribute var timeout: Int,
     @Attribute var modelId: String,
     @Attribute var temperature: String,
 ) : Cloneable, Comparable<LLMClientConfiguration> {

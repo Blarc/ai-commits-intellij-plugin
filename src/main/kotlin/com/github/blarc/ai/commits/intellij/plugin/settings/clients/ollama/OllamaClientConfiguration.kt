@@ -6,16 +6,19 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSha
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
+import com.intellij.util.xmlb.annotations.Attribute
 import javax.swing.Icon
 
 class OllamaClientConfiguration : LLMClientConfiguration(
     "Ollama",
-    "http://localhost:11434/",
-    null,
-    30,
     "llama3",
     "0.7"
 ) {
+
+    @Attribute
+    var host: String = "http://localhost:11434/"
+    @Attribute
+    var timeout: Int = 30
 
     companion object {
         const val CLIENT_NAME = "Ollama"
@@ -46,7 +49,6 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         copy.id = id
         copy.name = name
         copy.host = host
-        copy.proxyUrl = proxyUrl
         copy.timeout = timeout
         copy.modelId = modelId
         copy.temperature = temperature

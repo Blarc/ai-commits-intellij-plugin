@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini.GeminiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
@@ -48,8 +49,8 @@ class LLMClientTable {
     private fun createTableModel(): ListTableModel<LLMClientConfiguration> = ListTableModel(
         arrayOf(
             createColumn<LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient.name },
-            createColumn(message("settings.llmClient.host")) { llmClient -> llmClient.host },
-            createColumn(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId }
+            createColumn(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId },
+            createColumn(message("settings.llmClient.temperature")) { llmClient -> llmClient.temperature }
         ),
         llmClients.toList()
     )
@@ -136,7 +137,8 @@ class LLMClientTable {
                 listOf(
                     OpenAiClientConfiguration(),
                     OllamaClientConfiguration(),
-                    QianfanClientConfiguration()
+                    QianfanClientConfiguration(),
+                    GeminiClientConfiguration()
                 )
             } else {
                 listOf(newLLMClientConfiguration)
