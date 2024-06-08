@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2024-06-08
+
 ### Added
 
 - LLM clients table for saving multiple clients configurations.
@@ -192,7 +194,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.4.0...v1.5.0
