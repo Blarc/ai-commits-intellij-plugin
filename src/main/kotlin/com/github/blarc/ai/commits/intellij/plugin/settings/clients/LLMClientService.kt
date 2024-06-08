@@ -22,7 +22,7 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
 
     fun generateCommitMessage(client: T, prompt: String, project: Project, commitMessage: CommitMessage) {
         cs.launch(Dispatchers.Default) {
-            withBackgroundProgress(project, "Generating commit") {
+            withBackgroundProgress(project, message("action.background")) {
                 sendRequest(client, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
                         commitMessage.setCommitMessage(it)
@@ -39,7 +39,7 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
 
     fun verifyConfiguration(client: T, label: JBLabel) {
         // TODO @Blarc: Can you make this better? with notifications?
-        label.text = "Verifying configuration..."
+        label.text = message("settings.verify.running")
         cs.launch(Dispatchers.Default) {
             sendRequest(client, "test", onSuccess = {
                 // This can't be called from EDT thread, because dialog blocks the EDT thread
@@ -68,9 +68,9 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
             }
             onSuccess(response)
         } catch (e: IllegalArgumentException) {
-            onError("Invalid configuration: ${e.message ?: "unknown"}.")
+            onError(message("settings.verify.invalid", e.message ?: message("unknown-error")))
         } catch (e: Exception) {
-            onError(e.message ?: "Unknown error.")
+            onError(e.message ?: message("unknown-error"))
         }
     }
 }
