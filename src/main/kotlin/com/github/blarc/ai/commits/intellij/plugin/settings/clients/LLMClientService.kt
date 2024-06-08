@@ -4,6 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.application.EDT
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.ui.components.JBLabel
 import dev.langchain4j.data.message.UserMessage
@@ -20,22 +21,28 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
     fun generateCommitMessage(client: T, prompt: String, commitMessage: CommitMessage) {
         cs.launch(Dispatchers.Default) {
             sendRequest(client, prompt, onSuccess = {
-                commitMessage.setCommitMessage(it)
+                withContext(Dispatchers.EDT) {
+                    commitMessage.setCommitMessage(it)
+                }
                 AppSettings2.instance.recordHit()
             }, onError = {
-                commitMessage.setCommitMessage(it)
+                withContext(Dispatchers.EDT) {
+                    commitMessage.setCommitMessage(it)
+                }
             })
         }
     }
 
     fun verifyConfiguration(client: T, label: JBLabel) {
-        // TODO @Blarc: Can you make this better?
+        // TODO @Blarc: Can you make this better? with notifications?
         label.text = "Verifying configuration..."
         cs.launch(Dispatchers.Default) {
             sendRequest(client, "test", onSuccess = {
+                // This can't be called from EDT thread, because dialog blocks the EDT thread
                 label.text = message("settings.verify.valid")
                 label.icon = AllIcons.General.InspectionsOK
             }, onError = {
+                // This can't be called from EDT thread, because dialog blocks the EDT thread
                 label.text = it.wrap(80)
                 label.icon = AllIcons.General.InspectionsError
             })

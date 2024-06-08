@@ -1,7 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.saveToken
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
@@ -25,11 +24,10 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 .widthGroup("label")
             cell(tokenPasswordField)
                 .bindText(getter = {""}, setter = {
-                    saveToken(clientConfiguration.id, it)
+                    OpenAiClientService.getInstance().saveToken(clientConfiguration, it)
                 })
                 .emptyText(if (clientConfiguration.tokenIsStored) message("settings.openAI.token.stored") else message("settings.openAI.token.example"))
                 .resizableColumn()
-                .focused()
                 .widthGroup("input")
         }
         row {
@@ -54,14 +52,13 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
 
     override fun verifyConfiguration() {
 
-        val newConfiguration = OpenAiClientConfiguration()
-        newConfiguration.host = hostComboBox.item
-        newConfiguration.proxyUrl = proxyTextField.text
-        newConfiguration.timeout = socketTimeoutTextField.text.toInt()
-        newConfiguration.modelId = modelComboBox.item
-        newConfiguration.temperature = temperatureTextField.text
-        newConfiguration.token = String(tokenPasswordField.password)
+        clientConfiguration.host = hostComboBox.item
+        clientConfiguration.proxyUrl = proxyTextField.text
+        clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
+        clientConfiguration.modelId = modelComboBox.item
+        clientConfiguration.temperature = temperatureTextField.text
+        clientConfiguration.token = String(tokenPasswordField.password)
 
-        OpenAiClientService.getInstance().verifyConfiguration(newConfiguration, verifyLabel)
+        OpenAiClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

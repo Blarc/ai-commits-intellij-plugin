@@ -139,15 +139,6 @@ object AICommitsUtils {
 //        return encoding.countTokens(prompt) > modelType.maxContextLength
 //    }
 
-    // TODO @Blarc: Slow operations are prohibited on EDT
-    fun saveToken(title: String, token: String) {
-        try {
-            PasswordSafe.instance.setPassword(getCredentialAttributes(title), token)
-        } catch (e: Exception) {
-            sendNotification(Notification.unableToSaveToken(e.message))
-        }
-    }
-
     suspend fun retrieveToken(title: String): OneTimeString? {
         val credentialAttributes = getCredentialAttributes(title)
         val credentials = withContext(Dispatchers.IO) {
