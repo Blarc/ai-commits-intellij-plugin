@@ -52,11 +52,11 @@ abstract class LLMClientConfiguration(
         return name.compareTo(other.name)
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is LLMClientConfiguration && other.id == id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+//    override fun equals(other: Any?): Boolean {
+//        return other is LLMClientConfiguration && other.id == id
+//    }
+//
+//    override fun hashCode(): Int {
+//        return id.hashCode()
+//    }
 }

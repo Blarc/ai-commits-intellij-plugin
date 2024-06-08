@@ -3,20 +3,19 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 
 class OllamaClientPanel private constructor(
-    configuration: OllamaClientConfiguration,
+    private val clientConfiguration: OllamaClientConfiguration,
     val service: OllamaClientService
-): LLMClientPanel(configuration) {
+): LLMClientPanel(clientConfiguration) {
 
     constructor(configuration: OllamaClientConfiguration): this(configuration, OllamaClientService.getInstance())
 
     override fun verifyConfiguration() {
+        // Configuration passed to panel is already a copy of the original or a new configuration
+        clientConfiguration.host = hostComboBox.item
+        clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
+        clientConfiguration.modelId = modelComboBox.item
+        clientConfiguration.temperature = temperatureTextField.text
 
-        val newConfiguration = OllamaClientConfiguration()
-        newConfiguration.host = hostComboBox.item
-        newConfiguration.timeout = socketTimeoutTextField.text.toInt()
-        newConfiguration.modelId = modelComboBox.item
-        newConfiguration.temperature = temperatureTextField.text
-
-        service.verifyConfiguration(newConfiguration, verifyLabel)
+        service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

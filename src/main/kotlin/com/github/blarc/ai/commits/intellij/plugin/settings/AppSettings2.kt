@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.saveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -10,6 +9,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.Ollam
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
+import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
@@ -98,17 +98,25 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             temperature = appSettings.openAITemperature
 
             val credentialAttributes = getCredentialAttributes(appSettings.openAITokenTitle)
-            PasswordSafe.instance.getAsync(credentialAttributes)
-                .onSuccess {
-                    it?.password?.let { token ->
-                        saveToken(id, token.toString(false))
-                        tokenIsStored = true
-                    }
-                }
+            migrateToken(credentialAttributes)
         }
 
         OpenAiClientSharedState.getInstance().hosts.addAll(appSettings.openAIHosts)
         OpenAiClientSharedState.getInstance().modelIds.addAll(appSettings.openAIModelIds)
+    }
+
+    private fun OpenAiClientConfiguration.migrateToken(credentialAttributes: CredentialAttributes) {
+        PasswordSafe.instance.getAsync(credentialAttributes)
+            .onSuccess {
+                it?.password?.let { token ->
+                    try {
+                        PasswordSafe.instance.setPassword(getCredentialAttributes(id), token.toString(false))
+                    } catch (e: Exception) {
+                        sendNotification(Notification.unableToSaveToken(e.message))
+                    }
+                    tokenIsStored = true
+                }
+            }
     }
 
     fun recordHit() {
