@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Language Pack plugin makes the AI commits plugin unusable.
+
 ## [1.6.0] - 2024-03-05
 
 ### Added
