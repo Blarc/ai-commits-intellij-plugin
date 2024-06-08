@@ -54,7 +54,7 @@
 
     </projectListeners>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
+    <resource-bundle>messages.AiCommitsBundle</resource-bundle>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
