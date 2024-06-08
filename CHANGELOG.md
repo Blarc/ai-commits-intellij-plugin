@@ -14,6 +14,7 @@
 - Replace `com.aallam.openai:openai-client` with `langchain4j`.
 - Refactor the code with generic implementation of LLM clients that makes adding new clients easier.
 - Use Kotlin's coroutines to prevent blocking of EDT thread.
+- Plugin now supports IDE versions 233 and higher.
 
 ### Fixed
 
