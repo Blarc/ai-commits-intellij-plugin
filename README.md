@@ -24,25 +24,29 @@
 
 ## Description
 
-AI Commits is a plugin that generates your commit messages by using git diff and OpenAI. To get started, install the
-plugin and set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
+AI Commits is a plugin that generates your commit messages by using git diff and LLMs. To get started, install the
+plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
 
 ## Features
 
-- Generate commit message from diff using OpenAI API
+- Generate commit message from git diff using LLM
 - Compute diff only from the selected files and lines in the commit dialog
 - Create your own prompt for commit message generation
 - Use predefined variables and hint to customize your prompt
-- Choose any of the models available in OpenAI API
-- Set OpenAI network proxy
-- Set custom OpenAI compatible API endpoint
+
+## Supported models
+
+- Open AI
+- Ollama
+
+The plugin is implemented in a generic way and uses [langchain4j](https://github.com/langchain4j/langchain4j) for creating LLM API clients. If you would like to use some other LLM model that is supported by langchain4j, please make a feature request in GitHub issues.
 
 ## Demo
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./screenshots/plugin-dark.gif">
   <source media="(prefers-color-scheme: light)" srcset="./screenshots/plugin-white.gif">
-  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="./screenshots/plugin-white.gif">
+  <img alt="Demo." src="./screenshots/plugin-white.gif">
 </picture>
 
 ## Compatibility
@@ -69,7 +73,7 @@ for "AI Commits"</kbd> > <kbd>Install Plugin</kbd>  > <kbd>Restart IntelliJ IDEA
 1. Download zip from [releases](https://github.com/Blarc/ai-commits-intellij-plugin/releases)
 2. Import to IntelliJ: <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>Cog</kbd> > <kbd>Install plugin from
    disk...</kbd>
-3. Set OpenAI private token in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
+3. Set LLM client configuration in plugin's settings: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>AI Commits</kbd>
 
 [//]: # (## Demo)
 
@@ -97,6 +101,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 - Inspired by Nutlope's [AICommits](https://github.com/Nutlope/aicommits).
 - [openai-kotlin](https://github.com/aallam/openai-kotlin) for OpenAI API client.
+- [langchain4j](https://github.com/langchain4j/langchain4j) for LLM API clients.
 
 ## License
 
