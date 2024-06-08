@@ -4,18 +4,25 @@ import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
+import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import javax.swing.Icon
 
 class OpenAiClientConfiguration : LLMClientConfiguration(
     "OpenAI",
-    "https://api.openai.com/v1",
-    null,
-    30,
     "gpt-3.5-turbo",
     "0.7"
 ) {
+
+    @Attribute
+    var host: String = "https://api.openai.com/v1"
+    @Attribute
+    var timeout: Int = 30
+    @Attribute
+    var proxyUrl: String? = null
+    @Attribute
     var organizationId: String? = null
+    @Attribute
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null

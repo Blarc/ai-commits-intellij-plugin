@@ -9,6 +9,7 @@ import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
+import kotlin.reflect.KMutableProperty0
 
 
 abstract class LLMClientPanel(
@@ -16,7 +17,6 @@ abstract class LLMClientPanel(
 ) {
 
     val hostComboBox = ComboBox(clientConfiguration.getHosts().toTypedArray())
-    val proxyTextField = JBTextField()
     val socketTimeoutTextField = JBTextField()
     val modelComboBox = ComboBox(clientConfiguration.getModelIds().toTypedArray())
     val temperatureTextField = JBTextField()
@@ -24,8 +24,6 @@ abstract class LLMClientPanel(
 
     open fun create() = panel {
         nameRow()
-        hostRow()
-        timeoutRow()
         modelIdRow()
         temperatureRow()
         verifyRow()
@@ -42,7 +40,7 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.hostRow() {
+    open fun Panel.hostRow(property: MutableProperty<String?>) {
         row {
             label(message("settings.llmClient.host"))
                 .widthGroup("label")
@@ -50,33 +48,18 @@ abstract class LLMClientPanel(
                 .applyToComponent {
                     isEditable = true
                 }
-                .bindItem(clientConfiguration::host.toNullableProperty())
+                .bindItem(property)
                 .widthGroup("input")
                 .onApply { clientConfiguration.addHost(hostComboBox.item) }
         }
     }
 
-    open fun Panel.proxyRow() {
-        row {
-            label(message("settings.llmClient.proxy"))
-                .widthGroup("label")
-            cell(proxyTextField)
-                .applyToComponent { minimumWidth = 400 }
-                .bindText(clientConfiguration::proxyUrl.toNonNullableProperty(""))
-                .resizableColumn()
-                .widthGroup("input")
-        }
-        row {
-            comment(message("settings.llmClient.proxy.comment"))
-        }
-    }
-
-    open fun Panel.timeoutRow() {
+    open fun Panel.timeoutRow(property: KMutableProperty0<Int>) {
         row {
             label(message("settings.llmClient.timeout")).widthGroup("label")
             cell(socketTimeoutTextField)
                 .applyToComponent { minimumWidth = 400 }
-                .bindIntText(clientConfiguration::timeout)
+                .bindIntText(property)
                 .resizableColumn()
                 .widthGroup("input")
                 .validationOnInput { isInt(it.text) }

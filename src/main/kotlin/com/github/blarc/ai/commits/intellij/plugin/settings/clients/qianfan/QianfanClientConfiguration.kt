@@ -12,13 +12,14 @@ import javax.swing.Icon
 
 class QianfanClientConfiguration : LLMClientConfiguration(
     "Qianfan",
-    "https://aip.baidubce.com",
-    null,
-    30,
     QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName,
     "0.7"
 ) {
+    @Attribute
+    var host: String = "https://aip.baidubce.com"
+    @Attribute
     var apiKeyIsStored : Boolean = false
+    @Attribute
     var secretKeyIsStored: Boolean = false
     @Transient
     var apiKey: String = ""
@@ -64,8 +65,6 @@ class QianfanClientConfiguration : LLMClientConfiguration(
         copy.apiKeyId = apiKeyId
         copy.name = name
         copy.host = host
-        copy.proxyUrl = proxyUrl
-        copy.timeout = timeout
         copy.modelId = modelId
         copy.temperature = temperature
         copy.apiKeyIsStored = apiKeyIsStored

@@ -4,39 +4,56 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
-import com.intellij.ui.dsl.builder.AlignX
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toNonNullableProperty
+import com.intellij.ui.components.JBTextField
+import com.intellij.ui.dsl.builder.*
+import com.intellij.ui.util.minimumWidth
 
 class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfiguration) : LLMClientPanel(clientConfiguration) {
-
+    private val proxyTextField = JBTextField()
     private val tokenPasswordField = JBPasswordField()
 
     override fun create() = panel {
         nameRow()
-        hostRow()
+        hostRow(clientConfiguration::host.toNullableProperty())
         proxyRow()
-        timeoutRow()
+        timeoutRow(clientConfiguration::timeout)
+        tokenRow()
+        modelIdRow()
+        organizationIdRow()
+        temperatureRow()
+        verifyRow()
 
+    }
+
+    private fun Panel.proxyRow() {
+        row {
+            label(message("settings.llmClient.proxy"))
+                .widthGroup("label")
+            cell(proxyTextField)
+                .applyToComponent { minimumWidth = 400 }
+                .bindText(clientConfiguration::proxyUrl.toNonNullableProperty(""))
+                .resizableColumn()
+                .widthGroup("input")
+                .comment(message("settings.llmClient.proxy.comment"))
+        }
+    }
+
+    private fun Panel.tokenRow() {
         row {
             label(message("settings.llmClient.token"))
                 .widthGroup("label")
             cell(tokenPasswordField)
-                .bindText(getter = {""}, setter = {
+                .bindText(getter = { "" }, setter = {
                     OpenAiClientService.getInstance().saveToken(clientConfiguration, it)
                 })
                 .emptyText(if (clientConfiguration.tokenIsStored) message("settings.openAI.token.stored") else message("settings.openAI.token.example"))
                 .resizableColumn()
                 .widthGroup("input")
+                .comment(message("settings.openAi.token.comment"))
         }
-        row {
-            comment(message("settings.openAi.token.comment"))
-                .align(AlignX.LEFT)
-        }
+    }
 
-        modelIdRow()
-
+    private fun Panel.organizationIdRow() {
         row {
             label(message("settings.openAi.organizationId"))
                 .widthGroup("label")
@@ -44,10 +61,6 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 .bindText(clientConfiguration::organizationId.toNonNullableProperty(""))
                 .widthGroup("input")
         }
-
-        temperatureRow()
-        verifyRow()
-
     }
 
     override fun verifyConfiguration() {
