@@ -124,7 +124,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // langchain4j integrations
-    implementation("dev.langchain4j:langchain4j-open-ai:0.29.1")
+    implementation("dev.langchain4j:langchain4j-open-ai:0.31.0")
     implementation("dev.langchain4j:langchain4j-ollama:0.29.1")
 //    implementation("dev.langchain4j:langchain4j-hugging-face:0.28.0")
 //    implementation("dev.langchain4j:langchain4j-milvus:0.28.0")
