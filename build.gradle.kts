@@ -121,7 +121,7 @@ dependencies {
 //
 //    implementation("com.knuddels:jtokkit:1.0.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
     // langchain4j integrations
     implementation("dev.langchain4j:langchain4j-open-ai:0.31.0")
