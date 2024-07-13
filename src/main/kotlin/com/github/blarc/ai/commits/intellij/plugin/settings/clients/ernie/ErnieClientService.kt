@@ -34,7 +34,7 @@ class ErnieClientService(private val cs: CoroutineScope) : LLMClientService<Erni
             .secretKey(secretKey)
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
-        // Fix https://github.com/langchain4j/langchain4j/pull/1426. Remove this 'if' statement if langchain4j releases a new version that resolves this issue.
+        // Fix https://github.com/langchain4j/langchain4j/pull/1426. Remove this 'if' statement when langchain4j releases a new version that resolves this issue.
         if (client.modelId == QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName){
             builder.endpoint("ernie-speed-128k")
         }

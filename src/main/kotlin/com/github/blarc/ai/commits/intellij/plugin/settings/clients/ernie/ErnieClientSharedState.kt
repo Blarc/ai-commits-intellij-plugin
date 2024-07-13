@@ -20,7 +20,7 @@ class ErnieClientSharedState : PersistentStateComponent<ErnieClientSharedState>,
 
     @XCollection(style = XCollection.Style.v2)
     override val modelIds = QianfanChatModelNameEnum.entries.stream()
-        .map { it.toString() }
+        .map { it.modelName }
         .toList()
         .toMutableSet()
 
