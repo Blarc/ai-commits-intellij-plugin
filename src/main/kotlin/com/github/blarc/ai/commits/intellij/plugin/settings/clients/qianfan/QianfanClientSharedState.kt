@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ernie
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
@@ -7,12 +7,12 @@ import com.intellij.util.xmlb.annotations.XCollection
 import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
 
 @Service(Service.Level.APP)
-@State(name = "ErnieClientSharedState", storages = [Storage("AICommitsOpenAi.xml")])
-class ErnieClientSharedState : PersistentStateComponent<ErnieClientSharedState>, LLMClientSharedState {
+@State(name = "QianfanClientSharedState", storages = [Storage("AICommitsOpenAi.xml")])
+class QianfanClientSharedState : PersistentStateComponent<QianfanClientSharedState>, LLMClientSharedState {
 
     companion object {
         @JvmStatic
-        fun getInstance(): ErnieClientSharedState = service()
+        fun getInstance(): QianfanClientSharedState = service()
     }
 
     @XCollection(style = XCollection.Style.v2)
@@ -24,9 +24,9 @@ class ErnieClientSharedState : PersistentStateComponent<ErnieClientSharedState>,
         .toList()
         .toMutableSet()
 
-    override fun getState(): ErnieClientSharedState = this
+    override fun getState(): QianfanClientSharedState = this
 
-    override fun loadState(state: ErnieClientSharedState) {
+    override fun loadState(state: QianfanClientSharedState) {
         XmlSerializerUtil.copyBean(state, this)
     }
 }

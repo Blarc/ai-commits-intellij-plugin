@@ -5,7 +5,7 @@ import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ernie.ErnieClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Splitter
@@ -136,7 +136,7 @@ class LLMClientTable {
                 listOf(
                     OpenAiClientConfiguration(),
                     OllamaClientConfiguration(),
-                    ErnieClientConfiguration()
+                    QianfanClientConfiguration()
                 )
             } else {
                 listOf(newLLMClientConfiguration)

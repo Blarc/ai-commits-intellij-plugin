@@ -5,7 +5,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialA
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ernie.ErnieClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
@@ -51,7 +51,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         elementTypes = [
             OpenAiClientConfiguration::class,
             OllamaClientConfiguration::class,
-            ErnieClientConfiguration::class
+            QianfanClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )

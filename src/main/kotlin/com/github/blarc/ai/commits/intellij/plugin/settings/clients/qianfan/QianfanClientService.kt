@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ernie
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
@@ -17,14 +17,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Service(Service.Level.APP)
-class ErnieClientService(private val cs: CoroutineScope) : LLMClientService<ErnieClientConfiguration>(cs) {
+class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<QianfanClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic
-        fun getInstance(): ErnieClientService = service()
+        fun getInstance(): QianfanClientService = service()
     }
 
-    override suspend fun buildChatModel(client: ErnieClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: QianfanClientConfiguration): ChatLanguageModel {
         val apiKey = client.apiKey.nullize(true) ?: retrieveToken(client.apiKeyId)?.toString(true)
         val secretKey = client.secretKey.nullize(true) ?: retrieveToken(client.secretKeyId)?.toString(true)
 
@@ -51,11 +51,11 @@ class ErnieClientService(private val cs: CoroutineScope) : LLMClientService<Erni
             }
         }
     }
-    fun saveApiKey(client: ErnieClientConfiguration, apiKey: String) {
+    fun saveApiKey(client: QianfanClientConfiguration, apiKey: String) {
         saveToken(apiKey, client.apiKeyId)
         client.apiKeyIsStored = true
     }
-    fun saveSecretKey(client: ErnieClientConfiguration, secretKey: String) {
+    fun saveSecretKey(client: QianfanClientConfiguration, secretKey: String) {
         saveToken(secretKey, client.secretKeyId)
         client.secretKeyIsStored = true
     }

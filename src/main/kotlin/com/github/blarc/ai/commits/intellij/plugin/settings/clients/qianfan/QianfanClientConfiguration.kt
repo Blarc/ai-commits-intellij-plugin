@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ernie
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -6,12 +6,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
+import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
 import java.util.*
 import javax.swing.Icon
-import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
 
-class ErnieClientConfiguration : LLMClientConfiguration(
-    "Ernie",
+class QianfanClientConfiguration : LLMClientConfiguration(
+    "Qianfan",
     "https://aip.baidubce.com",
     null,
     30,
@@ -33,7 +33,7 @@ class ErnieClientConfiguration : LLMClientConfiguration(
     var secretKeyId: String = UUID.randomUUID().toString()
 
     companion object {
-        const val CLIENT_NAME = "Ernie"
+        const val CLIENT_NAME = "Qianfan"
     }
 
     override fun getClientName(): String {
@@ -41,22 +41,22 @@ class ErnieClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.ERNIE
+        return Icons.QIANFAN
     }
 
-    override fun getSharedState(): ErnieClientSharedState {
-        return ErnieClientSharedState.getInstance()
+    override fun getSharedState(): QianfanClientSharedState {
+        return QianfanClientSharedState.getInstance()
     }
 
     override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
-        return ErnieClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
+        return QianfanClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
     }
 
     // Model names are retrieved from Enum and do not need to be refreshed.
     override fun getRefreshModelsFunction() = null
 
     override fun clone(): LLMClientConfiguration {
-        val copy = ErnieClientConfiguration()
+        val copy = QianfanClientConfiguration()
         copy.id = id
         copy.apiKey = apiKey
         copy.secretKey = secretKey
@@ -73,5 +73,5 @@ class ErnieClientConfiguration : LLMClientConfiguration(
         return copy
     }
 
-    override fun panel() = ErnieClientPanel(this)
+    override fun panel() = QianfanClientPanel(this)
 }

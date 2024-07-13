@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ernie
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
@@ -6,7 +6,7 @@ import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 
-class ErnieClientPanel(private val clientConfiguration: ErnieClientConfiguration) : LLMClientPanel(clientConfiguration) {
+class QianfanClientPanel(private val clientConfiguration: QianfanClientConfiguration) : LLMClientPanel(clientConfiguration) {
 
     private val apiKeyField = JBPasswordField()
     private val secretKeyField = JBPasswordField()
@@ -17,22 +17,22 @@ class ErnieClientPanel(private val clientConfiguration: ErnieClientConfiguration
         modelIdRow()
 
         row {
-            label(message("settings.ernie.apiKey"))
+            label(message("settings.qianfan.apiKey"))
                 .widthGroup("label")
             cell(apiKeyField)
                 .bindText(getter = {""}, setter = {
-                    ErnieClientService.getInstance().saveApiKey(clientConfiguration, it)
+                    QianfanClientService.getInstance().saveApiKey(clientConfiguration, it)
                 })
                 .emptyText(if (clientConfiguration.apiKeyIsStored) message("settings.openAI.token.stored") else "")
                 .resizableColumn()
                 .widthGroup("input")
         }
         row {
-            label(message("settings.ernie.secretKey"))
+            label(message("settings.qianfan.secretKey"))
                 .widthGroup("label")
             cell(secretKeyField)
                 .bindText(getter = {""}, setter = {
-                    ErnieClientService.getInstance().saveSecretKey(clientConfiguration, it)
+                    QianfanClientService.getInstance().saveSecretKey(clientConfiguration, it)
                 })
                 .emptyText(if (clientConfiguration.secretKeyIsStored) message("settings.openAI.token.stored") else "")
                 .resizableColumn()
@@ -53,6 +53,6 @@ class ErnieClientPanel(private val clientConfiguration: ErnieClientConfiguration
         clientConfiguration.apiKey = String(apiKeyField.password)
         clientConfiguration.secretKey = String(secretKeyField.password)
 
-        ErnieClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
+        QianfanClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }
