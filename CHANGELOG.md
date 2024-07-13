@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Qianfan (Ernie).
+
 ## [2.0.0] - 2024-06-08
 
 ### Added
