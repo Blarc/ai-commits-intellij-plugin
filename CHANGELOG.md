@@ -6,6 +6,10 @@
 
 - Support for Qianfan (Ernie).
 
+### Fixed
+
+- Ollama icon size to 15x15.
+
 ## [2.0.0] - 2024-06-08
 
 ### Added
