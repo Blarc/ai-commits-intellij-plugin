@@ -25,8 +25,8 @@ class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<Qi
     }
 
     override suspend fun buildChatModel(client: QianfanClientConfiguration): ChatLanguageModel {
-        val apiKey = client.apiKey.nullize(true) ?: retrieveToken(client.apiKeyId)?.toString(true)
-        val secretKey = client.secretKey.nullize(true) ?: retrieveToken(client.secretKeyId)?.toString(true)
+        val apiKey = client.apiKey.nullize(true) ?: retrieveToken(client.id + "apiKey")?.toString(true)
+        val secretKey = client.secretKey.nullize(true) ?: retrieveToken(client.id + "secretKey")?.toString(true)
 
         val builder = QianfanChatModel.builder()
             .baseUrl(client.host)
@@ -35,28 +35,32 @@ class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<Qi
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
         // Fix https://github.com/langchain4j/langchain4j/pull/1426. Remove this 'if' statement when langchain4j releases a new version that resolves this issue.
-        if (client.modelId == QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName){
+        if (client.modelId == QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName) {
             builder.endpoint("ernie-speed-128k")
         }
 
         return builder.build()
     }
 
-    private fun saveToken(token: String, title: String) {
+    fun saveApiKey(client: QianfanClientConfiguration, key: String) {
         cs.launch(Dispatchers.Default) {
             try {
-                PasswordSafe.instance.setPassword(getCredentialAttributes(title), token)
+                PasswordSafe.instance.setPassword(getCredentialAttributes(client.id + "apiKey"), key)
+                client.apiKeyIsStored = true
             } catch (e: Exception) {
                 sendNotification(Notification.unableToSaveToken(e.message))
             }
         }
     }
-    fun saveApiKey(client: QianfanClientConfiguration, apiKey: String) {
-        saveToken(apiKey, client.apiKeyId)
-        client.apiKeyIsStored = true
-    }
-    fun saveSecretKey(client: QianfanClientConfiguration, secretKey: String) {
-        saveToken(secretKey, client.secretKeyId)
-        client.secretKeyIsStored = true
+
+    fun saveSecretKey(client: QianfanClientConfiguration, key: String) {
+        cs.launch(Dispatchers.Default) {
+            try {
+                PasswordSafe.instance.setPassword(getCredentialAttributes(client.id + "secretKey"), key)
+                client.secretKeyIsStored = true
+            } catch (e: Exception) {
+                sendNotification(Notification.unableToSaveToken(e.message))
+            }
+        }
     }
 }

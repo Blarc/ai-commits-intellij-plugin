@@ -7,7 +7,6 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
-import java.util.*
 import javax.swing.Icon
 
 class QianfanClientConfiguration : LLMClientConfiguration(
@@ -23,15 +22,8 @@ class QianfanClientConfiguration : LLMClientConfiguration(
     var secretKeyIsStored: Boolean = false
     @Transient
     var apiKey: String = ""
-
     @Transient
     var secretKey: String = ""
-
-    @Attribute
-    var apiKeyId: String = UUID.randomUUID().toString()
-
-    @Attribute
-    var secretKeyId: String = UUID.randomUUID().toString()
 
     companion object {
         const val CLIENT_NAME = "Qianfan"
@@ -61,8 +53,6 @@ class QianfanClientConfiguration : LLMClientConfiguration(
         copy.id = id
         copy.apiKey = apiKey
         copy.secretKey = secretKey
-        copy.secretKeyId = secretKeyId
-        copy.apiKeyId = apiKeyId
         copy.name = name
         copy.host = host
         copy.modelId = modelId

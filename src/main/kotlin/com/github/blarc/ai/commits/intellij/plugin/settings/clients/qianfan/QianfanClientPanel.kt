@@ -24,7 +24,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
                 .bindText(getter = {""}, setter = {
                     QianfanClientService.getInstance().saveApiKey(clientConfiguration, it)
                 })
-                .emptyText(if (clientConfiguration.apiKeyIsStored) message("settings.openAI.token.stored") else "")
+                .emptyText(if (clientConfiguration.apiKeyIsStored) message("settings.openAI.token.stored") else "JzRxxxxxxxxxxxxxxxxxxxxx")
                 .resizableColumn()
                 .widthGroup("input")
         }
@@ -35,7 +35,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
                 .bindText(getter = {""}, setter = {
                     QianfanClientService.getInstance().saveSecretKey(clientConfiguration, it)
                 })
-                .emptyText(if (clientConfiguration.secretKeyIsStored) message("settings.openAI.token.stored") else "")
+                .emptyText(if (clientConfiguration.secretKeyIsStored) message("settings.openAI.token.stored") else "kSlxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
                 .resizableColumn()
                 .widthGroup("input")
         }
