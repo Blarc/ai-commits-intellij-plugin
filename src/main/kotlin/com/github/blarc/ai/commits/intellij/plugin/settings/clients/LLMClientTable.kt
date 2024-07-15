@@ -156,12 +156,6 @@ class LLMClientTable {
                     }
                 }
 
-                // Register validators of the currently active cards
-                val dialogPanel = cardLayout.findComponentById(llmClient.getClientName()) as DialogPanel
-                dialogPanel.registerValidators(myDisposable) {
-                    isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
-                }
-
                 val cardsList = JBList(llmClientConfigurations).apply {
                     val descriptor = object : ListItemDescriptorAdapter<LLMClientConfiguration>() {
                         override fun getTextFor(value: LLMClientConfiguration) = value.getClientName()
@@ -175,6 +169,12 @@ class LLMClientTable {
                     addListSelectionListener {
                         llmClient = selectedValue
                         cardLayout.show(cardPanel, llmClient.getClientName())
+
+                        // Register validators of the currently active cards
+                        val dialogPanel = cardLayout.findComponentById(llmClient.getClientName()) as DialogPanel
+                        dialogPanel.registerValidators(myDisposable) {
+                            isOKActionEnabled = ContainerUtil.and(it.values) { info: ValidationInfo -> info.okEnabled }
+                        }
                     }
                     setSelectedValue(llmClient, true)
                 }
