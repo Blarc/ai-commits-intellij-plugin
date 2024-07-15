@@ -14,7 +14,7 @@ class GeminiClientConfiguration : LLMClientConfiguration(
     "0.7"
 ) {
     @Attribute
-    var projectId: String = ""
+    var projectId: String = "project-id"
     @Attribute
     var location: String = "us-central1"
 

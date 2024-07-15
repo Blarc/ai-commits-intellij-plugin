@@ -5,10 +5,11 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialA
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini.GeminiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.ide.passwordSafe.PasswordSafe
@@ -51,7 +52,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         elementTypes = [
             OpenAiClientConfiguration::class,
             OllamaClientConfiguration::class,
-            QianfanClientConfiguration::class
+            QianfanClientConfiguration::class,
+            GeminiClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )
