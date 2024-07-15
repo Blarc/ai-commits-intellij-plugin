@@ -5,10 +5,13 @@
 ### Added
 
 - Support for Qianfan (Ernie).
+- Support for Gemini.
+- Icon next to name in clients table.
 
 ### Fixed
 
 - Ollama icon size to 15x15.
+- Input is not validated when switching between clients in add and edit dialog.
 
 ## [2.0.0] - 2024-06-08
 
