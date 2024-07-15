@@ -19,12 +19,12 @@ import com.intellij.ui.table.TableView
 import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.ListTableModel
+import java.awt.Component
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import javax.swing.JComponent
-import javax.swing.JList
-import javax.swing.JPanel
+import javax.swing.*
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
+import javax.swing.table.DefaultTableCellRenderer
 
 class LLMClientTable {
     private var llmClients = AppSettings2.instance.llmClientConfigurations
@@ -34,6 +34,7 @@ class LLMClientTable {
         setShowColumns(true)
         setSelectionMode(SINGLE_SELECTION)
 
+        columnModel.getColumn(0).cellRenderer = IconTextCellRenderer()
         columnModel.getColumn(0).preferredWidth = 150
         columnModel.getColumn(0).maxWidth = 250
 
@@ -48,8 +49,8 @@ class LLMClientTable {
 
     private fun createTableModel(): ListTableModel<LLMClientConfiguration> = ListTableModel(
         arrayOf(
-            createColumn<LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient.name },
-            createColumn(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId },
+            createColumn<LLMClientConfiguration, LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient },
+            createColumn<LLMClientConfiguration, String>(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId },
             createColumn(message("settings.llmClient.temperature")) { llmClient -> llmClient.temperature }
         ),
         llmClients.toList()
@@ -181,6 +182,13 @@ class LLMClientTable {
                 firstComponent = cardsList
                 secondComponent = cardPanel
             }
+        }
+    }
+
+    class IconTextCellRenderer : DefaultTableCellRenderer() {
+        override fun getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean, hasFocus: Boolean, row: Int, column: Int): Component {
+            val llmClientConfiguration = value as LLMClientConfiguration
+            return JLabel(llmClientConfiguration.name, llmClientConfiguration.getClientIcon(), SwingConstants.LEFT)
         }
     }
 

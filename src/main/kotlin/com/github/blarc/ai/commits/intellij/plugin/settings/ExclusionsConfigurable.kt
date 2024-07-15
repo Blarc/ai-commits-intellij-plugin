@@ -67,7 +67,7 @@ class ExclusionsConfigurable(val project: Project) : BoundConfigurable(message("
 
     private fun createTableModel(): ListTableModel<String> = ListTableModel(
         arrayOf(
-            createColumn<String>(message("settings.exclusions.app.exclusion")) { exclusion -> exclusion }
+            createColumn<String, String>(message("settings.exclusions.app.exclusion")) { exclusion -> exclusion }
         ),
         appExclusions.toList()
     )

@@ -49,7 +49,7 @@ class PromptTable {
 
     private fun createTableModel(): ListTableModel<Prompt> = ListTableModel(
             arrayOf(
-                    createColumn<Prompt>(message("settings.prompt.name")) { prompt -> prompt.name },
+                    createColumn<Prompt, String>(message("settings.prompt.name")) { prompt -> prompt.name },
                     createColumn(message("settings.prompt.description")) { prompt -> prompt.description },
             ),
             prompts.values.toList()

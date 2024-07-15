@@ -8,9 +8,9 @@ import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ComponentWithEmptyText
 import javax.swing.JComponent
 
-fun <T> createColumn(name: String, formatter: (T) -> String) : ColumnInfo<T, String> {
-    return object : ColumnInfo<T, String>(name) {
-        override fun valueOf(item: T): String {
+fun <T, O> createColumn(name: String, formatter: (T) -> O) : ColumnInfo<T, O> {
+    return object : ColumnInfo<T, O>(name) {
+        override fun valueOf(item: T): O {
             return formatter(item)
         }
     }
