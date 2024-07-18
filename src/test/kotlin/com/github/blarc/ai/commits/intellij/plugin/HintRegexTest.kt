@@ -53,27 +53,27 @@ class HintRegexTest {
                 "Create a commit message. "
             ),
             Arguments.of(
-                DefaultPrompts.BASIC.content,
+                DefaultPrompts.BASIC.prompt.content,
                 "this is a hint",
-                DefaultPrompts.BASIC.content.replace(
-                    "{Use this hint to improve this commit message: \$hint\n}",
-                    "Use this hint to improve this commit message: this is a hint\n"
+                DefaultPrompts.BASIC.prompt.content.replace(
+                    "{Use this hint to improve the commit message: \$hint}\n",
+                    "Use this hint to improve the commit message: this is a hint\n"
                 )
             ),
             Arguments.of(
-                DefaultPrompts.CONVENTIONAL.content,
+                DefaultPrompts.CONVENTIONAL.prompt.content,
                 "this is a hint",
-                DefaultPrompts.CONVENTIONAL.content.replace(
-                    "{Use this hint to improve this commit message: \$hint\n}",
-                    "Use this hint to improve this commit message: this is a hint\n"
+                DefaultPrompts.CONVENTIONAL.prompt.content.replace(
+                    "{Use this hint to improve the commit message: \$hint}\n",
+                    "Use this hint to improve the commit message: this is a hint\n"
                 )
             ),
             Arguments.of(
-                DefaultPrompts.EMOJI.content,
+                DefaultPrompts.EMOJI.prompt.content,
                 "this is a hint",
-                DefaultPrompts.EMOJI.content.replace(
-                    "{Use this hint to improve this commit message: \$hint\n}",
-                    "Use this hint to improve this commit message: this is a hint\n"
+                DefaultPrompts.EMOJI.prompt.content.replace(
+                    "{Use this hint to improve the commit message: \$hint}\n",
+                    "Use this hint to improve the commit message: this is a hint\n"
                 )
             )
         )
