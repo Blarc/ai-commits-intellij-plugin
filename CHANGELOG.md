@@ -12,6 +12,7 @@
 
 - Ollama icon size to 15x15.
 - Input is not validated when switching between clients in add and edit dialog.
+- GitBranchWorker.loadTotalDiff should not wait for built-in server on EDT.
 
 ## [2.0.0] - 2024-06-08
 

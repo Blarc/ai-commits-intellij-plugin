@@ -12,6 +12,8 @@ import com.github.blarc.ai.commits.intellij.plugin.unique
 import com.intellij.dvcs.repo.VcsRepositoryManager
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
@@ -48,11 +50,11 @@ class PromptTable {
     }
 
     private fun createTableModel(): ListTableModel<Prompt> = ListTableModel(
-            arrayOf(
-                    createColumn<Prompt, String>(message("settings.prompt.name")) { prompt -> prompt.name },
-                    createColumn(message("settings.prompt.description")) { prompt -> prompt.description },
-            ),
-            prompts.values.toList()
+        arrayOf(
+            createColumn<Prompt, String>(message("settings.prompt.name")) { prompt -> prompt.name },
+            createColumn(message("settings.prompt.description")) { prompt -> prompt.description },
+        ),
+        prompts.values.toList()
     )
 
     fun addPrompt(): Prompt? {
@@ -135,16 +137,21 @@ class PromptTable {
             promptPreviewTextArea.columns = 100
             promptPreviewTextArea.autoscrolls = false
 
-            DataManager.getInstance().dataContextFromFocusAsync.onSuccess {
-                val project = it.getData(CommonDataKeys.PROJECT)
-                val changes = VcsRepositoryManager.getInstance(project!!).repositories.stream()
+            DataManager.getInstance().getDataContext(rootPane).getData(CommonDataKeys.PROJECT)?.let { project ->
+                ApplicationManager.getApplication().executeOnPooledThread {
+
+                    val changes = VcsRepositoryManager.getInstance(project).repositories.stream()
                         .map { r -> GitBranchWorker.loadTotalDiff(r, r.currentBranchName!!) }
                         .flatMap { r -> r.stream() }
                         .toList()
 
-                branch = commonBranch(changes, project)
-                diff = computeDiff(changes, true, project)
-                setPreview(prompt.content, promptHintTextField.text)
+                    branch = commonBranch(changes, project)
+                    diff = computeDiff(changes, true, project)
+
+                    ApplicationManager.getApplication().invokeLater({
+                        setPreview(prompt.content, promptHintTextField.text)
+                    }, ModalityState.stateForComponent(rootPane))
+                }
             }
 
             init()
@@ -153,17 +160,17 @@ class PromptTable {
         override fun createCenterPanel() = panel {
             row(message("settings.prompt.name")) {
                 cell(promptNameTextField)
-                        .align(Align.FILL)
-                        .bindText(prompt::name)
-                        .applyIf(prompt.canBeChanged) { focused() }
-                        .validationOnApply { notBlank(it.text) }
-                        .applyIf(newPrompt == null) { validationOnApply { unique(it.text.lowercase(), prompts) } }
+                    .align(Align.FILL)
+                    .bindText(prompt::name)
+                    .applyIf(prompt.canBeChanged) { focused() }
+                    .validationOnApply { notBlank(it.text) }
+                    .applyIf(newPrompt == null) { validationOnApply { unique(it.text.lowercase(), prompts) } }
             }
             row(message("settings.prompt.description")) {
                 cell(promptDescriptionTextField)
-                        .align(Align.FILL)
-                        .bindText(prompt::description)
-                        .validationOnApply { notBlank(it.text) }
+                    .align(Align.FILL)
+                    .bindText(prompt::description)
+                    .validationOnApply { notBlank(it.text) }
             }
             row(message("settings.prompt.hint")) {
                 cell(promptHintTextField)
@@ -177,17 +184,17 @@ class PromptTable {
             }
             row {
                 scrollCell(promptContentTextArea)
-                        .bindText(prompt::content)
-                        .validationOnApply { notBlank(it.text) }
-                        .onChanged { setPreview(it.text, promptHintTextField.text)}
-                        .align(Align.FILL)
+                    .bindText(prompt::content)
+                    .validationOnApply { notBlank(it.text) }
+                    .onChanged { setPreview(it.text, promptHintTextField.text) }
+                    .align(Align.FILL)
             }
             row {
                 label("Preview")
             }
             row {
                 scrollCell(promptPreviewTextArea)
-                        .align(Align.FILL)
+                    .align(Align.FILL)
             }
             row {
                 comment(message("settings.prompt.comment"))
