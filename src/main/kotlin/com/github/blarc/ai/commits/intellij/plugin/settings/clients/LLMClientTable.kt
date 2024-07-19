@@ -20,11 +20,13 @@ import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.ListTableModel
 import java.awt.Component
+import java.awt.Dimension
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.*
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import javax.swing.table.DefaultTableCellRenderer
+import kotlin.math.max
 
 class LLMClientTable {
     private var llmClients = AppSettings2.instance.llmClientConfigurations
@@ -130,6 +132,7 @@ class LLMClientTable {
             llmClient.panel().create()
         }.apply {
             isResizable = false
+            minimumSize = Dimension(max(size.width, 500), max(size.height, 300))
         }
 
         private fun getLlmClients(newLLMClientConfiguration: LLMClientConfiguration?): List<LLMClientConfiguration> {

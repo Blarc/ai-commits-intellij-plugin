@@ -8,7 +8,6 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.util.minimumWidth
 import kotlin.reflect.KMutableProperty0
 
 
@@ -58,7 +57,6 @@ abstract class LLMClientPanel(
         row {
             label(message("settings.llmClient.timeout")).widthGroup("label")
             cell(socketTimeoutTextField)
-                .applyToComponent { minimumWidth = 400 }
                 .bindIntText(property)
                 .resizableColumn()
                 .align(Align.FILL)
@@ -101,13 +99,12 @@ abstract class LLMClientPanel(
 
             cell(temperatureTextField)
                 .bindText(clientConfiguration::temperature)
-                .applyToComponent { minimumWidth = 400 }
-                .resizableColumn()
                 .align(Align.FILL)
                 .validationOnInput { temperatureValid(it.text) }
+                .resizableColumn()
 
             contextHelp(message("settings.llmClient.temperature.comment"))
-                .resizableColumn()
+                .align(AlignX.RIGHT)
         }
     }
 
