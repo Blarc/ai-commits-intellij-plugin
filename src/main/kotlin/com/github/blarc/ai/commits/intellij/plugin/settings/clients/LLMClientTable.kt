@@ -150,7 +150,6 @@ class LLMClientTable {
             return Splitter(false, 0.25f).apply {
 
                 val cardPanel = JPanel(cardLayout).apply {
-                    preferredSize = JBUI.size(640, 480)
                     llmClientConfigurations.forEach {
                         add(it.getClientName(), it.panel().create())
                     }

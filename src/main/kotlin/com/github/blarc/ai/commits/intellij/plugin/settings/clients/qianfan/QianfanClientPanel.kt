@@ -3,6 +3,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
+import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.toNullableProperty
@@ -26,7 +27,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
                 })
                 .emptyText(if (clientConfiguration.apiKeyIsStored) message("settings.openAI.token.stored") else "JzRxxxxxxxxxxxxxxxxxxxxx")
                 .resizableColumn()
-                .widthGroup("input")
+                .align(Align.FILL)
         }
         row {
             label(message("settings.qianfan.secretKey"))
@@ -37,7 +38,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
                 })
                 .emptyText(if (clientConfiguration.secretKeyIsStored) message("settings.openAI.token.stored") else "kSlxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
                 .resizableColumn()
-                .widthGroup("input")
+                .align(Align.FILL)
         }
 
         temperatureRow()

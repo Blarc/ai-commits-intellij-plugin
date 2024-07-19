@@ -6,7 +6,6 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPan
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.util.minimumWidth
 
 class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfiguration) : LLMClientPanel(clientConfiguration) {
     private val proxyTextField = JBTextField()
@@ -30,10 +29,9 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
             label(message("settings.llmClient.proxy"))
                 .widthGroup("label")
             cell(proxyTextField)
-                .applyToComponent { minimumWidth = 400 }
                 .bindText(clientConfiguration::proxyUrl.toNonNullableProperty(""))
                 .resizableColumn()
-                .widthGroup("input")
+                .align(Align.FILL)
                 .comment(message("settings.llmClient.proxy.comment"))
         }
     }
@@ -48,8 +46,9 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 })
                 .emptyText(if (clientConfiguration.tokenIsStored) message("settings.openAI.token.stored") else message("settings.openAI.token.example"))
                 .resizableColumn()
-                .widthGroup("input")
-                .comment(message("settings.openAi.token.comment"))
+                .align(Align.FILL)
+                // maxLineLength was eye-balled, but prevents the dialog getting wider
+                .comment(message("settings.openAi.token.comment"), 50)
         }
     }
 
@@ -59,7 +58,8 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 .widthGroup("label")
             textField()
                 .bindText(clientConfiguration::organizationId.toNonNullableProperty(""))
-                .widthGroup("input")
+                .align(Align.FILL)
+                .resizableColumn()
         }
     }
 

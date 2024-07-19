@@ -35,7 +35,7 @@ abstract class LLMClientPanel(
                 .widthGroup("label")
             textField()
                 .bindText(clientConfiguration::name)
-                .widthGroup("input")
+                .align(Align.FILL)
                 .validationOnInput { notBlank(it.text) }
         }
     }
@@ -49,7 +49,7 @@ abstract class LLMClientPanel(
                     isEditable = true
                 }
                 .bindItem(property)
-                .widthGroup("input")
+                .align(Align.FILL)
                 .onApply { clientConfiguration.addHost(hostComboBox.item) }
         }
     }
@@ -61,7 +61,7 @@ abstract class LLMClientPanel(
                 .applyToComponent { minimumWidth = 400 }
                 .bindIntText(property)
                 .resizableColumn()
-                .widthGroup("input")
+                .align(Align.FILL)
                 .validationOnInput { isInt(it.text) }
         }
     }
@@ -80,7 +80,7 @@ abstract class LLMClientPanel(
                         clientConfiguration.modelId = it
                     }
                 })
-                .widthGroup("input")
+                .align(Align.FILL)
                 .resizableColumn()
                 .onApply { clientConfiguration.addModelId(modelComboBox.item) }
 
@@ -103,12 +103,11 @@ abstract class LLMClientPanel(
                 .bindText(clientConfiguration::temperature)
                 .applyToComponent { minimumWidth = 400 }
                 .resizableColumn()
-                .widthGroup("input")
+                .align(Align.FILL)
                 .validationOnInput { temperatureValid(it.text) }
 
             contextHelp(message("settings.llmClient.temperature.comment"))
                 .resizableColumn()
-                .align(AlignX.LEFT)
         }
     }
 

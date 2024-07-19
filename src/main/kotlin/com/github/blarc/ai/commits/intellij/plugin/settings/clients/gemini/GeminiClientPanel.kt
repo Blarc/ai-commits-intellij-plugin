@@ -4,6 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBTextField
+import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
@@ -35,7 +36,7 @@ class GeminiClientPanel private constructor(
             cell(projectIdTextField)
                 .bindText(clientConfiguration::projectId)
                 .resizableColumn()
-                .widthGroup("input")
+                .align(Align.FILL)
                 .validationOnInput { notBlank(it.text) }
                 .comment(message("settings.gemini.project-id.comment"))
         }
@@ -50,7 +51,7 @@ class GeminiClientPanel private constructor(
                 .bindText(clientConfiguration::location)
                 .resizableColumn()
                 .validationOnInput { notBlank(it.text) }
-                .widthGroup("input")
+                .align(Align.FILL)
         }
     }
 
