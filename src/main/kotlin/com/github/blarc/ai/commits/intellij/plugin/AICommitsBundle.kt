@@ -8,15 +8,15 @@ import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.PropertyKey
-import java.net.URL
+import java.net.URI
 
 @NonNls
 private const val BUNDLE = "messages.AiCommitsBundle"
 
 object AICommitsBundle : DynamicBundle(BUNDLE) {
 
-    val URL_BUG_REPORT = URL("https://github.com/Blarc/ai-commits-intellij-plugin/issues")
-    val URL_PROMPTS_DISCUSSION = URL("https://github.com/Blarc/ai-commits-intellij-plugin/discussions/18");
+    val URL_BUG_REPORT = URI("https://github.com/Blarc/ai-commits-intellij-plugin/issues")
+    val URL_PROMPTS_DISCUSSION = URI("https://github.com/Blarc/ai-commits-intellij-plugin/discussions/18")
 
     @Suppress("SpreadOperator")
     @JvmStatic
