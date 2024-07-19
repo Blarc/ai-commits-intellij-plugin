@@ -1,5 +1,4 @@
 import org.jetbrains.changelog.Changelog
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -20,6 +19,11 @@ repositories {
     mavenCentral()
 }
 
+// Set the JVM language level used to build the project.
+kotlin {
+    jvmToolchain(properties("javaVersion").toInt())
+}
+
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
     pluginName.set(properties("pluginName"))
@@ -36,22 +40,11 @@ intellij {
 
 changelog {
 //    version.set(properties("pluginVersion"))
-    groups.set(emptyList())
+    groups.empty()
     repositoryUrl.set(properties("pluginRepositoryUrl"))
 }
 
 tasks {
-    // Set the JVM compatibility versions
-    properties("javaVersion").let {
-        withType<JavaCompile> {
-            sourceCompatibility = it
-            targetCompatibility = it
-        }
-        withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = it
-        }
-    }
-
     wrapper {
         gradleVersion = properties("gradleVersion")
     }
@@ -83,24 +76,7 @@ tasks {
     publishPlugin {
         dependsOn("patchChangelog")
         token.set(System.getenv("PUBLISH_TOKEN"))
-        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
     }
-
-    buildPlugin {
-        exclude { "coroutines" in it.name }
-    }
-
-    buildSearchableOptions {
-        enabled = false
-    }
-
-    prepareSandbox {
-        exclude { "coroutines" in it.name }
-    }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 }
 
 tasks.test {
