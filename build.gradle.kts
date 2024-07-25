@@ -100,7 +100,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
     // langchain4j integrations
-    implementation("dev.langchain4j:langchain4j-open-ai:0.32.0")
+    implementation("dev.langchain4j:langchain4j-open-ai:0.33.0")
     implementation("dev.langchain4j:langchain4j-ollama:0.32.0")
     implementation("dev.langchain4j:langchain4j-qianfan:0.32.0") // The Baidu Qianfan Large Model Platform, including the ERNIE series, can be accessed at https://docs.langchain4j.dev/integrations/language-models/qianfan/.
     implementation("dev.langchain4j:langchain4j-vertex-ai-gemini:0.32.0")
