@@ -44,7 +44,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 .bindText(getter = { "" }, setter = {
                     OpenAiClientService.getInstance().saveToken(clientConfiguration, it)
                 })
-                .emptyText(if (clientConfiguration.tokenIsStored) message("settings.openAI.token.stored") else message("settings.openAI.token.example"))
+                .emptyText(if (clientConfiguration.tokenIsStored) message("settings.llmClient.token.stored") else message("settings.openAI.token.example"))
                 .resizableColumn()
                 .align(Align.FILL)
                 // maxLineLength was eye-balled, but prevents the dialog getting wider

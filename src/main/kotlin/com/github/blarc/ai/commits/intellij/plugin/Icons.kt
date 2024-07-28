@@ -8,4 +8,5 @@ object Icons {
     val OLLAMA = IconLoader.getIcon("/icons/ollama15.svg", javaClass)
     val QIANFAN = IconLoader.getIcon("/icons/qianfan.png", javaClass)
     val GEMINI = IconLoader.getIcon("/icons/gemini.png", javaClass)
+    val ANTHROPIC = IconLoader.getIcon("/icons/anthropic.svg", javaClass)
 }
