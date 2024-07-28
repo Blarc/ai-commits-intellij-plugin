@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini.GeminiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
@@ -142,7 +143,8 @@ class LLMClientTable {
                     OpenAiClientConfiguration(),
                     OllamaClientConfiguration(),
                     QianfanClientConfiguration(),
-                    GeminiClientConfiguration()
+                    GeminiClientConfiguration(),
+                    AnthropicClientConfiguration()
                 )
             } else {
                 listOf(newLLMClientConfiguration)
