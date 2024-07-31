@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.1.1] - 2024-07-31
+
 ### Fixed
 
 - GPT4o-mini is missing from OpenAI model list.
@@ -212,7 +214,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.1...v1.6.0
