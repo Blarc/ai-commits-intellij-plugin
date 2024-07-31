@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
-import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.XCollection
 import dev.langchain4j.model.openai.OpenAiChatModelName
 
@@ -27,6 +26,8 @@ class OpenAiClientSharedState : PersistentStateComponent<OpenAiClientSharedState
     override fun getState(): OpenAiClientSharedState = this
 
     override fun loadState(state: OpenAiClientSharedState) {
-        XmlSerializerUtil.copyBean(state, this)
+        // Add all model IDs from enum in case they are not stored in xml
+        modelIds += state.modelIds
+        hosts += state.hosts
     }
 }

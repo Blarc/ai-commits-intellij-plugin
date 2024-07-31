@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- GPT4o-mini is missing from OpenAI model list.
+
 ## [2.1.0] - 2024-07-19
 
 ### Added
