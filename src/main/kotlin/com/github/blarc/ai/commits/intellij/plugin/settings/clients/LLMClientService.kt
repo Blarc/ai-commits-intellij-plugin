@@ -47,7 +47,7 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
                 label.icon = AllIcons.General.InspectionsOK
             }, onError = {
                 // This can't be called from EDT thread, because dialog blocks the EDT thread
-                label.text = it.wrap(80)
+                label.text = it.wrap(60)
                 label.icon = AllIcons.General.InspectionsError
             })
         }

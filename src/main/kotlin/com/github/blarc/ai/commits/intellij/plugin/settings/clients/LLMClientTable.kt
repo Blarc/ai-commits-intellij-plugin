@@ -133,7 +133,8 @@ class LLMClientTable {
             llmClient.panel().create()
         }.apply {
             isResizable = false
-            minimumSize = Dimension(max(size.width, 500), max(size.height, 300))
+            // Add 200 so there is space for verification message.
+            minimumSize = Dimension(max(size.width, 500), max(size.height, 300) + 200)
         }
 
         private fun getLlmClients(newLLMClientConfiguration: LLMClientConfiguration?): List<LLMClientConfiguration> {
