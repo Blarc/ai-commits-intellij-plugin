@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
-import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.XCollection
 import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
 
@@ -27,6 +26,7 @@ class QianfanClientSharedState : PersistentStateComponent<QianfanClientSharedSta
     override fun getState(): QianfanClientSharedState = this
 
     override fun loadState(state: QianfanClientSharedState) {
-        XmlSerializerUtil.copyBean(state, this)
+        hosts += state.hosts
+        modelIds += state.modelIds
     }
 }

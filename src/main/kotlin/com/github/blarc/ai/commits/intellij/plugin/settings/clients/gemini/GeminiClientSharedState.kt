@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
-import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
@@ -26,6 +25,7 @@ class GeminiClientSharedState : PersistentStateComponent<GeminiClientSharedState
     override fun getState(): GeminiClientSharedState = this
 
     override fun loadState(state: GeminiClientSharedState) {
-        XmlSerializerUtil.copyBean(state, this)
+        modelIds += state.modelIds
+        hosts += state.hosts
     }
 }

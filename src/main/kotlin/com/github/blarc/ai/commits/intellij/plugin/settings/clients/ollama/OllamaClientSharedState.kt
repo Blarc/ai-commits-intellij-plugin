@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
-import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
@@ -23,6 +22,7 @@ class OllamaClientSharedState : PersistentStateComponent<OllamaClientSharedState
     override fun getState(): OllamaClientSharedState = this
 
     override fun loadState(state: OllamaClientSharedState) {
-        XmlSerializerUtil.copyBean(state, this)
+        modelIds += state.modelIds
+        hosts += state.hosts
     }
 }
