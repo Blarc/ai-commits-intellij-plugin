@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Anthropic.
+
+### Fixed
+
+- Dialog is too small to show full verification result.
+
 ## [2.1.1] - 2024-07-31
 
 ### Fixed
