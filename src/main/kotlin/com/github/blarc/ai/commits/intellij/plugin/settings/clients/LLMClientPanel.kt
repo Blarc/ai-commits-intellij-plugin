@@ -119,6 +119,7 @@ abstract class LLMClientPanel(
 
             button(message("settings.verifyToken")) { verifyConfiguration() }
                 .align(AlignX.RIGHT)
+                .align(AlignY.TOP)
                 .widthGroup("button")
         }
     }
