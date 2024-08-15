@@ -111,7 +111,7 @@ dependencies {
 //    implementation("dev.langchain4j:langchain4j-local-ai:0.28.0")
 
     // tests
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
