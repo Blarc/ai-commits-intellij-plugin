@@ -71,6 +71,8 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
             onError(message("settings.verify.invalid", e.message ?: message("unknown-error")))
         } catch (e: Exception) {
             onError(e.message ?: message("unknown-error"))
+            // Generic exceptions should be logged by the IDE for easier error reporting
+            throw e
         }
     }
 }

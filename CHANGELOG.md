@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Rethrow generic exceptions when generating commit messages.
+
 ## [2.2.0] - 2024-08-01
 
 ### Added
