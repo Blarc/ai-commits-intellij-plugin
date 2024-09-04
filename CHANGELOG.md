@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Variables `{taskId}`, `{taskSummary}` and `{taskDescription}` for prompt customization that are replaced with values from the active [task](https://www.jetbrains.com/help/idea/managing-tasks-and-context.html#work-with-tasks).
+
 ### Changed
 
 - Rethrow generic exceptions when generating commit messages.
@@ -60,7 +64,7 @@
 
 ### Added
 
-- Variable `{hint}' for prompt customization that is filled with content from commit message dialog.
+- Variable `{hint}` for prompt customization that is filled with content from commit message dialog.
 
 ### Fixed
 

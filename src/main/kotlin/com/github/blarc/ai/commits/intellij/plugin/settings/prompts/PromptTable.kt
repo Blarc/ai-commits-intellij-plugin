@@ -14,6 +14,7 @@ import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
@@ -113,6 +114,7 @@ class PromptTable {
         val promptPreviewTextArea = JBTextArea()
         lateinit var branch: String
         lateinit var diff: String
+        lateinit var project: Project
 
         init {
             title = newPrompt?.let { message("settings.prompt.edit.title") } ?: message("settings.prompt.add.title")
@@ -138,6 +140,7 @@ class PromptTable {
             promptPreviewTextArea.autoscrolls = false
 
             DataManager.getInstance().getDataContext(rootPane).getData(CommonDataKeys.PROJECT)?.let { project ->
+                this.project = project
                 ApplicationManager.getApplication().executeOnPooledThread {
 
                     val changes = VcsRepositoryManager.getInstance(project).repositories.stream()
@@ -202,7 +205,7 @@ class PromptTable {
         }
 
         private fun setPreview(promptContent: String, hint: String) {
-            val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch, hint)
+            val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch, hint, project)
             promptPreviewTextArea.text = constructPrompt.substring(0, constructPrompt.length.coerceAtMost(10000))
             promptPreviewTextArea.caretPosition = max(0, promptContentTextArea.caretPosition - 10)
         }

@@ -12,6 +12,7 @@ import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
 import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.changes.Change
+import com.intellij.tasks.TaskManager
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -35,11 +36,16 @@ object AICommitsUtils {
         return false
     }
 
-    fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?): String {
+    fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?, project: Project): String {
         var content = promptContent
         content = content.replace("{locale}", AppSettings2.instance.locale.displayLanguage)
         content = content.replace("{branch}", branch)
         content = replaceHint(content, hint)
+
+        val activeTask = TaskManager.getManager(project).activeTask
+        content = content.replace("{taskId}", activeTask.id)
+        content = content.replace("{taskSummary}", activeTask.summary)
+        content = content.replace("{taskDescription}", activeTask.description.orEmpty())
 
         return if (content.contains("{diff}")) {
             content.replace("{diff}", diff)

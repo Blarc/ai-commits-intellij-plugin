@@ -39,7 +39,8 @@ class AICommitAction : AnAction(), DumbAware {
 
         val branch = commonBranch(includedChanges, project)
         val hint = commitMessage?.text
-        val prompt = constructPrompt(AppSettings2.instance.activePrompt.content, diff, branch, hint)
+
+        val prompt = constructPrompt(AppSettings2.instance.activePrompt.content, diff, branch, hint, project)
 
         // TODO @Blarc: add support for different clients
 //            if (isPromptTooLarge(prompt)) {
