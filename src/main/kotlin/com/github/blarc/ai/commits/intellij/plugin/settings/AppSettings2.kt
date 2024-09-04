@@ -136,8 +136,12 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         return AICommitsUtils.matchesGlobs(path, appExclusions)
     }
 
-    fun getActiveLLMClient(): LLMClientConfiguration? {
-        return llmClientConfigurations.find { it.id == activeLlmClientId }
+    fun getActiveLLMClientConfiguration(): LLMClientConfiguration? {
+        return getActiveLLMClientConfiguration(activeLlmClientId)
+    }
+
+    fun getActiveLLMClientConfiguration(activeLLMClientConfigurationId: String?): LLMClientConfiguration? {
+        return llmClientConfigurations.find { it.id == activeLLMClientConfigurationId }
             ?: llmClientConfigurations.firstOrNull()
     }
 

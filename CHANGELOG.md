@@ -5,6 +5,7 @@
 ### Added
 
 - Variables `{taskId}`, `{taskSummary}` and `{taskDescription}` for prompt customization that are replaced with values from the active [task](https://www.jetbrains.com/help/idea/managing-tasks-and-context.html#work-with-tasks).
+- Option to configure LLM client configuration per project.
 
 ### Changed
 

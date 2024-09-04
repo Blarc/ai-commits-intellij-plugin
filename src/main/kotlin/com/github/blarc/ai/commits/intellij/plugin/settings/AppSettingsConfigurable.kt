@@ -6,18 +6,23 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientCon
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
+import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
+import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.*
 import java.util.*
 
-class AppSettingsConfigurable : BoundConfigurable(message("settings.general.group.title")) {
+// Most of the settings are global, but we use project configurable to set isProjectSpecificLLMClient property
+class AppSettingsConfigurable(val project: Project) : BoundConfigurable(message("settings.general.group.title")) {
 
     private val llmClientTable = LLMClientTable()
-    private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private lateinit var llmClientConfigurationComboBox: ComboBox<LLMClientConfiguration>
+    private var isProjectSpecificLLMClientCheckBox = JBCheckBox(message("settings.llmClient.projectSpecific"))
+    private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private val promptTable = PromptTable()
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: ComboBox<Prompt>
@@ -27,12 +32,11 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
         row {
             label(message("settings.llmClient")).widthGroup("labelPrompt")
             llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations, AICommitsListCellRenderer())
-                .bindItem(getter = AppSettings2.instance::getActiveLLMClient) {
-                    it?.let {
-                        AppSettings2.instance.setActiveLlmClient(it.id)
-                    }
-                }.widthGroup("input")
+                .bindItem(getter = { getActiveLLMClientConfiguration() },  setter = { client: LLMClientConfiguration? -> setActiveLLMClientConfiguration(client) })
+                .widthGroup("input")
                 .component
+            cell(isProjectSpecificLLMClientCheckBox)
+                .bindSelected(project.service<ProjectSettings>()::isProjectSpecificLLMClient)
         }
         row {
             llmClientToolbarDecorator = ToolbarDecorator.createDecorator(llmClientTable.table)
@@ -122,6 +126,24 @@ class AppSettingsConfigurable : BoundConfigurable(message("settings.general.grou
 
         row {
             browserLink(message("settings.report-bug"), AICommitsBundle.URL_BUG_REPORT.toString())
+        }
+    }
+
+    private fun getActiveLLMClientConfiguration(): LLMClientConfiguration? {
+        return if (isProjectSpecificLLMClientCheckBox.isSelected) {
+            project.service<ProjectSettings>().getActiveLLMClientConfiguration()
+        } else {
+            AppSettings2.instance.getActiveLLMClientConfiguration()
+        }
+    }
+
+    private fun setActiveLLMClientConfiguration(llmClientConfiguration: LLMClientConfiguration?) {
+        llmClientConfiguration?.let {
+            if (isProjectSpecificLLMClientCheckBox.isSelected) {
+                project.service<ProjectSettings>().activeLlmClientId = it.id
+            } else {
+                AppSettings2.instance.activeLlmClientId = it.id
+            }
         }
     }
 

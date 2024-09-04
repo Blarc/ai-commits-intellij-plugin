@@ -15,7 +15,7 @@ import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 
 class AICommitAction : AnAction(), DumbAware {
     override fun actionPerformed(e: AnActionEvent) {
-        val llmClient = AppSettings2.instance.getActiveLLMClient()
+        val llmClient = AppSettings2.instance.getActiveLLMClientConfiguration()
         if (llmClient == null) {
             Notification.clientNotSet()
             return
