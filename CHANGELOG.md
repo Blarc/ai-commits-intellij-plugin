@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.3.0] - 2024-09-09
+
 ### Added
 
 - Variables `{taskId}`, `{taskSummary}` and `{taskDescription}` for prompt customization that are replaced with values from the active [task](https://www.jetbrains.com/help/idea/managing-tasks-and-context.html#work-with-tasks).
@@ -238,7 +240,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.0.0...v2.1.0
