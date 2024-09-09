@@ -100,15 +100,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2")
 
     // langchain4j integrations
-    implementation("dev.langchain4j:langchain4j-open-ai:0.33.0")
-    implementation("dev.langchain4j:langchain4j-ollama:0.33.0")
+    implementation(platform("dev.langchain4j:langchain4j-bom:0.34.0"))
+    implementation("dev.langchain4j:langchain4j-open-ai")
+    implementation("dev.langchain4j:langchain4j-ollama")
     // The Baidu Qianfan Large Model Platform, including the ERNIE series, can be accessed at https://docs.langchain4j.dev/integrations/language-models/qianfan/.
-    implementation("dev.langchain4j:langchain4j-qianfan:0.33.0")
-    implementation("dev.langchain4j:langchain4j-vertex-ai-gemini:0.33.0")
-    implementation("dev.langchain4j:langchain4j-anthropic:0.33.0")
-//    implementation("dev.langchain4j:langchain4j-hugging-face:0.28.0")
-//    implementation("dev.langchain4j:langchain4j-milvus:0.28.0")
-//    implementation("dev.langchain4j:langchain4j-local-ai:0.28.0")
+    implementation("dev.langchain4j:langchain4j-qianfan")
+    implementation("dev.langchain4j:langchain4j-vertex-ai-gemini")
+    implementation("dev.langchain4j:langchain4j-anthropic")
 
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.0")
