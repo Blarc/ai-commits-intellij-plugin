@@ -5,6 +5,8 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
+import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.asContextElement
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.platform.ide.progress.withBackgroundProgress
@@ -21,7 +23,7 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
     abstract suspend fun buildChatModel(client: T): ChatLanguageModel
 
     fun generateCommitMessage(client: T, prompt: String, project: Project, commitMessage: CommitMessage) {
-        cs.launch(Dispatchers.Default) {
+        cs.launch(Dispatchers.IO + ModalityState.current().asContextElement()) {
             withBackgroundProgress(project, message("action.background")) {
                 sendRequest(client, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
@@ -38,17 +40,18 @@ abstract class LLMClientService<T : LLMClientConfiguration>(private val cs: Coro
     }
 
     fun verifyConfiguration(client: T, label: JBLabel) {
-        // TODO @Blarc: Can you make this better? with notifications?
         label.text = message("settings.verify.running")
-        cs.launch(Dispatchers.Default) {
+        cs.launch(Dispatchers.IO + ModalityState.current().asContextElement()) {
             sendRequest(client, "test", onSuccess = {
-                // This can't be called from EDT thread, because dialog blocks the EDT thread
-                label.text = message("settings.verify.valid")
-                label.icon = AllIcons.General.InspectionsOK
+                withContext(Dispatchers.EDT) {
+                    label.text = message("settings.verify.valid")
+                    label.icon = AllIcons.General.InspectionsOK
+                }
             }, onError = {
-                // This can't be called from EDT thread, because dialog blocks the EDT thread
-                label.text = it.wrap(60)
-                label.icon = AllIcons.General.InspectionsError
+                withContext(Dispatchers.EDT) {
+                    label.text = it.wrap(60)
+                    label.icon = AllIcons.General.InspectionsError
+                }
             })
         }
     }

@@ -11,6 +11,10 @@
 
 - Rethrow generic exceptions when generating commit messages.
 
+### Fixed
+
+- NPE when verifying LLM client configuration.
+
 ## [2.2.0] - 2024-08-01
 
 ### Added
