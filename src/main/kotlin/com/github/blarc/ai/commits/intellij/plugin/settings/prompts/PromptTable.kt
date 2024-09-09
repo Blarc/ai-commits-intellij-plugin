@@ -12,8 +12,9 @@ import com.github.blarc.ai.commits.intellij.plugin.unique
 import com.intellij.dvcs.repo.VcsRepositoryManager
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.asContextElement
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextArea
@@ -25,12 +26,16 @@ import com.intellij.ui.dsl.builder.text
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
 import git4idea.branch.GitBranchWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import kotlin.math.max
 
-class PromptTable {
+class PromptTable(private val cs: CoroutineScope) {
     private var prompts = AppSettings2.instance.prompts
     private val tableModel = createTableModel()
 
@@ -59,7 +64,7 @@ class PromptTable {
     )
 
     fun addPrompt(): Prompt? {
-        val dialog = PromptDialog(prompts.keys.toSet())
+        val dialog = PromptDialog(prompts.keys.toSet(), cs)
 
         if (dialog.showAndGet()) {
             prompts = prompts.plus(dialog.prompt.name.lowercase() to dialog.prompt).toMutableMap()
@@ -78,7 +83,7 @@ class PromptTable {
 
     fun editPrompt(): Pair<Prompt, Prompt>? {
         val selectedPrompt = table.selectedObject ?: return null
-        val dialog = PromptDialog(prompts.keys.toSet(), selectedPrompt.copy())
+        val dialog = PromptDialog(prompts.keys.toSet(), cs, selectedPrompt.copy())
 
         if (dialog.showAndGet()) {
             prompts = prompts.minus(selectedPrompt.name.lowercase()).toMutableMap()
@@ -104,7 +109,7 @@ class PromptTable {
         AppSettings2.instance.prompts = prompts
     }
 
-    private class PromptDialog(val prompts: Set<String>, val newPrompt: Prompt? = null) : DialogWrapper(true) {
+    private class PromptDialog(val prompts: Set<String>, private val cs: CoroutineScope, val newPrompt: Prompt? = null) : DialogWrapper(true) {
 
         val prompt = newPrompt ?: Prompt("")
         val promptNameTextField = JBTextField()
@@ -141,24 +146,12 @@ class PromptTable {
 
             DataManager.getInstance().getDataContext(rootPane).getData(CommonDataKeys.PROJECT)?.let { project ->
                 this.project = project
-                ApplicationManager.getApplication().executeOnPooledThread {
-
-                    val changes = VcsRepositoryManager.getInstance(project).repositories.stream()
-                        .map { r -> GitBranchWorker.loadTotalDiff(r, r.currentBranchName!!) }
-                        .flatMap { r -> r.stream() }
-                        .toList()
-
-                    branch = commonBranch(changes, project)
-                    diff = computeDiff(changes, true, project)
-
-                    ApplicationManager.getApplication().invokeLater({
-                        setPreview(prompt.content, promptHintTextField.text)
-                    }, ModalityState.stateForComponent(rootPane))
-                }
+                getChangesAndSetPreview(project)
             }
 
             init()
         }
+
 
         override fun createCenterPanel() = panel {
             row(message("settings.prompt.name")) {
@@ -204,6 +197,19 @@ class PromptTable {
             }
         }
 
+        private fun getChangesAndSetPreview(project: Project) = cs.launch(Dispatchers.IO + ModalityState.stateForComponent(rootPane).asContextElement()) {
+            val changes = VcsRepositoryManager.getInstance(project).repositories.stream()
+                .map { r -> GitBranchWorker.loadTotalDiff(r, r.currentBranchName!!) }
+                .flatMap { r -> r.stream() }
+                .toList()
+
+            branch = commonBranch(changes, project)
+            diff = computeDiff(changes, true, project)
+
+            withContext(Dispatchers.EDT) {
+                setPreview(prompt.content, promptHintTextField.text)
+            }
+        }
         private fun setPreview(promptContent: String, hint: String) {
             val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch, hint, project)
             promptPreviewTextArea.text = constructPrompt.substring(0, constructPrompt.length.coerceAtMost(10000))

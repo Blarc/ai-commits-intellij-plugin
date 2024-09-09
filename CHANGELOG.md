@@ -10,6 +10,7 @@
 ### Changed
 
 - Rethrow generic exceptions when generating commit messages.
+- Replace `executeOnPooledThread` with coroutines and `ModalityState`.
 
 ### Fixed
 

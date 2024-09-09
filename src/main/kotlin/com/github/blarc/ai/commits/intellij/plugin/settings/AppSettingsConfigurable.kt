@@ -14,16 +14,17 @@ import com.intellij.ui.CommonActionsPanel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.*
+import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 // Most of the settings are global, but we use project configurable to set isProjectSpecificLLMClient property
-class AppSettingsConfigurable(val project: Project) : BoundConfigurable(message("settings.general.group.title")) {
+class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundConfigurable(message("settings.general.group.title")) {
 
     private val llmClientTable = LLMClientTable()
     private lateinit var llmClientConfigurationComboBox: ComboBox<LLMClientConfiguration>
     private var isProjectSpecificLLMClientCheckBox = JBCheckBox(message("settings.llmClient.projectSpecific"))
     private lateinit var llmClientToolbarDecorator: ToolbarDecorator
-    private val promptTable = PromptTable()
+    private val promptTable = PromptTable(cs)
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: ComboBox<Prompt>
 
