@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- NPE when retrieving TaskManager for prompt construction.
+
 ## [2.3.0] - 2024-09-09
 
 ### Added

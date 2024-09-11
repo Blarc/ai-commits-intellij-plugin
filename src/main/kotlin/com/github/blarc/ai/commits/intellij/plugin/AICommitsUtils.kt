@@ -42,10 +42,13 @@ object AICommitsUtils {
         content = content.replace("{branch}", branch)
         content = replaceHint(content, hint)
 
-        val activeTask = TaskManager.getManager(project).activeTask
-        content = content.replace("{taskId}", activeTask.id)
-        content = content.replace("{taskSummary}", activeTask.summary)
-        content = content.replace("{taskDescription}", activeTask.description.orEmpty())
+        // TODO @Blarc: If TaskManager is null, the prompt might be incorrect...
+        TaskManager.getManager(project)?.let {
+            val activeTask = it.activeTask
+            content = content.replace("{taskId}", activeTask.id)
+            content = content.replace("{taskSummary}", activeTask.summary)
+            content = content.replace("{taskDescription}", activeTask.description.orEmpty())
+        }
 
         return if (content.contains("{diff}")) {
             content.replace("{diff}", diff)
