@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import javax.swing.Icon
 
 class OpenAiClientConfiguration : LLMClientConfiguration(
@@ -43,8 +44,8 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
         return OpenAiClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
-        return OpenAiClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
+        return OpenAiClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
     // Model names are retrieved from Enum and do not need to be refreshed.

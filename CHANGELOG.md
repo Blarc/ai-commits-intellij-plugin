@@ -5,6 +5,7 @@
 ### Added
 
 - Option to choose prompt per project.
+- Amending commits now adds the changes from previous commit to the prompt.
 
 ### Fixed
 
