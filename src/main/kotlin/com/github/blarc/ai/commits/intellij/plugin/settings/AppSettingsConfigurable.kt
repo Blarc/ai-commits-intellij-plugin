@@ -25,6 +25,7 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
     private var isProjectSpecificLLMClientCheckBox = JBCheckBox(message("settings.llmClient.projectSpecific"))
     private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private val promptTable = PromptTable(cs)
+    private val isProjectSpecificPromptCheckBox = JBCheckBox(message("settings.prompt.projectSpecific"))
     private lateinit var toolbarDecorator: ToolbarDecorator
     private lateinit var promptComboBox: ComboBox<Prompt>
 
@@ -33,11 +34,13 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
         row {
             label(message("settings.llmClient")).widthGroup("labelPrompt")
             llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations, AICommitsListCellRenderer())
-                .bindItem(getter = { getActiveLLMClientConfiguration() },  setter = { client: LLMClientConfiguration? -> setActiveLLMClientConfiguration(client) })
+                .bindItem(getter = { getActiveLLMClientConfiguration() }, setter = { setActiveLLMClientConfiguration(it) })
                 .widthGroup("input")
                 .component
             cell(isProjectSpecificLLMClientCheckBox)
                 .bindSelected(project.service<ProjectSettings>()::isProjectSpecificLLMClient)
+            contextHelp(message("settings.llmClient.projectSpecific.contextHelp"))
+                .align(AlignX.LEFT)
         }
         row {
             llmClientToolbarDecorator = ToolbarDecorator.createDecorator(llmClientTable.table)
@@ -76,7 +79,7 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
                 AICommitsListCellRenderer()
             )
                 .widthGroup("input")
-                .bindItem(AppSettings2.instance::locale.toNullableProperty())
+                .bindItem(getter = { getActiveLocale() }, setter = { setActiveLocale(it)} )
 
             browserLink(message("settings.more-prompts"), AICommitsBundle.URL_PROMPTS_DISCUSSION.toString())
                 .align(AlignX.RIGHT)
@@ -84,9 +87,13 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
         row {
             label(message("settings.prompt")).widthGroup("labelPrompt")
             promptComboBox = comboBox(AppSettings2.instance.prompts.values, AICommitsListCellRenderer())
-                .bindItem(AppSettings2.instance::activePrompt.toNullableProperty())
+                .bindItem(getter = { getActivePrompt() }, { setActivePrompt(it) })
                 .widthGroup("input")
                 .component
+            cell(isProjectSpecificPromptCheckBox)
+                .bindSelected(project.service<ProjectSettings>()::isProjectSpecificPrompt)
+            contextHelp(message("settings.prompt.projectSpecific.contextHelp"))
+                .align(AlignX.LEFT)
         }
         row {
             toolbarDecorator = ToolbarDecorator.createDecorator(promptTable.table)
@@ -144,6 +151,42 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
                 project.service<ProjectSettings>().activeLlmClientId = it.id
             } else {
                 AppSettings2.instance.activeLlmClientId = it.id
+            }
+        }
+    }
+
+    private fun getActivePrompt(): Prompt? {
+        return if (isProjectSpecificPromptCheckBox.isSelected) {
+            project.service<ProjectSettings>().activePrompt
+        } else {
+            AppSettings2.instance.activePrompt
+        }
+    }
+
+    private fun setActivePrompt(prompt: Prompt?) {
+        prompt?.let {
+            if (isProjectSpecificPromptCheckBox.isSelected) {
+                project.service<ProjectSettings>().activePrompt = prompt
+            } else {
+                AppSettings2.instance.activePrompt = prompt
+            }
+        }
+    }
+
+    private fun getActiveLocale(): Locale {
+        return if (isProjectSpecificPromptCheckBox.isSelected) {
+            project.service<ProjectSettings>().locale
+        } else {
+            AppSettings2.instance.locale
+        }
+    }
+
+    private fun setActiveLocale(locale: Locale?) {
+        locale?.let {
+            if (isProjectSpecificPromptCheckBox.isSelected) {
+                project.service<ProjectSettings>().locale = locale
+            } else {
+                AppSettings2.instance.locale = locale
             }
         }
     }

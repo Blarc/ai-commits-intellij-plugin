@@ -1,13 +1,17 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2.LocaleConverter
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.util.xmlb.annotations.OptionTag
+import java.util.*
 
 @State(
         name = ProjectSettings.SERVICE_NAME,
@@ -26,6 +30,12 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var activeLlmClientId: String? = null
     @Attribute
     var isProjectSpecificLLMClient: Boolean = false
+
+    var activePrompt: Prompt? = null
+    @OptionTag(converter = LocaleConverter::class)
+    var locale: Locale = Locale.ENGLISH
+    @Attribute
+    var isProjectSpecificPrompt: Boolean = false
 
     override fun getState() = this
 

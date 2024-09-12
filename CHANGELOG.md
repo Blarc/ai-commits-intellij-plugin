@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Option to choose prompt per project.
+
 ## [2.3.1] - 2024-09-11
 
 ### Fixed
