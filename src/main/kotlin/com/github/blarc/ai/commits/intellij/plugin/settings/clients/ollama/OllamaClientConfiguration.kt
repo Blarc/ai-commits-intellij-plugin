@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import javax.swing.Icon
 
 class OllamaClientConfiguration : LLMClientConfiguration(
@@ -36,8 +37,8 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         return OllamaClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
-        return OllamaClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
+        return OllamaClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
     override fun getRefreshModelsFunction() = fun (cb: ComboBox<String>) {

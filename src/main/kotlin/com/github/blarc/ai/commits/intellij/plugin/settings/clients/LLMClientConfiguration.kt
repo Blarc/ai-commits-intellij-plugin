@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import java.util.*
 import javax.swing.Icon
 
@@ -38,7 +39,7 @@ abstract class LLMClientConfiguration(
         getSharedState().modelIds.add(modelId)
     }
 
-    abstract fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage)
+    abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project)
 
     abstract fun getRefreshModelsFunction(): ((ComboBox<String>) -> Unit)?
 

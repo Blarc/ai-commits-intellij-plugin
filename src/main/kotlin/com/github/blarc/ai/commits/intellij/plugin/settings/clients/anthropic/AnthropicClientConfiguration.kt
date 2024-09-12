@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import dev.langchain4j.model.anthropic.AnthropicChatModelName
 import javax.swing.Icon
 
@@ -44,8 +45,8 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         return AnthropicClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
-        return AnthropicClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
+        return AnthropicClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
     override fun getRefreshModelsFunction() = null

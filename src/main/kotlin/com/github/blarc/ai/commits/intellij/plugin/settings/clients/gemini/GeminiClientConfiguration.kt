@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSha
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import javax.swing.Icon
 
 class GeminiClientConfiguration : LLMClientConfiguration(
@@ -34,8 +35,8 @@ class GeminiClientConfiguration : LLMClientConfiguration(
         return GeminiClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
-        return GeminiClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
+        return GeminiClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
     // Model names are hard-coded and do not need to be refreshed.

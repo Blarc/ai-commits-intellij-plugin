@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
 import javax.swing.Icon
 
@@ -41,8 +42,8 @@ class QianfanClientConfiguration : LLMClientConfiguration(
         return QianfanClientSharedState.getInstance()
     }
 
-    override fun generateCommitMessage(prompt: String, project: Project, commitMessage: CommitMessage) {
-        return QianfanClientService.getInstance().generateCommitMessage(this, prompt, project, commitMessage)
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
+        return QianfanClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
     // Model names are retrieved from Enum and do not need to be refreshed.
