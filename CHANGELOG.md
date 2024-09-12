@@ -6,6 +6,10 @@
 
 - Option to choose prompt per project.
 
+### Fixed
+
+- Prompt does not contain diff for new files.
+
 ## [2.3.1] - 2024-09-11
 
 ### Fixed

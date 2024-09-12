@@ -2,6 +2,8 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.openapi.vcs.FilePath
+import com.intellij.openapi.vcs.changes.Change
 import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.util.ui.ColumnInfo
@@ -70,4 +72,8 @@ fun String.wrap(length: Int): String {
     wrapped.append(input)
 
     return wrapped.toString()
+}
+
+fun Change.filePath(): FilePath? {
+    return afterRevision?.file ?: beforeRevision?.file
 }

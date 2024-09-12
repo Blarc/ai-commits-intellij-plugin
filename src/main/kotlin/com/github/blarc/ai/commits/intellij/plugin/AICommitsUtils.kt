@@ -22,7 +22,7 @@ import java.nio.file.FileSystems
 object AICommitsUtils {
 
     fun isPathExcluded(path: String, project: Project): Boolean {
-        return !AppSettings2.instance.isPathExcluded(path) && !project.service<ProjectSettings>().isPathExcluded(path)
+        return AppSettings2.instance.isPathExcluded(path) || project.service<ProjectSettings>().isPathExcluded(path)
     }
 
     fun matchesGlobs(text: String, globs: Set<String>): Boolean {
@@ -98,14 +98,14 @@ object AICommitsUtils {
         // go through included changes, create a map of repository to changes and discard nulls
         val changesByRepository = includedChanges
             .filter {
-                it.virtualFile?.path?.let { path ->
-                    isPathExcluded(path, project)
+                it.filePath()?.path?.let { path ->
+                    !isPathExcluded(path, project)
                 } ?: false
             }
             .mapNotNull { change ->
-                change.virtualFile?.let { file ->
+                change.filePath()?.let { filePath ->
                     gitRepositoryManager.getRepositoryForFileQuick(
-                        file
+                        filePath
                     ) to change
                 }
             }
