@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.4.1] - 2024-09-19
+
 ### Fixed
 
 - Setting LLM client configuration or prompt as project specific does not work.
@@ -261,7 +263,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.4.1...HEAD
+[2.4.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.3.1...v2.4.0
 [2.3.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.2.0...v2.3.0
