@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2.LocaleConverter
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
@@ -31,9 +32,12 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     @Attribute
     var isProjectSpecificLLMClient: Boolean = false
 
-    var activePrompt: Prompt? = null
+    var activePrompt = DefaultPrompts.BASIC.prompt
+        get() = getActivePrompt(field)
+
     @OptionTag(converter = LocaleConverter::class)
     var locale: Locale = Locale.ENGLISH
+        get() = getActiveLocale(field)
     @Attribute
     var isProjectSpecificPrompt: Boolean = false
 
@@ -48,7 +52,26 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     }
 
     fun getActiveLLMClientConfiguration(): LLMClientConfiguration? {
-        return AppSettings2.instance.getActiveLLMClientConfiguration(activeLlmClientId)
+        return if (isProjectSpecificLLMClient) {
+            AppSettings2.instance.getActiveLLMClientConfiguration(activeLlmClientId)
+        } else {
+            AppSettings2.instance.getActiveLLMClientConfiguration()
+        }
     }
 
+    private fun getActivePrompt(activePrompt: Prompt): Prompt {
+        return if (isProjectSpecificPrompt) {
+            activePrompt
+        } else {
+            AppSettings2.instance.activePrompt
+        }
+    }
+
+    private fun getActiveLocale(locale: Locale): Locale {
+        return if (isProjectSpecificPrompt) {
+            locale
+        } else {
+            AppSettings2.instance.locale
+        }
+    }
 }

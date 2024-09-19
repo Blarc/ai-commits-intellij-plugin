@@ -68,7 +68,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
 
     @XMap
     var prompts = DefaultPrompts.toPromptsMap()
-    var activePrompt = prompts["basic"]!!
+    var activePrompt = DefaultPrompts.BASIC.prompt
 
     var appExclusions: Set<String> = setOf()
 

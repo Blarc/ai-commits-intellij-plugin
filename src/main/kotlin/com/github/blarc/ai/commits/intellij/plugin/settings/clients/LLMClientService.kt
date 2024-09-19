@@ -7,11 +7,13 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.constructPromp
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
+import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.asContextElement
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.openapi.vcs.ui.CommitMessage
@@ -54,7 +56,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
                 }
 
                 val branch = commonBranch(includedChanges, project)
-                val prompt = constructPrompt(AppSettings2.instance.activePrompt.content, diff, branch, commitMessage.text, project)
+                val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitMessage.text, project)
 
                 sendRequest(clientConfiguration, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Setting LLM client configuration or prompt as project specific does not work.
+
 ## [2.4.0] - 2024-09-13
 
 ### Added
