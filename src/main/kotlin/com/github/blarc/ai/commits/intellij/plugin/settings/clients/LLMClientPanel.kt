@@ -39,7 +39,7 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.hostRow(property: MutableProperty<String?>) {
+    open fun Panel.hostRow(property: MutableProperty<String?>, labelKey: String = "settings.llmClient.host") {
         row {
             label(message("settings.llmClient.host"))
                 .widthGroup("label")
@@ -64,9 +64,9 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.modelIdRow() {
+    open fun Panel.modelIdRow(labelKey: String = "settings.llmClient.modelId") {
         row {
-            label(message("settings.llmClient.modelId"))
+            label(message(labelKey))
                 .widthGroup("label")
 
             cell(modelComboBox)
@@ -75,12 +75,12 @@ abstract class LLMClientPanel(
                 }
                 .bindItem({ clientConfiguration.modelId }, {
                     if (it != null) {
+                        clientConfiguration.addModelId(modelComboBox.item)
                         clientConfiguration.modelId = it
                     }
                 })
                 .align(Align.FILL)
                 .resizableColumn()
-                .onApply { clientConfiguration.addModelId(modelComboBox.item) }
 
             clientConfiguration.getRefreshModelsFunction()?.let { f ->
                 button(message("settings.refreshModels")) {

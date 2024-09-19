@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi;
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -8,29 +8,25 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import dev.langchain4j.model.anthropic.AnthropicChatModelName
 import javax.swing.Icon
 
-class AnthropicClientConfiguration : LLMClientConfiguration(
-    "Anthropic",
-    AnthropicChatModelName.CLAUDE_2_1.toString(),
+class AzureOpenAiClientConfiguration : LLMClientConfiguration(
+    CLIENT_NAME,
+    "",
     "0.7"
 ) {
+
     @Attribute
-    var host: String = "https://api.anthropic.com/v1/"
+    var host: String = ""
+    @Attribute
+    var timeout: Int = 30
     @Attribute
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
-    @Attribute
-    var version: String? = null
-    @Attribute
-    var beta: String? = null
-    @Attribute
-    var timeout: Int = 30
 
     companion object {
-        const val CLIENT_NAME = "Anthropic"
+        const val CLIENT_NAME = "Azure OpenAI"
     }
 
     override fun getClientName(): String {
@@ -38,31 +34,31 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.ANTHROPIC
+        return Icons.AZURE_OPEN_AI
     }
 
     override fun getSharedState(): LLMClientSharedState {
-        return AnthropicClientSharedState.getInstance()
+        return AzureOpenAiClientSharedState.getInstance()
     }
 
     override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
-        return AnthropicClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
+        return AzureOpenAiClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
+    // Model names are retrieved from Enum and do not need to be refreshed.
     override fun getRefreshModelsFunction() = null
 
     override fun clone(): LLMClientConfiguration {
-        val copy = AnthropicClientConfiguration()
+        val copy = AzureOpenAiClientConfiguration()
         copy.id = id
         copy.name = name
         copy.modelId = modelId
         copy.temperature = temperature
-        copy.tokenIsStored = tokenIsStored
-        copy.version = version
-        copy.beta = beta
+        copy.host = host
         copy.timeout = timeout
+        copy.tokenIsStored = tokenIsStored
         return copy
     }
 
-    override fun panel() = AnthropicClientPanel(this)
+    override fun panel() = AzureOpenAiClientPanel(this)
 }

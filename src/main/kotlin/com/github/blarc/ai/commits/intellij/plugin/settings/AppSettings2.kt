@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini.GeminiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
@@ -56,6 +57,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             QianfanClientConfiguration::class,
             GeminiClientConfiguration::class,
             AnthropicClientConfiguration::class,
+            AzureOpenAiClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )

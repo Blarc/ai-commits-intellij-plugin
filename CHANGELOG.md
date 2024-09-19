@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Azure OpenAI.
+
 ## [2.4.1] - 2024-09-19
 
 ### Fixed
