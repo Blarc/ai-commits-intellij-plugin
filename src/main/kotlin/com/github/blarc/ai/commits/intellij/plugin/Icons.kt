@@ -9,4 +9,5 @@ object Icons {
     val QIANFAN = IconLoader.getIcon("/icons/qianfan.png", javaClass)
     val GEMINI = IconLoader.getIcon("/icons/gemini.png", javaClass)
     val ANTHROPIC = IconLoader.getIcon("/icons/anthropic.svg", javaClass)
+    val AZURE_OPEN_AI = IconLoader.getIcon("/icons/azureOpenAi.svg", javaClass)
 }
