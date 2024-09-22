@@ -73,14 +73,17 @@ object AICommitsUtils {
         return promptContent.replace("{hint}", hint.orEmpty())
     }
 
-    fun commonBranch(changes: List<Change>, project: Project): String {
+    fun commonBranch(changes: List<Change>, project: Project, showNotification: Boolean = true): String {
         val repositoryManager = GitRepositoryManager.getInstance(project)
         var branch = changes.map {
             repositoryManager.getRepositoryForFileQuick(it.virtualFile)?.currentBranchName
         }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
 
         if (branch == null) {
-            sendNotification(Notification.noCommonBranch())
+            // Can't show notification in edit prompt dialog
+            if (showNotification) {
+                sendNotification(Notification.noCommonBranch())
+            }
             // hardcoded fallback branch
             branch = "main"
         }

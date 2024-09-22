@@ -203,13 +203,14 @@ class PromptTable(private val cs: CoroutineScope) {
                 .flatMap { r -> r.stream() }
                 .toList()
 
-            branch = commonBranch(changes, project)
+            branch = commonBranch(changes, project, false)
             diff = computeDiff(changes, true, project)
 
             withContext(Dispatchers.EDT) {
                 setPreview(prompt.content, promptHintTextField.text)
             }
         }
+
         private fun setPreview(promptContent: String, hint: String) {
             val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch, hint, project)
             promptPreviewTextArea.text = constructPrompt.substring(0, constructPrompt.length.coerceAtMost(10000))
