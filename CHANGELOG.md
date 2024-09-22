@@ -7,6 +7,9 @@
 - Support for Azure OpenAI.
 - Sort LLM client configurations by provider name and configuration name.
 
+### Fixed
+- Open AI configuration setting `organizationId` is not used when verifying configuration.
+
 ## [2.4.1] - 2024-09-19
 
 ### Fixed
