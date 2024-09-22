@@ -214,7 +214,7 @@ class PromptTable(private val cs: CoroutineScope) {
         private fun setPreview(promptContent: String, hint: String) {
             val constructPrompt = AICommitsUtils.constructPrompt(promptContent, diff, branch, hint, project)
             promptPreviewTextArea.text = constructPrompt.substring(0, constructPrompt.length.coerceAtMost(10000))
-            promptPreviewTextArea.caretPosition = max(0, promptContentTextArea.caretPosition - 10)
+            promptPreviewTextArea.caretPosition = max(0, promptPreviewTextArea.caretPosition - 10)
         }
 
     }
