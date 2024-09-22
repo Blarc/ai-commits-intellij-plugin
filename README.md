@@ -36,11 +36,12 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 
 ## Supported models
 
+- Anthropic
+- Azure Open AI
+- Gemini
 - Open AI
 - Ollama
 - Qianfan (Ernie)
-- Gemini
-- Anthropic
 
 The plugin is implemented in a generic way and uses [langchain4j](https://github.com/langchain4j/langchain4j) for creating LLM API clients. If you would like to use some other LLM model that is supported by langchain4j, please make a feature request in GitHub issues.
 
