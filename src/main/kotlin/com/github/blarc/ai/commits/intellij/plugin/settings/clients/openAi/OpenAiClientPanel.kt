@@ -10,6 +10,7 @@ import com.intellij.ui.dsl.builder.*
 class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfiguration) : LLMClientPanel(clientConfiguration) {
     private val proxyTextField = JBTextField()
     private val tokenPasswordField = JBPasswordField()
+    private val organizationIdTextField = JBTextField()
 
     override fun create() = panel {
         nameRow()
@@ -56,7 +57,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         row {
             label(message("settings.openAi.organizationId"))
                 .widthGroup("label")
-            textField()
+            cell(organizationIdTextField)
                 .bindText(clientConfiguration::organizationId.toNonNullableProperty(""))
                 .align(Align.FILL)
                 .resizableColumn()
@@ -69,6 +70,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         clientConfiguration.proxyUrl = proxyTextField.text
         clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
         clientConfiguration.modelId = modelComboBox.item
+        clientConfiguration.organizationId = organizationIdTextField.text
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.token = String(tokenPasswordField.password)
 
