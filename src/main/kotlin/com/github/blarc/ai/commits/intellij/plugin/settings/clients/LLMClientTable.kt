@@ -31,7 +31,7 @@ import javax.swing.table.DefaultTableCellRenderer
 import kotlin.math.max
 
 class LLMClientTable {
-    private var llmClients = AppSettings2.instance.llmClientConfigurations
+    private var llmClients = fetchSortedLlmClients()
     private val tableModel = createTableModel()
 
     val table = TableView(tableModel).apply {
@@ -60,12 +60,19 @@ class LLMClientTable {
         llmClients.toList()
     )
 
+    private fun fetchSortedLlmClients() = AppSettings2.instance.llmClientConfigurations.sortedWith(
+        compareBy({ it.getClientName() }, { it.name })
+    )
+
+    private fun updateLlmClients(newClients: List<LLMClientConfiguration>) {
+        llmClients = newClients.sortedWith(compareBy({ it.getClientName() }, { it.name }))
+        refreshTableModel()
+    }
+
     fun addLlmClient(): LLMClientConfiguration? {
         val dialog = LLMClientDialog()
-
         if (dialog.showAndGet()) {
-            llmClients = llmClients.plus(dialog.llmClient)
-            refreshTableModel()
+            updateLlmClients(llmClients + dialog.llmClient)
             return dialog.llmClient
         }
         return null
@@ -73,20 +80,15 @@ class LLMClientTable {
 
     fun removeLlmClient(): LLMClientConfiguration? {
         val selectedLlmClient = table.selectedObject ?: return null
-        llmClients = llmClients.minus(selectedLlmClient)
-        refreshTableModel()
+        updateLlmClients(llmClients - selectedLlmClient)
         return selectedLlmClient
-
     }
 
     fun editLlmClient(): Pair<LLMClientConfiguration, LLMClientConfiguration>? {
         val selectedLlmClient = table.selectedObject ?: return null
         val dialog = LLMClientDialog(selectedLlmClient.clone())
-
         if (dialog.showAndGet()) {
-            llmClients = llmClients.minus(selectedLlmClient)
-            llmClients = llmClients.plus(dialog.llmClient)
-            refreshTableModel()
+            updateLlmClients(llmClients - selectedLlmClient + dialog.llmClient)
             return selectedLlmClient to dialog.llmClient
         }
         return null
@@ -97,14 +99,14 @@ class LLMClientTable {
     }
 
     fun reset() {
-        llmClients = AppSettings2.instance.llmClientConfigurations
+        llmClients = fetchSortedLlmClients()
         refreshTableModel()
     }
 
-    fun isModified() = llmClients != AppSettings2.instance.llmClientConfigurations
+    fun isModified() = llmClients.toSet() != AppSettings2.instance.llmClientConfigurations
 
     fun apply() {
-        AppSettings2.instance.llmClientConfigurations = llmClients
+        AppSettings2.instance.llmClientConfigurations = llmClients.toSet()
     }
 
     private class LLMClientDialog(val newLlmClientConfiguration: LLMClientConfiguration? = null) : DialogWrapper(true) {

@@ -5,6 +5,7 @@
 ### Added
 
 - Support for Azure OpenAI.
+- Sort LLM client configurations by provider name and configuration name.
 
 ## [2.4.1] - 2024-09-19
 
