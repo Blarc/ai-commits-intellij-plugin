@@ -33,20 +33,16 @@ enum class DefaultPrompts(val prompt: Prompt) {
         )
     ),
 
-    // ✨ feat(mine): Generate objects UUIDs and start team timers on game start
+    // author: ljgonzalez1
+    // source: https://github.com/Blarc/ai-commits-intellij-plugin/discussions/18#discussioncomment-10718381
+    // ✨ feat(conditions): add HpComparisonType enum and ICondition interface for unit comparison logic
     EMOJI(
         Prompt(
-            "Emoji",
-            "Prompt for commit message in the conventional commit convention with GitMoji convention.",
-            "Write a clean and comprehensive commit message in the conventional commit convention. " +
-                    "I'll send you an output of 'git diff --staged' command, and you convert " +
-                    "it into a commit message. " +
-                    "Use GitMoji convention to preface the commit. " +
-                    "Do NOT add any descriptions to the commit, only commit message. " +
-                    "Use the present tense. " +
-                    "Lines must not be longer than 74 characters.\n" +
-                    "{Use this hint to improve the commit message: \$hint}\n" +
-                    "Use {locale} language to answer.\n" +
+            "GitMoji",
+            "Prompt for generating commit messages with GitMoji.",
+            "Write concise commit message from 'git diff --staged' in format `[EMOJI] [TYPE](topic): " +
+                    "description in {locale}`. Use GitMoji, present tense, max 120 chars.\n" +
+                    "\n" +
                     "{diff}",
             false
         )

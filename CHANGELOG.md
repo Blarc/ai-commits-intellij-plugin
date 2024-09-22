@@ -7,7 +7,12 @@
 - Support for Azure OpenAI.
 - Sort LLM client configurations by provider name and configuration name.
 
+### Changed
+
+- Update default prompt for generating commit messages with GitMoji.
+
 ### Fixed
+
 - Open AI configuration setting `organizationId` is not used when verifying configuration.
 - Gemini configuration settings `projectId` and `location` are not used when verifying configuration.
 
