@@ -9,6 +9,7 @@
 
 ### Fixed
 - Open AI configuration setting `organizationId` is not used when verifying configuration.
+- Gemini configuration settings `projectId` and `location` are not used when verifying configuration.
 
 ## [2.4.1] - 2024-09-19
 

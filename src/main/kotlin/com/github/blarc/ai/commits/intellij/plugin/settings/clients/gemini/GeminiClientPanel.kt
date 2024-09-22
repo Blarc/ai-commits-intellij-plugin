@@ -59,7 +59,8 @@ class GeminiClientPanel private constructor(
         // Configuration passed to panel is already a copy of the original or a new configuration
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.temperature = temperatureTextField.text
-
+        clientConfiguration.projectId = projectIdTextField.text
+        clientConfiguration.location = locationTextField.text
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }
