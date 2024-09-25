@@ -40,9 +40,10 @@ enum class DefaultPrompts(val prompt: Prompt) {
         Prompt(
             "GitMoji",
             "Prompt for generating commit messages with GitMoji.",
-            "Write concise commit message from 'git diff --staged' in format `[EMOJI] [TYPE](topic): " +
-                    "description in {locale}`. Use GitMoji, present tense, max 120 chars.\n" +
-                    "\n" +
+            "Write a concise commit message from 'git diff --staged' output in the format " +
+                    "`[EMOJI] [TYPE](file/topic): [description in {locale}]`. Use GitMoji emojis (e.g., ✨ → feat), " +
+                    "present tense, active voice, max 120 characters per line, no code blocks.\n" +
+                    "---\n" +
                     "{diff}",
             false
         )
