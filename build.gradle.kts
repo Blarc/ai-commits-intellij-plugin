@@ -108,6 +108,7 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-vertex-ai-gemini")
     implementation("dev.langchain4j:langchain4j-anthropic")
     implementation("dev.langchain4j:langchain4j-azure-open-ai")
+    implementation("dev.langchain4j:langchain4j-hugging-face")
 
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.2")

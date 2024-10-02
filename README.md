@@ -39,6 +39,7 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 - Anthropic
 - Azure Open AI
 - Gemini
+- Hugging Face
 - Open AI
 - Ollama
 - Qianfan (Ernie)
