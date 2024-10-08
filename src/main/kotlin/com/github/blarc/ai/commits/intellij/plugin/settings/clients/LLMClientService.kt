@@ -21,8 +21,11 @@ import com.intellij.platform.ide.progress.withBackgroundProgress
 import com.intellij.ui.components.JBLabel
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import com.intellij.vcs.commit.isAmendCommitMode
+import dev.langchain4j.data.message.AiMessage
 import dev.langchain4j.data.message.UserMessage
+import dev.langchain4j.model.StreamingResponseHandler
 import dev.langchain4j.model.chat.ChatLanguageModel
+import dev.langchain4j.model.chat.StreamingChatLanguageModel
 import git4idea.GitCommit
 import git4idea.history.GitHistoryUtils
 import git4idea.repo.GitRepositoryManager
@@ -34,6 +37,8 @@ import kotlinx.coroutines.withContext
 abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope) {
 
     abstract suspend fun buildChatModel(client: C): ChatLanguageModel
+
+    abstract suspend fun buildStreamingChatModel(client: C): StreamingChatLanguageModel?
 
     fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
 
@@ -58,7 +63,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
                 val branch = commonBranch(includedChanges, project)
                 val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitMessage.text, project)
 
-                sendRequest(clientConfiguration, prompt, onSuccess = {
+                makeRequest(clientConfiguration, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
                         commitMessage.setCommitMessage(it)
                     }
@@ -71,6 +76,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
             }
         }
     }
+
 
     fun verifyConfiguration(client: C, label: JBLabel) {
         label.text = message("settings.verify.running")
@@ -89,20 +95,15 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         }
     }
 
-    private suspend fun sendRequest(client: C, text: String, onSuccess: suspend (r: String) -> Unit, onError: suspend (r: String) -> Unit) {
+    private suspend fun makeRequest(client: C, text: String, onSuccess: suspend (r: String) -> Unit, onError: suspend (r: String) -> Unit) {
         try {
-            val model = buildChatModel(client)
-            val response = withContext(Dispatchers.IO) {
-                model.generate(
-                    listOf(
-                        UserMessage.from(
-                            "user",
-                            text
-                        )
-                    )
-                ).content().text()
+            if (AppSettings2.instance.useStreamingResponse) {
+                buildStreamingChatModel(client)?.let { streamingChatModel ->
+                    sendStreamingRequest(streamingChatModel, text, onSuccess, onError)
+                    return
+                }
             }
-            onSuccess(response)
+            sendRequest(client, text, onSuccess, onError)
         } catch (e: IllegalArgumentException) {
             onError(message("settings.verify.invalid", e.message ?: message("unknown-error")))
         } catch (e: Exception) {
@@ -110,6 +111,50 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
             // Generic exceptions should be logged by the IDE for easier error reporting
             throw e
         }
+    }
+
+    private suspend fun sendStreamingRequest(streamingModel: StreamingChatLanguageModel, text: String, onSuccess: suspend (r: String) -> Unit, onError: suspend (r: String) -> Unit) {
+        var response = ""
+        withContext(Dispatchers.IO) {
+            streamingModel.generate(
+                listOf(
+                    UserMessage.from(
+                        "user",
+                        text
+                    )
+                ),
+                object : StreamingResponseHandler<AiMessage> {
+                    override fun onNext(token: String?) {
+                        response += token
+                        cs.launch {
+                            onSuccess(response)
+                        }
+                    }
+
+                    override fun onError(error: Throwable?) {
+                        response = error?.message.toString()
+                        cs.launch {
+                            onError(response)
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+    private suspend fun sendRequest(client: C, text: String, onSuccess: suspend (r: String) -> Unit, onError: suspend (r: String) -> Unit) {
+        val model = buildChatModel(client)
+        val response = withContext(Dispatchers.IO) {
+            model.generate(
+                listOf(
+                    UserMessage.from(
+                        "user",
+                        text
+                    )
+                )
+            ).content().text()
+        }
+        onSuccess(response)
     }
 
     private suspend fun getLastCommitChanges(project: Project): List<Change> {

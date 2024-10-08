@@ -4,6 +4,7 @@
 
 ### Added
 
+- Support streaming response.
 - Support for Hugging Face.
 
 ## [2.5.0] - 2024-09-22

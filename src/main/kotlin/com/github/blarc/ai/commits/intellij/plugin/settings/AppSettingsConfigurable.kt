@@ -42,6 +42,10 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
                 .bindSelected(project.service<ProjectSettings>()::isProjectSpecificLLMClient)
             contextHelp(message("settings.llmClient.projectSpecific.contextHelp"))
                 .align(AlignX.LEFT)
+            checkBox(message("settings.llmClient.streamingResponse"))
+                .bindSelected(AppSettings2.instance::useStreamingResponse)
+            contextHelp(message("settings.llmClient.streamingResponse.contextHelp"))
+                .align(AlignX.LEFT)
         }
         row {
             llmClientToolbarDecorator = ToolbarDecorator.createDecorator(llmClientTable.table)

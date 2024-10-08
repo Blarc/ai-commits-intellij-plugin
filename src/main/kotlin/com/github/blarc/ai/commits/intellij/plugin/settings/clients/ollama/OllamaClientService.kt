@@ -6,8 +6,10 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.naturalSorted
 import dev.langchain4j.model.chat.ChatLanguageModel
+import dev.langchain4j.model.chat.StreamingChatLanguageModel
 import dev.langchain4j.model.ollama.OllamaChatModel
 import dev.langchain4j.model.ollama.OllamaModels
+import dev.langchain4j.model.ollama.OllamaStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +49,15 @@ class OllamaClientService(private val cs: CoroutineScope) : LLMClientService<Oll
 
     override suspend fun buildChatModel(client: OllamaClientConfiguration): ChatLanguageModel {
         return OllamaChatModel.builder()
+            .modelName(client.modelId)
+            .temperature(client.temperature.toDouble())
+            .timeout(Duration.ofSeconds(client.timeout.toLong()))
+            .baseUrl(client.host)
+            .build()
+    }
+
+    override suspend fun buildStreamingChatModel(client: OllamaClientConfiguration): StreamingChatLanguageModel {
+        return OllamaStreamingChatModel.builder()
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))

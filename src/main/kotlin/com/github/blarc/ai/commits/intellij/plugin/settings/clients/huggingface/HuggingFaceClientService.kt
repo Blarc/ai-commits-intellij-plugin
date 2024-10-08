@@ -37,6 +37,8 @@ class HuggingFaceClientService(private val cs: CoroutineScope) : LLMClientServic
             .build()
     }
 
+    override suspend fun buildStreamingChatModel(client: HuggingFaceClientConfiguration) = null
+
     fun saveToken(client: HuggingFaceClientConfiguration, token: String) {
         cs.launch(Dispatchers.Default) {
             try {

@@ -10,7 +10,9 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
 import dev.langchain4j.model.chat.ChatLanguageModel
+import dev.langchain4j.model.chat.StreamingChatLanguageModel
 import dev.langchain4j.model.openai.OpenAiChatModel
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +32,27 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
     override suspend fun buildChatModel(client: OpenAiClientConfiguration): ChatLanguageModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = OpenAiChatModel.builder()
+            .apiKey(token ?: "")
+            .modelName(client.modelId)
+            .temperature(client.temperature.toDouble())
+            .timeout(Duration.ofSeconds(client.timeout.toLong()))
+            .baseUrl(client.host)
+
+        client.proxyUrl?.takeIf { it.isNotBlank() }?.let {
+            val uri = URI(it)
+            builder.proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(uri.host, uri.port)))
+        }
+
+        client.organizationId?.takeIf { it.isNotBlank() }?.let {
+            builder.organizationId(it)
+        }
+
+        return builder.build()
+    }
+
+    override suspend fun buildStreamingChatModel(client: OpenAiClientConfiguration): StreamingChatLanguageModel {
+        val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
+        val builder = OpenAiStreamingChatModel.builder()
             .apiKey(token ?: "")
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
