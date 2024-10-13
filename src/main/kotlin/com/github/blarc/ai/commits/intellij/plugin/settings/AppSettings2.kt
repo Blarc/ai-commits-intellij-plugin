@@ -1,6 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openrouter.OpenRouterClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
@@ -59,12 +60,14 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             GeminiClientConfiguration::class,
             AnthropicClientConfiguration::class,
             AzureOpenAiClientConfiguration::class,
-            HuggingFaceClientConfiguration::class
+            HuggingFaceClientConfiguration::class,
+            OpenRouterClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )
     var llmClientConfigurations = setOf<LLMClientConfiguration>(
-        OpenAiClientConfiguration()
+        OpenAiClientConfiguration(),
+        OpenRouterClientConfiguration()
     )
 
     @Attribute

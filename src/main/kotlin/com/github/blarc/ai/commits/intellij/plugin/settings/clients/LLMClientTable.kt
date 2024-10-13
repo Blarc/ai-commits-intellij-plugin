@@ -2,6 +2,9 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openrouter.OpenRouterClientConfiguration
+
+
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
@@ -143,7 +146,6 @@ class LLMClientTable {
 
         private fun getLlmClients(newLLMClientConfiguration: LLMClientConfiguration?): List<LLMClientConfiguration> {
             return if (newLLMClientConfiguration == null) {
-                // TODO(@Blarc): Is there a better way to create the list of all possible LLM Clients that implement LLMClient abstract class
                 listOf(
                     OpenAiClientConfiguration(),
                     OllamaClientConfiguration(),
@@ -151,12 +153,15 @@ class LLMClientTable {
                     GeminiClientConfiguration(),
                     AnthropicClientConfiguration(),
                     AzureOpenAiClientConfiguration(),
-                    HuggingFaceClientConfiguration()
+                    HuggingFaceClientConfiguration(),
+                    OpenRouterClientConfiguration()
                 )
             } else {
                 listOf(newLLMClientConfiguration)
             }
         }
+
+
 
         private fun createCardSplitter(): JComponent {
             return Splitter(false, 0.25f).apply {
