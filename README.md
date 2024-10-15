@@ -111,3 +111,13 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## License
 
 Please see [LICENSE](LICENSE) for details.
+
+## Star History
+
+<a href="https://star-history.com/#Blarc/ai-commits-intellij-plugin&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Blarc/ai-commits-intellij-plugin&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Blarc/ai-commits-intellij-plugin&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Blarc/ai-commits-intellij-plugin&type=Date" />
+ </picture>
+</a>
