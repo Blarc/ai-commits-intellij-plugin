@@ -8,6 +8,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientCon
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini.GeminiClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiApi.GeminiApiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface.HuggingFaceClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
@@ -57,6 +58,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             OllamaClientConfiguration::class,
             QianfanClientConfiguration::class,
             GeminiClientConfiguration::class,
+            GeminiApiClientConfiguration::class,
             AnthropicClientConfiguration::class,
             AzureOpenAiClientConfiguration::class,
             HuggingFaceClientConfiguration::class
