@@ -15,6 +15,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.asContextElement
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextArea
@@ -30,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
@@ -110,7 +113,6 @@ class PromptTable(private val cs: CoroutineScope) {
     }
 
     private class PromptDialog(val prompts: Set<String>, private val cs: CoroutineScope, val newPrompt: Prompt? = null) : DialogWrapper(true) {
-
         val prompt = newPrompt ?: Prompt("")
         val promptNameTextField = JBTextField()
         val promptDescriptionTextField = JBTextField()
@@ -120,14 +122,17 @@ class PromptTable(private val cs: CoroutineScope) {
         lateinit var branch: String
         lateinit var diff: String
         lateinit var project: Project
+        private val logger = Logger.getInstance(PromptDialog::class.java)
 
         init {
+            setSize(AppSettings2.instance.promptDialogWidth, AppSettings2.instance.promptDialogHeight)
+
             title = newPrompt?.let { message("settings.prompt.edit.title") } ?: message("settings.prompt.add.title")
             setOKButtonText(newPrompt?.let { message("actions.update") } ?: message("actions.add"))
 
             promptContentTextArea.wrapStyleWord = true
             promptContentTextArea.lineWrap = true
-            promptContentTextArea.rows = 15
+            promptContentTextArea.rows = 5
             promptContentTextArea.autoscrolls = false
 
             if (!prompt.canBeChanged) {
@@ -140,7 +145,7 @@ class PromptTable(private val cs: CoroutineScope) {
             promptPreviewTextArea.wrapStyleWord = true
             promptPreviewTextArea.lineWrap = true
             promptPreviewTextArea.isEditable = false
-            promptPreviewTextArea.rows = 25
+            promptPreviewTextArea.rows = 5
             promptPreviewTextArea.columns = 100
             promptPreviewTextArea.autoscrolls = false
 
@@ -151,7 +156,6 @@ class PromptTable(private val cs: CoroutineScope) {
 
             init()
         }
-
 
         override fun createCenterPanel() = panel {
             row(message("settings.prompt.name")) {
@@ -184,24 +188,50 @@ class PromptTable(private val cs: CoroutineScope) {
                     .validationOnApply { notBlank(it.text) }
                     .onChanged { setPreview(it.text, promptHintTextField.text) }
                     .align(Align.FILL)
-            }
+            }.resizableRow()
             row {
                 label("Preview")
             }
             row {
                 scrollCell(promptPreviewTextArea)
                     .align(Align.FILL)
-            }
+            }.resizableRow()
             row {
                 comment(message("settings.prompt.comment"))
             }
+        }.apply {
+            // This listener saves the size of the dialog so the dialog size does not change when it's re-opened
+            addComponentListener(object : ComponentAdapter() {
+                override fun componentResized(e: ComponentEvent?) {
+                    AppSettings2.instance.promptDialogWidth = size.width
+                    AppSettings2.instance.promptDialogHeight = size.height
+                }
+            })
         }
 
         private fun getChangesAndSetPreview(project: Project) = cs.launch(Dispatchers.IO + ModalityState.stateForComponent(rootPane).asContextElement()) {
-            val changes = VcsRepositoryManager.getInstance(project).repositories.stream()
-                .map { r -> GitBranchWorker.loadTotalDiff(r, r.currentBranchName!!) }
-                .flatMap { r -> r.stream() }
+            val repositories = VcsRepositoryManager.getInstance(project).repositories
+            if (repositories.isEmpty()) {
+                logger.warn("No Git repositories found in the project.")
+                return@launch
+            }
+
+            val changes = repositories.asSequence()
+                .filter { it.currentBranchName != null }
+                .flatMap { repository ->
+                    val branchName = repository.currentBranchName!!
+                    try {
+                        GitBranchWorker.loadTotalDiff(repository, branchName).asSequence()
+                    } catch (e: Exception) {
+                        logger.error("Failed to load diff for branch '$branchName' in repository: ${repository.presentableUrl}", e)
+                        emptySequence()
+                    }
+                }
                 .toList()
+
+            if (changes.isEmpty()) {
+                logger.warn("No changes found for the current branch.")
+            }
 
             branch = commonBranch(changes, project, false)
             diff = computeDiff(changes, true, project)

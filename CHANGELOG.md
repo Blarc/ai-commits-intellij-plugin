@@ -5,6 +5,7 @@
 ### Added
 
 - Support for Gemini Google.
+- Save the size of the dialog for adding prompts, if it's resized by the user.
 
 ### Changed
 
