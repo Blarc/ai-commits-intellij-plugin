@@ -75,6 +75,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     @XMap
     var prompts = DefaultPrompts.toPromptsMap()
     var activePrompt = DefaultPrompts.BASIC.prompt
+    var promptDialogWidth = 800
+    var promptDialogHeight = 600
 
     var appExclusions: Set<String> = setOf()
 
