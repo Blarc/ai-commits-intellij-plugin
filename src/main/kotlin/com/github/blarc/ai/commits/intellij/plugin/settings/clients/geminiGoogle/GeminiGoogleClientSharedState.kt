@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiApi
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
@@ -6,11 +6,11 @@ import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "GeminiApiClientSharedState", storages = [Storage("AICommitsGeminiApi.xml")])
-class GeminiApiClientSharedState : PersistentStateComponent<GeminiApiClientSharedState>, LLMClientSharedState {
+class GeminiGoogleClientSharedState : PersistentStateComponent<GeminiGoogleClientSharedState>, LLMClientSharedState {
 
     companion object {
         @JvmStatic
-        fun getInstance(): GeminiApiClientSharedState = service()
+        fun getInstance(): GeminiGoogleClientSharedState = service()
     }
 
     @XCollection(style = XCollection.Style.v2)
@@ -34,9 +34,9 @@ class GeminiApiClientSharedState : PersistentStateComponent<GeminiApiClientShare
         "gemini-1.5-flash-exp-0827"
     )
 
-    override fun getState(): GeminiApiClientSharedState = this
+    override fun getState(): GeminiGoogleClientSharedState = this
 
-    override fun loadState(state: GeminiApiClientSharedState) {
+    override fun loadState(state: GeminiGoogleClientSharedState) {
         modelIds += state.modelIds
         hosts += state.hosts
     }

@@ -5,8 +5,8 @@ import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini.GeminiClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiApi.GeminiApiClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface.HuggingFaceClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
@@ -150,7 +150,7 @@ class LLMClientTable {
                     OllamaClientConfiguration(),
                     QianfanClientConfiguration(),
                     GeminiClientConfiguration(),
-                    GeminiApiClientConfiguration(),
+                    GeminiGoogleClientConfiguration(),
                     AnthropicClientConfiguration(),
                     AzureOpenAiClientConfiguration(),
                     HuggingFaceClientConfiguration()
