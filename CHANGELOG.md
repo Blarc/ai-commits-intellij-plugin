@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Gemini Google.
+
+### Changed
+
+- Rename Gemini to Gemini Vertex.
+- Use the correct icon for Gemini Vertex.
+
 ## [2.6.0] - 2024-10-09
 
 ### Added

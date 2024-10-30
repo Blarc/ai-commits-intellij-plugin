@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
@@ -9,15 +9,15 @@ import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 
-class GeminiClientPanel private constructor(
+class GeminiVertexClientPanel private constructor(
     private val clientConfiguration: GeminiClientConfiguration,
-    val service: GeminiClientService
+    val service: GeminiVertexClientService
 ) : LLMClientPanel(clientConfiguration) {
 
     private val projectIdTextField = JBTextField()
     private val locationTextField = JBTextField()
 
-    constructor(configuration: GeminiClientConfiguration): this(configuration, GeminiClientService.getInstance())
+    constructor(configuration: GeminiClientConfiguration): this(configuration, GeminiVertexClientService.getInstance())
 
     override fun create() = panel {
         nameRow()

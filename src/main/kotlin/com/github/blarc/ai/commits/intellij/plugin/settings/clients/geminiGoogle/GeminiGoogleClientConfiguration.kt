@@ -1,26 +1,28 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.gemini
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle
 
+import GeminiGoogleClientService
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import javax.swing.Icon
 
-class GeminiClientConfiguration : LLMClientConfiguration(
-    "Gemini",
-    "gemini-pro",
+class GeminiGoogleClientConfiguration : LLMClientConfiguration(
+    "Gemini Google",
+    "gemini-1.5-pro",
     "0.7"
 ) {
     @Attribute
-    var projectId: String = "project-id"
-    @Attribute
-    var location: String = "us-central1"
+    var tokenIsStored: Boolean = false
+    @Transient
+    var token: String? = null
 
     companion object {
-        const val CLIENT_NAME = "Gemini"
+        const val CLIENT_NAME = "Gemini Google"
     }
 
     override fun getClientName(): String {
@@ -28,32 +30,31 @@ class GeminiClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.GEMINI
+        return Icons.GEMINI_GOOGLE
     }
 
     override fun getSharedState(): LLMClientSharedState {
-        return GeminiClientSharedState.getInstance()
+        return GeminiGoogleClientSharedState.getInstance()
     }
 
     override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
-        return GeminiClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
+        return GeminiGoogleClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
     // Model names are hard-coded and do not need to be refreshed.
     override fun getRefreshModelsFunction() = null
 
     override fun clone(): LLMClientConfiguration {
-        val copy = GeminiClientConfiguration()
+        val copy = GeminiGoogleClientConfiguration()
         copy.id = id
         copy.name = name
         copy.modelId = modelId
         copy.temperature = temperature
-        copy.projectId = projectId
-        copy.location = location
+        copy.tokenIsStored = tokenIsStored
+        copy.token = token
         return copy
     }
 
-    override fun panel() = GeminiClientPanel(this)
-
+    override fun panel() = GeminiGoogleClientPanel(this)
 
 }
