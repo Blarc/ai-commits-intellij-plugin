@@ -12,6 +12,7 @@ import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.OptionTag
+import com.intellij.util.xmlb.annotations.Property
 import java.util.*
 
 @State(
@@ -32,6 +33,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     @Attribute
     var isProjectSpecificLLMClient: Boolean = false
 
+    @Property
     var activePrompt = DefaultPrompts.BASIC.prompt
         get() = getActivePrompt(field)
 

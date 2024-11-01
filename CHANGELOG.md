@@ -12,6 +12,10 @@
 - Rename Gemini to Gemini Vertex.
 - Use the correct icon for Gemini Vertex.
 
+### Fixed
+
+- Project's specific prompt is not saved properly.
+
 ## [2.6.0] - 2024-10-09
 
 ### Added
