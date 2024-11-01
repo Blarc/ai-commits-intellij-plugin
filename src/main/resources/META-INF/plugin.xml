@@ -24,13 +24,16 @@
         </ul>
         <h3>Supported models</h3>
         <ul>
+            <li>Anthropic</li>
+            <li>Azure Open AI</li>
+            <li>Gemini Google AI</li>
+            <li>Gemini Vertex AI</li>
+            <li>Hugging Face</li>
             <li>Open AI</li>
             <li>Ollama</li>
             <li>Qianfan (Ernie)</li>
-            <li>Gemini</li>
-            <li>Anthropic</li>
         </ul>
-        <p>The plugin is implemented in a generic way and uses [langchain4j](https://github.com/langchain4j/langchain4j)
+        <p>The plugin is implemented in a generic way and uses <a href="https://github.com/langchain4j/langchain4j">langchain4j</a>
         for creating LLM API clients. If you would like to use some other LLM model that is supported by langchain4j,
         please make a feature request in GitHub issues.</p>
         <h3>Usage</h3>
