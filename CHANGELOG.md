@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.7.1] - 2024-11-04
+
 ### Added
 
 - Option to set top K and top P in Gemini Google client settings.
@@ -312,7 +314,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.7.1...HEAD
+[2.7.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.4.1...v2.5.0
