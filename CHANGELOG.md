@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Option to set top K and top P in Gemini Google client settings.
+
+### Fixed
+
+- Unable to submit request to Gemini Google because it has a topK value of 64 but the supported range is from 1 (inclusive) to 41 (exclusive).
+
 ## [2.7.0] - 2024-11-01
 
 ### Added

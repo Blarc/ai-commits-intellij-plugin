@@ -50,6 +50,20 @@ fun ValidationInfoBuilder.isInt(value: String): ValidationInfo? {
     }
 }
 
+fun ValidationInfoBuilder.isDouble(value: String): ValidationInfo? {
+    if (value.isBlank()){
+        return null
+    }
+
+    value.toDoubleOrNull().let {
+        if (it == null) {
+            return error(message("validation.double"))
+        } else {
+            return null
+        }
+    }
+}
+
 // Adds emptyText method to all cells that contain a component that implements ComponentWithEmptyText class
 fun <T>Cell<T>.emptyText(emptyText: String) : Cell<T> where T : JComponent, T : ComponentWithEmptyText {
     this.component.emptyText.text = emptyText

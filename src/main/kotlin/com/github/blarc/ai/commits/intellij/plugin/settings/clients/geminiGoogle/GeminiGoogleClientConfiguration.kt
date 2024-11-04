@@ -20,6 +20,8 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
+    var topK = 40
+    var topP = 0.95
 
     companion object {
         const val CLIENT_NAME = "Gemini Google"
@@ -52,6 +54,8 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
         copy.temperature = temperature
         copy.tokenIsStored = tokenIsStored
         copy.token = token
+        copy.topK = topK
+        copy.topP = topP
         return copy
     }
 

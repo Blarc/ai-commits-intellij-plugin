@@ -3,12 +3,12 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogl
 import GeminiGoogleClientService
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
+import com.github.blarc.ai.commits.intellij.plugin.isDouble
+import com.github.blarc.ai.commits.intellij.plugin.isInt
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.Panel
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.components.JBTextField
+import com.intellij.ui.dsl.builder.*
 
 class GeminiGoogleClientPanel private constructor(
     private val clientConfiguration: GeminiGoogleClientConfiguration,
@@ -16,6 +16,8 @@ class GeminiGoogleClientPanel private constructor(
 ) : LLMClientPanel(clientConfiguration) {
 
     private val tokenPasswordField = JBPasswordField()
+    private val topKTextField = JBTextField()
+    private val topPTextField = JBTextField()
 
     constructor(configuration: GeminiGoogleClientConfiguration): this(configuration, GeminiGoogleClientService.getInstance())
 
@@ -24,7 +26,37 @@ class GeminiGoogleClientPanel private constructor(
         tokenRow()
         modelIdRow()
         temperatureRow()
+        topKRow()
+        topPRow()
         verifyRow()
+    }
+
+    private fun Panel.topKRow() {
+        row {
+            label(message("settings.geminiGoogle.topK"))
+                .widthGroup("label")
+            cell(topKTextField)
+                .bindIntText(clientConfiguration::topK)
+                .align(Align.FILL)
+                .validationOnInput { isInt(it.text) }
+                .resizableColumn()
+            contextHelp(message("settings.geminiGoogle.topK.comment"))
+                .align(AlignX.RIGHT)
+        }
+    }
+
+    private fun Panel.topPRow() {
+        row {
+            label(message("settings.geminiGoogle.topP"))
+                .widthGroup("label")
+            cell(topPTextField)
+                .bindText({ clientConfiguration.topP.toString() }, { s -> clientConfiguration.topP = s.toDouble() })
+                .align(Align.FILL)
+                .validationOnInput { isDouble(it.text) }
+                .resizableColumn()
+            contextHelp(message("settings.geminiGoogle.topP.comment"))
+                .align(AlignX.RIGHT)
+        }
     }
 
     private fun Panel.tokenRow() {

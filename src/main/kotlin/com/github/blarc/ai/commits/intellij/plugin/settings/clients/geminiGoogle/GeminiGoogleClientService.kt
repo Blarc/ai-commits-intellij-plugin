@@ -29,6 +29,8 @@ class GeminiGoogleClientService(private val cs: CoroutineScope) : LLMClientServi
             .apiKey(token)
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
+            .topK(client.topK)
+            .topP(client.topP)
             .build()
     }
 
