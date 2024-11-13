@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -37,7 +37,7 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.HUGGING_FACE
+        return Icons.HUGGING_FACE.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {

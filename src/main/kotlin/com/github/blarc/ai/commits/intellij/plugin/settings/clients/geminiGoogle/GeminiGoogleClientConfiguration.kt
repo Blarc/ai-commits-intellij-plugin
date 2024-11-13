@@ -32,7 +32,7 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.GEMINI_GOOGLE
+        return Icons.GEMINI_GOOGLE.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {

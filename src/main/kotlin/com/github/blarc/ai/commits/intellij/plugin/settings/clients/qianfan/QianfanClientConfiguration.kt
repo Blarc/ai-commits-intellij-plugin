@@ -35,7 +35,7 @@ class QianfanClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.QIANFAN
+        return Icons.QIANFAN.getThemeBasedIcon()
     }
 
     override fun getSharedState(): QianfanClientSharedState {

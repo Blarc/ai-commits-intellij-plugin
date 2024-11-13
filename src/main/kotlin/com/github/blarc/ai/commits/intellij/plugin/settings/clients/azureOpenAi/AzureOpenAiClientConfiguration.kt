@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -34,7 +34,7 @@ class AzureOpenAiClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.AZURE_OPEN_AI
+        return Icons.AZURE_OPEN_AI.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {

@@ -30,7 +30,7 @@ class GeminiClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.GEMINI_VERTEX
+        return Icons.GEMINI_VERTEX.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {

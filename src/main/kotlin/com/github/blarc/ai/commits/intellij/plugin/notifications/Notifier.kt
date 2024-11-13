@@ -25,7 +25,7 @@ fun sendNotification(notification : Notification, project : Project? = null) {
         NotificationType.INFORMATION
     )
 
-    intellijNotification.icon = Icons.AI_COMMITS
+    intellijNotification.icon = Icons.AI_COMMITS.getThemeBasedIcon()
 
     notification.actions.forEach { action ->
         intellijNotification.addAction(DumbAwareAction.create(action.title) {

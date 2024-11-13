@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
@@ -32,7 +32,7 @@ class GitHubModelsClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.GITHUB
+        return Icons.GITHUB.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {

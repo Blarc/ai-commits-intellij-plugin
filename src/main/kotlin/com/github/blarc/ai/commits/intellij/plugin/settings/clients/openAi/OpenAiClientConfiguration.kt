@@ -37,7 +37,7 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.OPEN_AI
+        return Icons.OPEN_AI.getThemeBasedIcon()
     }
 
     override fun getSharedState(): OpenAiClientSharedState {

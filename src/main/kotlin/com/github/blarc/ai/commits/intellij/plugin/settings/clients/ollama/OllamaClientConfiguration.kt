@@ -30,7 +30,7 @@ class OllamaClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.OLLAMA
+        return Icons.OLLAMA.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {

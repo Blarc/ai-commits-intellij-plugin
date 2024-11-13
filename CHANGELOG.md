@@ -6,6 +6,7 @@
 
 - Support streaming mode for Gemini Google.
 - Support GitHub models client.
+- Theme based icons for better visibility.
 
 ### Fixed
 

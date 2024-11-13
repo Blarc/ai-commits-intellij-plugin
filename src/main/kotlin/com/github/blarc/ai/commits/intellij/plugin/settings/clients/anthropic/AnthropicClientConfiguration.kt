@@ -38,7 +38,7 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
     }
 
     override fun getClientIcon(): Icon {
-        return Icons.ANTHROPIC
+        return Icons.ANTHROPIC.getThemeBasedIcon()
     }
 
     override fun getSharedState(): LLMClientSharedState {
