@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support streaming mode for Gemini Google.
+
 ## [2.7.1] - 2024-11-04
 
 ### Added
