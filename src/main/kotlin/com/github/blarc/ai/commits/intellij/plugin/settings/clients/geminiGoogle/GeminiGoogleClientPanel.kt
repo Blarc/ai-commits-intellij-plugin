@@ -81,6 +81,8 @@ class GeminiGoogleClientPanel private constructor(
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.token = String(tokenPasswordField.password)
+        clientConfiguration.topP = topPTextField.text.toDouble()
+        clientConfiguration.topK = topKTextField.text.toInt()
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

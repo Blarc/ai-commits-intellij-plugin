@@ -9,6 +9,7 @@
 ### Fixed
 
 - Project specific locale is not used when creating prompt.
+- Properties topP and topK are not used when verifying Gemini Google client configuration.
 
 ## [2.7.1] - 2024-11-04
 
