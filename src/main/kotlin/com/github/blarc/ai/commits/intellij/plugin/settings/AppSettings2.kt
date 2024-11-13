@@ -9,6 +9,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.An
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels.GitHubModelsClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface.HuggingFaceClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
@@ -61,7 +62,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             GeminiGoogleClientConfiguration::class,
             AnthropicClientConfiguration::class,
             AzureOpenAiClientConfiguration::class,
-            HuggingFaceClientConfiguration::class
+            HuggingFaceClientConfiguration::class,
+            GitHubModelsClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )

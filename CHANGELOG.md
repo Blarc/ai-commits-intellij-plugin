@@ -5,6 +5,7 @@
 ### Added
 
 - Support streaming mode for Gemini Google.
+- Support GitHub models client.
 
 ### Fixed
 

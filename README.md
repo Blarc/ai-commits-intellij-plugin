@@ -40,6 +40,7 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 - Azure Open AI
 - Gemini Google AI
 - Gemini Vertex AI
+- GitHub Models
 - Hugging Face
 - Open AI
 - Ollama

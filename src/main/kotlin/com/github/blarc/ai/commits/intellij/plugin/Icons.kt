@@ -12,4 +12,5 @@ object Icons {
     val ANTHROPIC = IconLoader.getIcon("/icons/anthropic.svg", javaClass)
     val AZURE_OPEN_AI = IconLoader.getIcon("/icons/azureOpenAi.svg", javaClass)
     val HUGGING_FACE = IconLoader.getIcon("/icons/huggingface.svg", javaClass)
+    val GITHUB = IconLoader.getIcon("/icons/github15.svg", javaClass)
 }

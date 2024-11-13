@@ -110,7 +110,8 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-azure-open-ai")
     implementation("dev.langchain4j:langchain4j-hugging-face")
     implementation("dev.langchain4j:langchain4j-google-ai-gemini")
-
+    implementation("dev.langchain4j:langchain4j-google-ai-gemini")
+    implementation("dev.langchain4j:langchain4j-github-models")
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
