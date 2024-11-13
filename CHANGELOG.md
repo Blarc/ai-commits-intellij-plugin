@@ -6,6 +6,10 @@
 
 - Support streaming mode for Gemini Google.
 
+### Fixed
+
+- Project specific locale is not used when creating prompt.
+
 ## [2.7.1] - 2024-11-04
 
 ### Added
