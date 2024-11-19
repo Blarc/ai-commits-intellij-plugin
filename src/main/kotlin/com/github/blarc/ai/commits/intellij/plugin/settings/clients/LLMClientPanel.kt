@@ -89,6 +89,9 @@ abstract class LLMClientPanel(
                     .align(AlignX.RIGHT)
                     .widthGroup("button")
             }
+
+            contextHelp(message("settings.llmClient.modelId.comment"))
+                .align(AlignX.RIGHT)
         }
     }
 
