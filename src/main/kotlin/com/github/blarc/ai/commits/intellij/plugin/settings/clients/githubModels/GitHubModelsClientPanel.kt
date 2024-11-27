@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModel
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
-import com.github.blarc.ai.commits.intellij.plugin.isDouble
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
@@ -24,7 +23,7 @@ class GitHubModelsClientPanel private constructor(
         tokenRow()
         modelIdRow()
         temperatureRow()
-        topPRow()
+        topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
     }
 
@@ -41,20 +40,6 @@ class GitHubModelsClientPanel private constructor(
                 .align(Align.FILL)
                 // maxLineLength was eye-balled, but prevents the dialog getting wider
                 .comment(message("settings.githubModels.token.comment"), 50)
-        }
-    }
-
-    private fun Panel.topPRow() {
-        row {
-            label(message("settings.githubModels.topP"))
-                .widthGroup("label")
-            cell(topPTextField)
-                .bindText({ clientConfiguration.topP.toString() }, { s -> clientConfiguration.topP = s.toDouble() })
-                .align(Align.FILL)
-                .validationOnInput { isDouble(it.text) }
-                .resizableColumn()
-            contextHelp(message("settings.githubModels.topP.comment"))
-                .align(AlignX.RIGHT)
         }
     }
 

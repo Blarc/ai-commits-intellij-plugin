@@ -1,9 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
+import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.isInt
-import com.github.blarc.ai.commits.intellij.plugin.notBlank
-import com.github.blarc.ai.commits.intellij.plugin.temperatureValid
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
@@ -124,6 +122,49 @@ abstract class LLMClientPanel(
                 .align(AlignX.RIGHT)
                 .align(AlignY.TOP)
                 .widthGroup("button")
+        }
+    }
+
+    open fun Panel.topKRow(topKField: JBTextField, property: MutableProperty<Int?>) {
+        row {
+            label(message("settings.llmClient.topK"))
+                .widthGroup("label")
+            cell(topKField)
+                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toInt()) })
+                .align(Align.FILL)
+                .validationOnInput { isInt(it.text) }
+                .resizableColumn()
+            contextHelp(message("settings.llmClient.topK.comment"))
+                .align(AlignX.RIGHT)
+        }
+    }
+
+    open fun Panel.topPDoubleRow(topPField: JBTextField, property: MutableProperty<Double?>) {
+        row {
+            label(message("settings.llmClient.topP"))
+                .widthGroup("label")
+            cell(topPField)
+                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toDouble()) })
+                .align(Align.FILL)
+                .validationOnInput { isDouble(it.text) }
+                .resizableColumn()
+            contextHelp(message("settings.llmClient.topP.comment"))
+                .align(AlignX.RIGHT)
+        }
+    }
+
+    open fun Panel.topPFloatRow(topPField: JBTextField, property: MutableProperty<Float?>) {
+        row {
+            label(message("settings.llmClient.topP"))
+                .widthGroup("label")
+
+            cell(topPField)
+                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toFloat()) })
+                .align(Align.FILL)
+                .validationOnInput { isFloat(it.text) }
+                .resizableColumn()
+            contextHelp(message("settings.llmClient.topP.comment"))
+                .align(AlignX.RIGHT)
         }
     }
 

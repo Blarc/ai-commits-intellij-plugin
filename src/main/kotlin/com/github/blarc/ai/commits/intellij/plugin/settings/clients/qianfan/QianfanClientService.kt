@@ -36,6 +36,7 @@ class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<Qi
             .secretKey(secretKey)
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
+            .topP(client.topP)
         // Fix https://github.com/langchain4j/langchain4j/pull/1426. Remove this 'if' statement when langchain4j releases a new version that resolves this issue.
         if (client.modelId == QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName) {
             builder.endpoint("ernie-speed-128k")
@@ -54,6 +55,7 @@ class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<Qi
             .secretKey(secretKey)
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
+            .topP(client.topP)
         // Fix https://github.com/langchain4j/langchain4j/pull/1426. Remove this 'if' statement when langchain4j releases a new version that resolves this issue.
         if (client.modelId == QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName) {
             builder.endpoint("ernie-speed-128k")

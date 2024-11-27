@@ -36,6 +36,7 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
+            .topP(client.topP)
             .baseUrl(client.host)
 
         client.proxyUrl?.takeIf { it.isNotBlank() }?.let {
@@ -57,6 +58,7 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
+            .topP(client.topP)
             .baseUrl(client.host)
 
         client.proxyUrl?.takeIf { it.isNotBlank() }?.let {

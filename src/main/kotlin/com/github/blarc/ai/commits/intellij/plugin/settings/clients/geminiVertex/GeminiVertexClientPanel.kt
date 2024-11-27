@@ -4,10 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.Panel
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.*
 
 class GeminiVertexClientPanel private constructor(
     private val clientConfiguration: GeminiClientConfiguration,
@@ -16,6 +13,8 @@ class GeminiVertexClientPanel private constructor(
 
     private val projectIdTextField = JBTextField()
     private val locationTextField = JBTextField()
+    private val topKTextField = JBTextField()
+    private val topPTextField = JBTextField()
 
     constructor(configuration: GeminiClientConfiguration): this(configuration, GeminiVertexClientService.getInstance())
 
@@ -25,6 +24,8 @@ class GeminiVertexClientPanel private constructor(
         locationRow()
         modelIdRow()
         temperatureRow()
+        topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
+        topPFloatRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
     }
 
@@ -61,6 +62,8 @@ class GeminiVertexClientPanel private constructor(
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.projectId = projectIdTextField.text
         clientConfiguration.location = locationTextField.text
+        clientConfiguration.topP = topPTextField.text.toFloatOrNull()
+        clientConfiguration.topK = topKTextField.text.toIntOrNull()
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

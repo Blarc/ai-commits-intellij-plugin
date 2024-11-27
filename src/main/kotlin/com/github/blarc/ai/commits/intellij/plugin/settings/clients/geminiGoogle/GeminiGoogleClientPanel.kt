@@ -3,8 +3,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogl
 import GeminiGoogleClientService
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
-import com.github.blarc.ai.commits.intellij.plugin.isDouble
-import com.github.blarc.ai.commits.intellij.plugin.isInt
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
@@ -26,37 +24,9 @@ class GeminiGoogleClientPanel private constructor(
         tokenRow()
         modelIdRow()
         temperatureRow()
-        topKRow()
-        topPRow()
+        topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
+        topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
-    }
-
-    private fun Panel.topKRow() {
-        row {
-            label(message("settings.geminiGoogle.topK"))
-                .widthGroup("label")
-            cell(topKTextField)
-                .bindIntText(clientConfiguration::topK)
-                .align(Align.FILL)
-                .validationOnInput { isInt(it.text) }
-                .resizableColumn()
-            contextHelp(message("settings.geminiGoogle.topK.comment"))
-                .align(AlignX.RIGHT)
-        }
-    }
-
-    private fun Panel.topPRow() {
-        row {
-            label(message("settings.geminiGoogle.topP"))
-                .widthGroup("label")
-            cell(topPTextField)
-                .bindText({ clientConfiguration.topP.toString() }, { s -> clientConfiguration.topP = s.toDouble() })
-                .align(Align.FILL)
-                .validationOnInput { isDouble(it.text) }
-                .resizableColumn()
-            contextHelp(message("settings.geminiGoogle.topP.comment"))
-                .align(AlignX.RIGHT)
-        }
     }
 
     private fun Panel.tokenRow() {

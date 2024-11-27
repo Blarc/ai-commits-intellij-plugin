@@ -28,6 +28,10 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
     var beta: String? = null
     @Attribute
     var timeout: Int = 30
+    @Attribute
+    var topK: Int? = null
+    @Attribute
+    var topP: Double? = null
 
     companion object {
         const val CLIENT_NAME = "Anthropic"
@@ -61,6 +65,8 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         copy.version = version
         copy.beta = beta
         copy.timeout = timeout
+        copy.topK = topK
+        copy.topP = topP
         return copy
     }
 

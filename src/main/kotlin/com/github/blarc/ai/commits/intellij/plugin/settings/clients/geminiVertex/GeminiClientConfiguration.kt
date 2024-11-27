@@ -20,6 +20,10 @@ class GeminiClientConfiguration : LLMClientConfiguration(
     var projectId: String = "project-id"
     @Attribute
     var location: String = "us-central1"
+    @Attribute
+    var topK: Int? = null
+    @Attribute
+    var topP: Float? = null
 
     companion object {
         const val CLIENT_NAME = "Gemini Vertex"
@@ -52,6 +56,8 @@ class GeminiClientConfiguration : LLMClientConfiguration(
         copy.temperature = temperature
         copy.projectId = projectId
         copy.location = location
+        copy.topP = topP
+        copy.topK = topK
         return copy
     }
 

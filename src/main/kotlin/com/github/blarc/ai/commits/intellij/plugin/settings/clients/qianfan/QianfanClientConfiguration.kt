@@ -25,6 +25,8 @@ class QianfanClientConfiguration : LLMClientConfiguration(
     var apiKey: String = ""
     @Transient
     var secretKey: String = ""
+    @Attribute
+    var topP: Double? = null
 
     companion object {
         const val CLIENT_NAME = "Qianfan"
@@ -60,6 +62,7 @@ class QianfanClientConfiguration : LLMClientConfiguration(
         copy.temperature = temperature
         copy.apiKeyIsStored = apiKeyIsStored
         copy.secretKeyIsStored = secretKeyIsStored
+        copy.topP = topP
         return copy
     }
 

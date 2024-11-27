@@ -50,6 +50,20 @@ fun ValidationInfoBuilder.isInt(value: String): ValidationInfo? {
     }
 }
 
+fun ValidationInfoBuilder.isFloat(value: String): ValidationInfo? {
+    if (value.isBlank()){
+        return null
+    }
+
+    value.toFloatOrNull().let {
+        if (it == null) {
+            return error(message("validation.float"))
+        } else {
+            return null
+        }
+    }
+}
+
 fun ValidationInfoBuilder.isDouble(value: String): ValidationInfo? {
     if (value.isBlank()){
         return null

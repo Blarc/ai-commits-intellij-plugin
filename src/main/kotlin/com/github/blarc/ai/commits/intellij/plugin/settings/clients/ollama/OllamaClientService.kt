@@ -52,6 +52,10 @@ class OllamaClientService(private val cs: CoroutineScope) : LLMClientService<Oll
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
+            .numCtx(client.numCtx)
+            .numPredict(client.numPredict)
+            .topK(client.topK)
+            .topP(client.topP)
             .baseUrl(client.host)
             .build()
     }
@@ -61,6 +65,10 @@ class OllamaClientService(private val cs: CoroutineScope) : LLMClientService<Oll
             .modelName(client.modelId)
             .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
+            .numCtx(client.numCtx)
+            .numPredict(client.numPredict)
+            .topK(client.topK)
+            .topP(client.topP)
             .baseUrl(client.host)
             .build()
     }

@@ -4,6 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 
 class AzureOpenAiClientPanel private constructor(
@@ -12,6 +13,7 @@ class AzureOpenAiClientPanel private constructor(
 ) : LLMClientPanel(clientConfiguration) {
 
     private val tokenPasswordField = JBPasswordField()
+    private val topPTextField = JBTextField()
 
     constructor(configuration: AzureOpenAiClientConfiguration) : this(configuration, AzureOpenAiClientService.getInstance())
 
@@ -22,6 +24,7 @@ class AzureOpenAiClientPanel private constructor(
         tokenRow()
         modelIdRow("settings.azureOpenAi.modelId")
         temperatureRow()
+        topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
 
     }
@@ -49,7 +52,7 @@ class AzureOpenAiClientPanel private constructor(
         clientConfiguration.host = hostComboBox.item
         clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
         clientConfiguration.token = String(tokenPasswordField.password)
-
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

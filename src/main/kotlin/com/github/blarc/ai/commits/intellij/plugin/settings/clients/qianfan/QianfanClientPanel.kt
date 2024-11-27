@@ -1,8 +1,10 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
+
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
@@ -12,6 +14,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
 
     private val apiKeyField = JBPasswordField()
     private val secretKeyField = JBPasswordField()
+    private val topPTextField = JBTextField()
 
     override fun create() = panel {
         nameRow()
@@ -22,7 +25,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
             label(message("settings.qianfan.apiKey"))
                 .widthGroup("label")
             cell(apiKeyField)
-                .bindText(getter = {""}, setter = {
+                .bindText(getter = { "" }, setter = {
                     QianfanClientService.getInstance().saveApiKey(clientConfiguration, it)
                 })
                 .emptyText(if (clientConfiguration.apiKeyIsStored) message("settings.llmClient.token.stored") else "JzRxxxxxxxxxxxxxxxxxxxxx")
@@ -33,7 +36,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
             label(message("settings.qianfan.secretKey"))
                 .widthGroup("label")
             cell(secretKeyField)
-                .bindText(getter = {""}, setter = {
+                .bindText(getter = { "" }, setter = {
                     QianfanClientService.getInstance().saveSecretKey(clientConfiguration, it)
                 })
                 .emptyText(if (clientConfiguration.secretKeyIsStored) message("settings.llmClient.token.stored") else "kSlxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
@@ -42,6 +45,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
         }
 
         temperatureRow()
+        topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
     }
 
@@ -52,6 +56,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.apiKey = String(apiKeyField.password)
         clientConfiguration.secretKey = String(secretKeyField.password)
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
 
         QianfanClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
     }
