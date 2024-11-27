@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- More options for configuring LLM clients.
+
 ## [2.8.0] - 2024-11-13
 
 ### Added

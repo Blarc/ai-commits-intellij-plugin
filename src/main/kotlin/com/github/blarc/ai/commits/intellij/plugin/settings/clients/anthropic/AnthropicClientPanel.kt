@@ -14,6 +14,8 @@ class AnthropicClientPanel private constructor(
     private val tokenPasswordField = JBPasswordField()
     private val versionTextField = JBTextField()
     private val betaTextField = JBTextField()
+    private val topPTextField = JBTextField()
+    private val topKTextField = JBTextField()
 
     constructor(configuration: AnthropicClientConfiguration) : this(configuration, AnthropicClientService.getInstance())
 
@@ -26,6 +28,8 @@ class AnthropicClientPanel private constructor(
         tokenRow()
         versionRow()
         betaRow()
+        topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        topPDoubleRow(topKTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
     }
 
@@ -78,7 +82,8 @@ class AnthropicClientPanel private constructor(
         clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
         clientConfiguration.version = versionTextField.text
         clientConfiguration.beta = betaTextField.text
-
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
+        clientConfiguration.topK = topKTextField.text.toIntOrNull()
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

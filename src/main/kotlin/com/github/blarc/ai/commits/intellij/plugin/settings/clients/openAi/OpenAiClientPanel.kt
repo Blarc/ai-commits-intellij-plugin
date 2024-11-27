@@ -11,6 +11,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
     private val proxyTextField = JBTextField()
     private val tokenPasswordField = JBPasswordField()
     private val organizationIdTextField = JBTextField()
+    private val topPTextField = JBTextField()
 
     override fun create() = panel {
         nameRow()
@@ -21,6 +22,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         modelIdRow()
         organizationIdRow()
         temperatureRow()
+        topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
 
     }
@@ -73,6 +75,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         clientConfiguration.organizationId = organizationIdTextField.text
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.token = String(tokenPasswordField.password)
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
 
         OpenAiClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
     }

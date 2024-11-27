@@ -33,6 +33,8 @@ class AnthropicClientService(private val cs: CoroutineScope) : LLMClientService<
             .temperature(client.temperature.toDouble())
             .apiKey(token ?: "")
             .baseUrl(client.host)
+            .topP(client.topP)
+            .topK(client.topK)
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
 
         client.version?.takeIf { it.isNotBlank() }?.let {
@@ -54,6 +56,8 @@ class AnthropicClientService(private val cs: CoroutineScope) : LLMClientService<
             .temperature(client.temperature.toDouble())
             .apiKey(token ?: "")
             .baseUrl(client.host)
+            .topP(client.topP)
+            .topK(client.topK)
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
 
         client.version?.takeIf { it.isNotBlank() }?.let {

@@ -24,6 +24,8 @@ class AzureOpenAiClientConfiguration : LLMClientConfiguration(
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
+    @Attribute
+    var topP: Double? = null
 
     companion object {
         const val CLIENT_NAME = "Azure OpenAI"
@@ -57,6 +59,7 @@ class AzureOpenAiClientConfiguration : LLMClientConfiguration(
         copy.host = host
         copy.timeout = timeout
         copy.tokenIsStored = tokenIsStored
+        copy.topP = topP
         return copy
     }
 

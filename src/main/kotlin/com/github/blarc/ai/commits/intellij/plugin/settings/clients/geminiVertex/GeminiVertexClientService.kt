@@ -23,6 +23,8 @@ class GeminiVertexClientService(private val cs: CoroutineScope): LLMClientServic
             .location(client.location)
             .modelName(client.modelId)
             .temperature(client.temperature.toFloat())
+            .topP(client.topP)
+            .topK(client.topK)
             .build()
     }
 
@@ -32,6 +34,8 @@ class GeminiVertexClientService(private val cs: CoroutineScope): LLMClientServic
             .location(client.location)
             .modelName(client.modelId)
             .temperature(client.temperature.toFloat())
+            .topP(client.topP)
+            .topK(client.topK)
             .build()
     }
 }

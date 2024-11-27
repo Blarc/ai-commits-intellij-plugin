@@ -27,6 +27,8 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
+    @Attribute
+    var topP: Double? = null
 
     companion object {
         const val CLIENT_NAME = "OpenAI"
@@ -62,6 +64,7 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
         copy.organizationId = organizationId
         copy.temperature = temperature
         copy.tokenIsStored = tokenIsStored
+        copy.topP = topP
         return copy
     }
 

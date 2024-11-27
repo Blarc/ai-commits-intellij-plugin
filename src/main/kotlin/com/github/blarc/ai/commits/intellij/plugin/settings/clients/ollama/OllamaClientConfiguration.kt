@@ -20,6 +20,14 @@ class OllamaClientConfiguration : LLMClientConfiguration(
     var host: String = "http://localhost:11434/"
     @Attribute
     var timeout: Int = 30
+    @Attribute
+    var topK: Int? = null
+    @Attribute
+    var topP: Double? = null
+    @Attribute
+    var numCtx: Int? = null
+    @Attribute
+    var numPredict: Int? = null
 
     companion object {
         const val CLIENT_NAME = "Ollama"
@@ -53,6 +61,10 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         copy.timeout = timeout
         copy.modelId = modelId
         copy.temperature = temperature
+        copy.topP = topP
+        copy.topK = topK
+        copy.numCtx = numCtx
+        copy.numPredict = numPredict
         return copy
     }
 

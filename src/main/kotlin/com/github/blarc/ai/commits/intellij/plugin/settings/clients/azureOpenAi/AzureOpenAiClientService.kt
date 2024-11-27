@@ -35,6 +35,7 @@ class AzureOpenAiClientService(private val cs: CoroutineScope) : LLMClientServic
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
             .endpoint(client.host)
             .apiKey(token ?: "")
+            .topP(client.topP)
             .build()
     }
 
@@ -46,6 +47,7 @@ class AzureOpenAiClientService(private val cs: CoroutineScope) : LLMClientServic
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
             .endpoint(client.host)
             .apiKey(token ?: "")
+            .topP(client.topP)
             .build()
     }
 
