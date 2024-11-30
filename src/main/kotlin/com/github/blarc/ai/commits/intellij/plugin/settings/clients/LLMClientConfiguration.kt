@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import kotlinx.coroutines.Job
 import java.util.*
 import javax.swing.Icon
 
@@ -41,7 +42,7 @@ abstract class LLMClientConfiguration(
 
     abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project)
 
-    abstract fun cancelGenerateCommitMessage()
+    abstract fun getGenerateCommitMessageJob(): Job?
 
     abstract fun getRefreshModelsFunction(): ((ComboBox<String>) -> Unit)?
 

@@ -34,7 +34,7 @@ import kotlinx.coroutines.*
 
 abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope) {
 
-    private var generateCommitMessageJob : Job? = null
+    var generateCommitMessageJob : Job? = null
 
     abstract suspend fun buildChatModel(client: C): ChatLanguageModel
 
@@ -75,11 +75,6 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
                 })
             }
         }
-    }
-
-    fun cancelGenerateCommitMessage() {
-        // Cancellation of parent with cancel or its exceptional completion (failure) immediately cancels all its children.
-        generateCommitMessageJob?.cancel()
     }
 
     fun verifyConfiguration(client: C, label: JBLabel) {

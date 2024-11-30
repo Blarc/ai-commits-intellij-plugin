@@ -8,6 +8,7 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class GitHubModelsClientConfiguration : LLMClientConfiguration(
@@ -43,8 +44,8 @@ class GitHubModelsClientConfiguration : LLMClientConfiguration(
         return GitHubModelsClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
-    override fun cancelGenerateCommitMessage() {
-        GitHubModelsClientService.getInstance().cancelGenerateCommitMessage()
+    override fun getGenerateCommitMessageJob(): Job? {
+        return GitHubModelsClientService.getInstance().generateCommitMessageJob
     }
 
     override fun getRefreshModelsFunction() = null

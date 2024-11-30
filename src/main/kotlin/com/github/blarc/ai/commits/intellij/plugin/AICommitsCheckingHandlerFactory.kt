@@ -11,7 +11,7 @@ class AICommitsCheckingHandlerFactory : CheckinHandlerFactory() {
     override fun createHandler(panel: CheckinProjectPanel, commitContext: CommitContext): CheckinHandler {
         return object : CheckinHandler() {
             override fun beforeCheckin(): ReturnResult {
-                panel.project.service<ProjectSettings>().getActiveLLMClientConfiguration()?.cancelGenerateCommitMessage()
+                panel.project.service<ProjectSettings>().getActiveLLMClientConfiguration()?.getGenerateCommitMessageJob()?.cancel()
                 return super.beforeCheckin()
             }
         }

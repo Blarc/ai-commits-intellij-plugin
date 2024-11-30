@@ -9,6 +9,7 @@ import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import dev.langchain4j.model.anthropic.AnthropicChatModelName
+import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class AnthropicClientConfiguration : LLMClientConfiguration(
@@ -53,8 +54,8 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         return AnthropicClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
-    override fun cancelGenerateCommitMessage() {
-        AnthropicClientService.getInstance().cancelGenerateCommitMessage()
+    override fun getGenerateCommitMessageJob(): Job? {
+        return AnthropicClientService.getInstance().generateCommitMessageJob
     }
 
     override fun getRefreshModelsFunction() = null

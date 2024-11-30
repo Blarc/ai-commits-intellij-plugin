@@ -9,6 +9,7 @@ import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import dev.langchain4j.model.huggingface.HuggingFaceModelName
+import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class HuggingFaceClientConfiguration : LLMClientConfiguration(
@@ -48,8 +49,8 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
         return HuggingFaceClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
-    override fun cancelGenerateCommitMessage() {
-        HuggingFaceClientService.getInstance().cancelGenerateCommitMessage()
+    override fun getGenerateCommitMessageJob(): Job? {
+        return HuggingFaceClientService.getInstance().generateCommitMessageJob
     }
 
     override fun getRefreshModelsFunction() = null

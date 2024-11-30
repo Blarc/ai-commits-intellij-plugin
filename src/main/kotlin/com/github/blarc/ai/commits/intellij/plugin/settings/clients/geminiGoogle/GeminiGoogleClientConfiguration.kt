@@ -9,6 +9,7 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class GeminiGoogleClientConfiguration : LLMClientConfiguration(
@@ -43,8 +44,8 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
         return GeminiGoogleClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
-    override fun cancelGenerateCommitMessage() {
-        GeminiGoogleClientService.getInstance().cancelGenerateCommitMessage()
+    override fun getGenerateCommitMessageJob(): Job? {
+        return GeminiGoogleClientService.getInstance().generateCommitMessageJob
     }
 
     // Model names are hard-coded and do not need to be refreshed.

@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 // Can not rename this class because of backwards compatibility
@@ -45,8 +46,8 @@ class GeminiClientConfiguration : LLMClientConfiguration(
         return GeminiVertexClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
-    override fun cancelGenerateCommitMessage() {
-        GeminiVertexClientService.getInstance().cancelGenerateCommitMessage()
+    override fun getGenerateCommitMessageJob(): Job? {
+        return GeminiVertexClientService.getInstance().generateCommitMessageJob
     }
 
     // Model names are hard-coded and do not need to be refreshed.

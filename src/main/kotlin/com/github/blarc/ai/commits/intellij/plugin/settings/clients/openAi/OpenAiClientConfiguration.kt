@@ -7,6 +7,7 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class OpenAiClientConfiguration : LLMClientConfiguration(
@@ -50,8 +51,8 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
         return OpenAiClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
-    override fun cancelGenerateCommitMessage() {
-        OpenAiClientService.getInstance().cancelGenerateCommitMessage()
+    override fun getGenerateCommitMessageJob(): Job? {
+        return OpenAiClientService.getInstance().generateCommitMessageJob
     }
 
     // Model names are retrieved from Enum and do not need to be refreshed.
