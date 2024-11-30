@@ -6,6 +6,10 @@
 
 - More options for configuring LLM clients.
 
+### Fixed
+
+- The progress bar for generating commit message continues running after the user creates the commit.
+
 ## [2.8.0] - 2024-11-13
 
 ### Added

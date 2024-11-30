@@ -34,6 +34,8 @@ import kotlinx.coroutines.*
 
 abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope) {
 
+    private var generateCommitMessageJob : Job? = null
+
     abstract suspend fun buildChatModel(client: C): ChatLanguageModel
 
     abstract suspend fun buildStreamingChatModel(client: C): StreamingChatLanguageModel?
@@ -43,7 +45,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         val commitContext = commitWorkflowHandler.workflow.commitContext
         val includedChanges = commitWorkflowHandler.ui.getIncludedChanges().toMutableList()
 
-        cs.launch(ModalityState.current().asContextElement()) {
+        generateCommitMessageJob = cs.launch(ModalityState.current().asContextElement()) {
             withBackgroundProgress(project, message("action.background")) {
 
                 if (commitContext.isAmendCommitMode) {
@@ -75,6 +77,10 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         }
     }
 
+    fun cancelGenerateCommitMessage() {
+        // Cancellation of parent with cancel or its exceptional completion (failure) immediately cancels all its children.
+        generateCommitMessageJob?.cancel()
+    }
 
     fun verifyConfiguration(client: C, label: JBLabel) {
         label.text = message("settings.verify.running")

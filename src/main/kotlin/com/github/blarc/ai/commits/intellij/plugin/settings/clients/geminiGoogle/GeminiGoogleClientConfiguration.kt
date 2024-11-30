@@ -43,6 +43,10 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
         return GeminiGoogleClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
+    override fun cancelGenerateCommitMessage() {
+        GeminiGoogleClientService.getInstance().cancelGenerateCommitMessage()
+    }
+
     // Model names are hard-coded and do not need to be refreshed.
     override fun getRefreshModelsFunction() = null
 

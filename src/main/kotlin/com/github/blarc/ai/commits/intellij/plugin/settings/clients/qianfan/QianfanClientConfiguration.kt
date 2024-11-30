@@ -48,6 +48,10 @@ class QianfanClientConfiguration : LLMClientConfiguration(
         return QianfanClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
+    override fun cancelGenerateCommitMessage() {
+        QianfanClientService.getInstance().cancelGenerateCommitMessage()
+    }
+
     // Model names are retrieved from Enum and do not need to be refreshed.
     override fun getRefreshModelsFunction() = null
 

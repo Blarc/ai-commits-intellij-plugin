@@ -41,6 +41,8 @@ abstract class LLMClientConfiguration(
 
     abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project)
 
+    abstract fun cancelGenerateCommitMessage()
+
     abstract fun getRefreshModelsFunction(): ((ComboBox<String>) -> Unit)?
 
     public abstract override fun clone(): LLMClientConfiguration

@@ -43,6 +43,10 @@ class GitHubModelsClientConfiguration : LLMClientConfiguration(
         return GitHubModelsClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
+    override fun cancelGenerateCommitMessage() {
+        GitHubModelsClientService.getInstance().cancelGenerateCommitMessage()
+    }
+
     override fun getRefreshModelsFunction() = null
 
     override fun clone(): LLMClientConfiguration {

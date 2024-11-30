@@ -100,6 +100,8 @@
                 implementation="com.github.blarc.ai.commits.intellij.plugin.listeners.ApplicationStartupListener"
         />
 
+        <checkinHandlerFactory implementation="com.github.blarc.ai.commits.intellij.plugin.AICommitsCheckingHandlerFactory"/>
+
     </extensions>
 
     <actions>
@@ -113,5 +115,4 @@
             <add-to-group group-id="Vcs.MessageActionGroup" anchor="last"/>
         </action>
     </actions>
-
 </idea-plugin>

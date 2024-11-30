@@ -53,6 +53,10 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         return AnthropicClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
+    override fun cancelGenerateCommitMessage() {
+        AnthropicClientService.getInstance().cancelGenerateCommitMessage()
+    }
+
     override fun getRefreshModelsFunction() = null
 
     override fun clone(): LLMClientConfiguration {

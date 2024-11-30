@@ -46,7 +46,10 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
 
     override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
         return HuggingFaceClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
+    }
 
+    override fun cancelGenerateCommitMessage() {
+        HuggingFaceClientService.getInstance().cancelGenerateCommitMessage()
     }
 
     override fun getRefreshModelsFunction() = null

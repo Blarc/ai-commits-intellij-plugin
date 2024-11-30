@@ -49,6 +49,10 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         return OllamaClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
     }
 
+    override fun cancelGenerateCommitMessage() {
+        OllamaClientService.getInstance().cancelGenerateCommitMessage()
+    }
+
     override fun getRefreshModelsFunction() = fun (cb: ComboBox<String>) {
         OllamaClientService.getInstance().refreshModels(this, cb)
     }
