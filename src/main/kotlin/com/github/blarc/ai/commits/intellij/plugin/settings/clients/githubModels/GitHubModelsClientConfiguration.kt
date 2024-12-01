@@ -48,8 +48,6 @@ class GitHubModelsClientConfiguration : LLMClientConfiguration(
         return GitHubModelsClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun getRefreshModelsFunction() = null
-
     override fun clone(): LLMClientConfiguration {
         val copy = GitHubModelsClientConfiguration()
         copy.id = id

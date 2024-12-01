@@ -58,8 +58,6 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         return AnthropicClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun getRefreshModelsFunction() = null
-
     override fun clone(): LLMClientConfiguration {
         val copy = AnthropicClientConfiguration()
         copy.id = id

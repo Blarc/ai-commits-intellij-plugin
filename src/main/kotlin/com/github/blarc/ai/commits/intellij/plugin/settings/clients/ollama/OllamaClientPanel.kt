@@ -45,6 +45,10 @@ class OllamaClientPanel private constructor(
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 
+    override fun getRefreshModelsFunction() = fun () {
+        service.refreshModels(clientConfiguration, modelComboBox, verifyLabel)
+    }
+
     private fun Panel.numCtxRow() {
         row {
             label(message("settings.ollama.numCtx"))

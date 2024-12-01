@@ -48,9 +48,6 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
         return GeminiGoogleClientService.getInstance().generateCommitMessageJob
     }
 
-    // Model names are hard-coded and do not need to be refreshed.
-    override fun getRefreshModelsFunction() = null
-
     override fun clone(): LLMClientConfiguration {
         val copy = GeminiGoogleClientConfiguration()
         copy.id = id

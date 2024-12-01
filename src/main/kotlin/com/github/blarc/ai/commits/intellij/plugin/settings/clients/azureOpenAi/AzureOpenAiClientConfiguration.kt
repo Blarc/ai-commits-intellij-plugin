@@ -52,9 +52,6 @@ class AzureOpenAiClientConfiguration : LLMClientConfiguration(
         return AzureOpenAiClientService.getInstance().generateCommitMessageJob
     }
 
-    // Model names are retrieved from Enum and do not need to be refreshed.
-    override fun getRefreshModelsFunction() = null
-
     override fun clone(): LLMClientConfiguration {
         val copy = AzureOpenAiClientConfiguration()
         copy.id = id

@@ -27,6 +27,20 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
 
     }
 
+    override fun verifyConfiguration() {
+
+        clientConfiguration.host = hostComboBox.item
+        clientConfiguration.proxyUrl = proxyTextField.text
+        clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
+        clientConfiguration.modelId = modelComboBox.item
+        clientConfiguration.organizationId = organizationIdTextField.text
+        clientConfiguration.temperature = temperatureTextField.text
+        clientConfiguration.token = String(tokenPasswordField.password)
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
+
+        OpenAiClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
+    }
+
     private fun Panel.proxyRow() {
         row {
             label(message("settings.llmClient.proxy"))
@@ -64,19 +78,5 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
                 .align(Align.FILL)
                 .resizableColumn()
         }
-    }
-
-    override fun verifyConfiguration() {
-
-        clientConfiguration.host = hostComboBox.item
-        clientConfiguration.proxyUrl = proxyTextField.text
-        clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
-        clientConfiguration.modelId = modelComboBox.item
-        clientConfiguration.organizationId = organizationIdTextField.text
-        clientConfiguration.temperature = temperatureTextField.text
-        clientConfiguration.token = String(tokenPasswordField.password)
-        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
-
-        OpenAiClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

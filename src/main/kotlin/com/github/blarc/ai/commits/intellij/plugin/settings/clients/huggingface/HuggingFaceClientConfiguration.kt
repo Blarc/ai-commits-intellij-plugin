@@ -64,8 +64,6 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
         return HuggingFaceClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun getRefreshModelsFunction() = null
-
     override fun clone(): LLMClientConfiguration {
         val copy = HuggingFaceClientConfiguration()
         copy.id = id

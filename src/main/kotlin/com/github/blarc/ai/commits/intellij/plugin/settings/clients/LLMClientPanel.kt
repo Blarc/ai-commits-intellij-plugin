@@ -80,9 +80,9 @@ abstract class LLMClientPanel(
                 .align(Align.FILL)
                 .resizableColumn()
 
-            clientConfiguration.getRefreshModelsFunction()?.let { f ->
+            getRefreshModelsFunction()?.let { f ->
                 button(message("settings.refreshModels")) {
-                    f.invoke(modelComboBox)
+                    f.invoke()
                 }
                     .align(AlignX.RIGHT)
                     .widthGroup("button")
@@ -169,4 +169,6 @@ abstract class LLMClientPanel(
     }
 
     abstract fun verifyConfiguration()
+
+    open fun getRefreshModelsFunction(): (() -> Unit)? = null
 }
