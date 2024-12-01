@@ -42,6 +42,7 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 - Gemini Vertex AI
 - GitHub Models
 - Hugging Face
+- Mistral AI
 - Open AI
 - Ollama
 - Qianfan (Ernie)

@@ -9,6 +9,7 @@
 - Option to stop the commit message generation by clicking the action icon again.
 - Setting for HuggingFace client to automatically remove prompt from the generated commit message.
 - Show progress and result when refreshing models via API.
+- Support for Mistral AI.
 
 ### Fixed
 

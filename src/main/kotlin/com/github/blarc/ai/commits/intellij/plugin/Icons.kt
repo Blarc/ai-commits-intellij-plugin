@@ -27,6 +27,7 @@ object Icons {
     val AZURE_OPEN_AI = AICommitsIcon("/icons/azureOpenAi.svg", null)
     val HUGGING_FACE = AICommitsIcon("/icons/huggingface.svg", null)
     val GITHUB = AICommitsIcon("/icons/github15bright.svg", "/icons/github15dark.svg")
+    val MISTRAL = AICommitsIcon("/icons/mistral.svg", null)
 
     object Process {
         val STOP = AICommitsIcon("/icons/stop.svg", "/icons/stop_dark.svg")
