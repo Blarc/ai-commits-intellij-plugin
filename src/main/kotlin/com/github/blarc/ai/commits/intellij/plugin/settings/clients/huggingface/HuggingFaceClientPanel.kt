@@ -16,6 +16,7 @@ class HuggingFaceClientPanel private constructor(
     private val tokenPasswordField = JBPasswordField()
     private val maxNewTokensTextField = JBTextField()
     private val waitForModelCheckBox = JBCheckBox()
+    private val removePrompt = JBCheckBox()
 
     constructor(configuration: HuggingFaceClientConfiguration) : this(configuration, HuggingFaceClientService.getInstance())
 
@@ -27,6 +28,7 @@ class HuggingFaceClientPanel private constructor(
         temperatureRow()
         maxNewTokens()
         waitForModel()
+        removePrompt()
         verifyRow()
     }
 
@@ -40,6 +42,7 @@ class HuggingFaceClientPanel private constructor(
         clientConfiguration.token = String(tokenPasswordField.password)
         clientConfiguration.maxNewTokens = maxNewTokensTextField.text.toInt()
         clientConfiguration.waitForModel = waitForModelCheckBox.isSelected
+        clientConfiguration.removePrompt = removePrompt.isSelected
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 
@@ -80,6 +83,20 @@ class HuggingFaceClientPanel private constructor(
                 .align(Align.FILL)
 
             contextHelp(message("settings.huggingface.waitModel.comment"))
+                .align(AlignX.RIGHT)
+        }
+    }
+
+    private fun Panel.removePrompt() {
+        row {
+            label(message("settings.huggingface.removePrompt"))
+                .widthGroup("label")
+            cell(removePrompt)
+                .bindSelected(clientConfiguration::removePrompt)
+                .resizableColumn()
+                .align(Align.FILL)
+
+            contextHelp(message("settings.huggingface.removePrompt.comment"))
                 .align(AlignX.RIGHT)
         }
     }

@@ -65,7 +65,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
 
                 makeRequest(clientConfiguration, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
-                        commitMessage.setCommitMessage(it)
+                        clientConfiguration.setCommitMessage(commitMessage, prompt, it)
                     }
                     AppSettings2.instance.recordHit()
                 }, onError = {

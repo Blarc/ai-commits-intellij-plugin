@@ -40,6 +40,10 @@ abstract class LLMClientConfiguration(
         getSharedState().modelIds.add(modelId)
     }
 
+    open fun setCommitMessage(commitMessage: CommitMessage, prompt: String, result: String) {
+        commitMessage.setCommitMessage(result)
+    }
+
     abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project)
 
     abstract fun getGenerateCommitMessageJob(): Job?

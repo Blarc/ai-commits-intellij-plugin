@@ -28,6 +28,8 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
+    @Attribute
+    var removePrompt: Boolean = false
 
     companion object {
         const val CLIENT_NAME = "HuggingFace"
@@ -43,6 +45,15 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
 
     override fun getSharedState(): LLMClientSharedState {
         return HuggingFaceClientSharedState.getInstance()
+    }
+
+    override fun setCommitMessage(commitMessage: CommitMessage, prompt: String, result: String) {
+        var newResult = result
+        if (removePrompt) {
+            // https://github.com/Blarc/ai-commits-intellij-plugin/issues/294
+            newResult = result.substring(prompt.length+1)
+        }
+        super.setCommitMessage(commitMessage, prompt, newResult)
     }
 
     override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
@@ -65,6 +76,7 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
         copy.timeout = timeout
         copy.waitForModel = waitForModel
         copy.maxNewTokens = maxNewTokens
+        copy.removePrompt = removePrompt
         return copy
     }
 

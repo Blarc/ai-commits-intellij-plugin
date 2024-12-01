@@ -7,6 +7,7 @@
 - More options for configuring LLM clients.
 - **Use the chosen LLM client icon as the generate commit message action's icon.**
 - Option to stop the commit message generation by clicking the action icon again.
+- Setting for HuggingFace client to automatically remove prompt from the generated commit message.
 
 ### Fixed
 
