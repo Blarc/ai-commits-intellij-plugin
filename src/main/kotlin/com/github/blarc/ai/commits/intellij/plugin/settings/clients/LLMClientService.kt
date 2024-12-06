@@ -1,9 +1,9 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.commonBranch
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.constructPrompt
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCommonBranchOrDefault
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
@@ -96,7 +96,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
                     return@withBackgroundProgress
                 }
 
-                val branch = commonBranch(includedChanges, project)
+                val branch = getCommonBranchOrDefault(includedChanges, project)
                 val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitMessage.text, project)
 
                 makeRequest(clientConfiguration, prompt, onSuccess = {

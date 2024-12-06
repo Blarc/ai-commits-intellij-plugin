@@ -74,12 +74,8 @@ object AICommitsUtils {
         return promptContent.replace("{hint}", hint.orEmpty())
     }
 
-    fun commonBranch(changes: List<Change>, project: Project, showNotification: Boolean = true): String {
-        val repositoryManager = GitRepositoryManager.getInstance(project)
-        var branch = changes.map {
-            repositoryManager.getRepositoryForFileQuick(it.virtualFile)?.currentBranchName
-        }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
-
+    suspend fun getCommonBranchOrDefault(changes: List<Change>, project: Project, showNotification: Boolean = true): String {
+        var branch = getCommonBranch(changes, project)
         if (branch == null) {
             // Can't show notification in edit prompt dialog
             if (showNotification) {
@@ -89,6 +85,15 @@ object AICommitsUtils {
             branch = "main"
         }
         return branch
+    }
+
+    suspend fun getCommonBranch(changes: List<Change>, project: Project): String? {
+        val repositoryManager = GitRepositoryManager.getInstance(project)
+        return withContext(Dispatchers.IO) {
+            changes.map {
+                repositoryManager.getRepositoryForFile(it.virtualFile)?.currentBranchName
+            }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
+        }
     }
 
     fun computeDiff(

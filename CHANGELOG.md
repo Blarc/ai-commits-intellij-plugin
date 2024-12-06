@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Common branch is not computed.
+
 ## [2.9.0] - 2024-12-01
 
 ### Added
