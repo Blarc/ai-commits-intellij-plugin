@@ -2,6 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
@@ -16,6 +17,7 @@ import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.*
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
+import java.text.Collator
 
 // Most of the settings are global, but we use project configurable to set isProjectSpecificLLMClient property
 class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundConfigurable(message("settings.general.group.title")) {
@@ -78,11 +80,23 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
 
         row {
             label(message("settings.locale")).widthGroup("labelPrompt")
-            comboBox(Locale.getAvailableLocales()
-                .distinctBy { it.displayLanguage }
-                .sortedBy { it.displayLanguage },
-                AICommitsListCellRenderer()
-            )
+            val ideLocale = AICommitsUtils.getIDELocale()
+
+            val collator = Collator.getInstance(ideLocale).apply {
+                strength = Collator.TERTIARY
+                decomposition = Collator.CANONICAL_DECOMPOSITION
+            }
+
+            val locales = Locale.getAvailableLocales()
+                .asSequence()
+                .filter { it.language.isNotBlank() }
+                .distinctBy { it.language }
+                .sortedWith(compareBy(collator) { locale ->
+                    locale.getDisplayLanguage(ideLocale)
+                })
+                .toList()
+
+            comboBox(locales, AICommitsListCellRenderer())
                 .widthGroup("input")
                 .bindItem(getter = { projectSettings.locale }, setter = { setActiveLocale(it)} )
 
