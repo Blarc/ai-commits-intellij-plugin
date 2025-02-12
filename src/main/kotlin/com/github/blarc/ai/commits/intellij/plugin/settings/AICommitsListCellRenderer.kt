@@ -1,5 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import java.awt.Component
@@ -18,7 +19,9 @@ class AICommitsListCellRenderer : DefaultListCellRenderer() {
         val component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
         when (value) {
             is Locale -> {
-                text = value.displayLanguage
+                val ideLocale = AICommitsUtils.getIDELocale()
+                // lang format: "Language name in IDE's locale + (ISO 639 lang code)"; example for Spanish in IDE "francés (fr)", for IDE in German "Französisch (fr)"
+                text = "${Locale(value.language).getDisplayName(ideLocale)} (${value.language})"
             }
 
             is Prompt -> {

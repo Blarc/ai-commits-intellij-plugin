@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.OneTimeString
+import com.intellij.DynamicBundle
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.StringWriter
 import java.nio.file.FileSystems
+import java.util.Locale
 
 object AICommitsUtils {
 
@@ -39,7 +41,8 @@ object AICommitsUtils {
     fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?, project: Project): String {
         var content = promptContent
         val locale = project.service<ProjectSettings>().locale
-        content = content.replace("{locale}", locale.displayLanguage)
+        // lang format: "Language name in English + (ISO 639 lang code) + – + native language name in IDE's locale"; example "French (fr) – français"
+        content = content.replace("{locale}", "${locale.getDisplayLanguage(Locale.ENGLISH)} (${locale.language}) \u2013 ${locale.getDisplayLanguage(locale)}")
         content = content.replace("{branch}", branch)
         content = replaceHint(content, hint)
 
@@ -172,5 +175,9 @@ object AICommitsUtils {
             this.javaClass,
             false
         )
+    }
+
+    fun getIDELocale(): Locale {
+        return DynamicBundle.getLocale() ?: Locale.getDefault()
     }
 }
