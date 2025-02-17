@@ -41,8 +41,7 @@ object AICommitsUtils {
     fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?, project: Project): String {
         var content = promptContent
         val locale = project.service<ProjectSettings>().locale
-        // lang format: "Language name in English + (ISO 639 lang code) + – + native language name in IDE's locale"; example "French (fr) – français"
-        content = content.replace("{locale}", "${locale.getDisplayLanguage(Locale.ENGLISH)} (${locale.language}) \u2013 ${locale.getDisplayLanguage(locale)}")
+        content = content.replace("{locale}", locale.getDisplayLanguage(Locale.ENGLISH))
         content = content.replace("{branch}", branch)
         content = replaceHint(content, hint)
 
@@ -178,6 +177,6 @@ object AICommitsUtils {
     }
 
     fun getIDELocale(): Locale {
-        return DynamicBundle.getLocale() ?: Locale.getDefault()
+        return DynamicBundle.getLocale()
     }
 }

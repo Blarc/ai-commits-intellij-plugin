@@ -21,7 +21,7 @@ class AICommitsListCellRenderer : DefaultListCellRenderer() {
             is Locale -> {
                 val ideLocale = AICommitsUtils.getIDELocale()
                 // lang format: "Language name in IDE's locale + (ISO 639 lang code)"; example for Spanish in IDE "francés (fr)", for IDE in German "Französisch (fr)"
-                text = "${Locale(value.language).getDisplayName(ideLocale)} (${value.language})"
+                text = "${Locale.forLanguageTag(value.language).getDisplayLanguage(ideLocale)} (${value.language})"
             }
 
             is Prompt -> {
