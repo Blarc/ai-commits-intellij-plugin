@@ -82,6 +82,8 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
             label(message("settings.locale")).widthGroup("labelPrompt")
             val ideLocale = AICommitsUtils.getIDELocale()
 
+            // Configures locale-aware text comparator for proper language name sorting
+            // Without a Collator, we would get incorrect sorting based on raw Unicode values
             val collator = Collator.getInstance(ideLocale).apply {
                 strength = Collator.TERTIARY
                 decomposition = Collator.CANONICAL_DECOMPOSITION
@@ -99,6 +101,8 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
             comboBox(locales, AICommitsListCellRenderer())
                 .widthGroup("input")
                 .bindItem(getter = { projectSettings.locale }, setter = { setActiveLocale(it)} )
+
+            contextHelp(message("settings.locale.contextHelp"))
 
             browserLink(message("settings.more-prompts"), AICommitsBundle.URL_PROMPTS_DISCUSSION.toString())
                 .align(AlignX.RIGHT)
