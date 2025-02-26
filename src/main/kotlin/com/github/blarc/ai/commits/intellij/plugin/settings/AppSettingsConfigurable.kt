@@ -100,7 +100,10 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
 
             comboBox(locales, AICommitsListCellRenderer())
                 .widthGroup("input")
-                .bindItem(getter = { projectSettings.locale }, setter = { setActiveLocale(it)} )
+                .bindItem(
+                    getter = { locales.find { it.language == projectSettings.locale.language } ?: Locale.ENGLISH },
+                    setter = { setActiveLocale(it)}
+                )
 
             contextHelp(message("settings.locale.contextHelp"))
 
