@@ -5,6 +5,8 @@
 ### Fixed
 
 - Common branch is not computed.
+- Align language handling with IDE settings (thanks to @Canario5).
+- Locale dropdown incorrectly displays the first alphabetical locale instead of the actual default (e.q. "English") (thanks to @Canario5).
 
 ## [2.9.0] - 2024-12-01
 
