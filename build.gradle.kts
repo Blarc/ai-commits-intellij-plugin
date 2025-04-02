@@ -97,7 +97,7 @@ dependencies {
 //
 //    implementation("com.knuddels:jtokkit:1.0.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
     // langchain4j integrations
     implementation(platform("dev.langchain4j:langchain4j-bom:0.36.2"))
