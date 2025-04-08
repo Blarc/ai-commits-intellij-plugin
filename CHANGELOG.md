@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Variable `{taskTimeSpent}` in `HH:mm` format for prompt customization that is replaced with value from the active [task](https://www.jetbrains.com/help/idea/managing-tasks-and-context.html#work-with-tasks).
+
 ## [2.9.1] - 2025-03-23
 
 ### Fixed

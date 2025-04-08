@@ -4,9 +4,9 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
+import com.intellij.DynamicBundle
 import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.OneTimeString
-import com.intellij.DynamicBundle
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
@@ -14,12 +14,13 @@ import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.changes.Change
 import com.intellij.tasks.TaskManager
+import com.intellij.util.text.DateFormatUtil
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.StringWriter
 import java.nio.file.FileSystems
-import java.util.Locale
+import java.util.*
 
 object AICommitsUtils {
 
@@ -51,6 +52,7 @@ object AICommitsUtils {
             content = content.replace("{taskId}", activeTask.id)
             content = content.replace("{taskSummary}", activeTask.summary)
             content = content.replace("{taskDescription}", activeTask.description.orEmpty())
+            content = content.replace("{taskTimeSpent}", DateFormatUtil.formatTime(activeTask.totalTimeSpent))
         }
 
         return if (content.contains("{diff}")) {
