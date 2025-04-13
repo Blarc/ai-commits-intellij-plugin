@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.10.1] - 2025-04-13
+
 ### Fixed
 
 - Common branch is not detected when most files are unassociated with branches, despite at least one file belonging to a branch.
@@ -361,7 +363,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.1...HEAD
+[2.10.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.0...v2.10.1
 [2.10.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.9.1...v2.10.0
 [2.9.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.8.0...v2.9.0
