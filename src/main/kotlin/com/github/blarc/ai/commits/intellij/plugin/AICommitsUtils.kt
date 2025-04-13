@@ -122,6 +122,7 @@ object AICommitsUtils {
                     ) to change
                 }
             }
+            .filter { !it.second.isSubmoduleChange(project) }
             .groupBy({ it.first }, { it.second })
 
 

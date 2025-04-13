@@ -5,6 +5,7 @@
 ### Fixed
 
 - Common branch is not detected when most files are unassociated with branches, despite at least one file belonging to a branch.
+- Cannot generate commit message when updating a submodule.
 
 ## [2.10.0] - 2025-04-08
 
