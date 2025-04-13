@@ -96,7 +96,7 @@ object AICommitsUtils {
         return withContext(Dispatchers.IO) {
             changes.map {
                 repositoryManager.getRepositoryForFile(it.virtualFile)?.currentBranchName
-            }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
+            }.filterNotNull().groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
         }
     }
 
