@@ -105,9 +105,6 @@ object AICommitsUtils {
         reversePatch: Boolean,
         project: Project
     ): String {
-
-        val gitRepositoryManager = GitRepositoryManager.getInstance(project)
-
         // go through included changes, create a map of repository to changes and discard nulls
         val changesByRepository = includedChanges
             .filter {
@@ -117,9 +114,9 @@ object AICommitsUtils {
             }
             .mapNotNull { change ->
                 change.filePath()?.let { filePath ->
-                    gitRepositoryManager.getRepositoryForFileQuick(
-                        filePath
-                    ) to change
+                    VcsUtil.getVcsRootFor(project, filePath)?.let { vcsRoot ->
+                        vcsRoot to change
+                    }
                 }
             }
             .filter { !it.second.isSubmoduleChange(project) }
@@ -128,19 +125,17 @@ object AICommitsUtils {
 
         // compute diff for each repository
         return changesByRepository
-            .map { (repository, changes) ->
-                repository?.let {
-                    val filePatches = IdeaTextPatchBuilder.buildPatch(
-                        project,
-                        changes,
-                        repository.root.toNioPath(), reversePatch, true
-                    )
+            .map { (vcsRoot, changes) ->
+                val filePatches = IdeaTextPatchBuilder.buildPatch(
+                    project,
+                    changes,
+                    vcsRoot.toNioPath(), reversePatch, true
+                )
 
-                    val stringWriter = StringWriter()
-                    stringWriter.write("Repository: ${repository.root.path}\n")
-                    UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
-                    stringWriter.toString()
-                }
+                val stringWriter = StringWriter()
+                stringWriter.write("Repository: ${vcsRoot.path}\n")
+                UnifiedDiffWriter.write(project, filePatches, stringWriter, "\n", null)
+                stringWriter.toString()
             }
             .joinToString("\n")
     }
