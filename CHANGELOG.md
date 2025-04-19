@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for SVN.
+
 ## [2.10.1] - 2025-04-13
 
 ### Fixed
