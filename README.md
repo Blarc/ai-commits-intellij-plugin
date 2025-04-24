@@ -33,6 +33,7 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 - Compute diff only from the selected files and lines in the commit dialog
 - Create your own prompt for commit message generation
 - Use predefined variables and hint to customize your prompt
+- Supports Git and Subversion as version control systems.
 
 ## Supported models
 

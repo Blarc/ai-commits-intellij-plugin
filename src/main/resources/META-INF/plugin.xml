@@ -21,6 +21,7 @@
             <li>Compute diff only from the selected files and lines in the commit dialog</li>
             <li>Create your own prompt for commit message generation</li>
             <li>Use predefined variables and hint to customize your prompt</li>
+            <li>Supports Git and Subversion as version control systems.</li>
         </ul>
         <h3>Supported models</h3>
         <ul>
@@ -52,7 +53,15 @@
             border="0"
             width="600"
             alt="Demo.gif"/>
-         </p>
+        </p>
+        <h3>Support</h3>
+        <ul>
+            <li><a href="https://github.com/Blarc/ai-commits-intellij-plugin">Star the repository</a></li>
+            <li><a href="https://ko-fi.com/blarc">Buy me a coffee</a></li>
+            <li><a href="https://plugins.jetbrains.com/plugin/21335-ai-commits">Rate the plugin</a></li>
+            <li><a href="https://plugins.jetbrains.com/plugin/21335-ai-commits">Share the plugin</a></li>
+            <li><a href="https://github.com/sponsors/Blarc">Sponsor me</a></li>
+        </ul>
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.
