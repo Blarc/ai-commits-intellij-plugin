@@ -17,6 +17,9 @@ object AICommitsBundle : DynamicBundle(BUNDLE) {
 
     val URL_BUG_REPORT = URI("https://github.com/Blarc/ai-commits-intellij-plugin/issues")
     val URL_PROMPTS_DISCUSSION = URI("https://github.com/Blarc/ai-commits-intellij-plugin/discussions/18")
+    val URL_GITHUB = URI("https://github.com/Blarc/ai-commits-intellij-plugin")
+    val URL_KOFI = URI("https://ko-fi.com/blarc")
+    val URL_GITHUB_SPONSORS = URI("https://github.com/sponsors/Blarc")
 
     @Suppress("SpreadOperator")
     @JvmStatic

@@ -16,8 +16,8 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.*
 import kotlinx.coroutines.CoroutineScope
-import java.util.*
 import java.text.Collator
+import java.util.*
 
 // Most of the settings are global, but we use project configurable to set isProjectSpecificLLMClient property
 class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundConfigurable(message("settings.general.group.title")) {
@@ -160,6 +160,9 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
 
         row {
             browserLink(message("settings.report-bug"), AICommitsBundle.URL_BUG_REPORT.toString())
+            browserLink(message("settings.github-star"), AICommitsBundle.URL_GITHUB.toString())
+            browserLink(message("settings.kofi"), AICommitsBundle.URL_KOFI.toString())
+            browserLink(message("settings.github-sponsors"), AICommitsBundle.URL_GITHUB_SPONSORS.toString())
         }
     }
 
