@@ -9,15 +9,14 @@ import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.unique
-import com.intellij.dvcs.repo.VcsRepositoryManager
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.asContextElement
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
@@ -26,7 +25,6 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.text
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
-import git4idea.branch.GitBranchWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -122,7 +120,6 @@ class PromptTable(private val cs: CoroutineScope) {
         var branch: String? = null
         lateinit var diff: String
         lateinit var project: Project
-        private val logger = Logger.getInstance(PromptDialog::class.java)
 
         init {
             setSize(AppSettings2.instance.promptDialogWidth, AppSettings2.instance.promptDialogHeight)
@@ -210,29 +207,7 @@ class PromptTable(private val cs: CoroutineScope) {
         }
 
         private fun getChangesAndSetPreview(project: Project) = cs.launch(Dispatchers.IO + ModalityState.stateForComponent(rootPane).asContextElement()) {
-            val repositories = VcsRepositoryManager.getInstance(project).repositories
-            if (repositories.isEmpty()) {
-                logger.warn("No Git repositories found in the project.")
-                return@launch
-            }
-
-            val changes = repositories.asSequence()
-                .filter { it.currentBranchName != null }
-                .flatMap { repository ->
-                    val branchName = repository.currentBranchName!!
-                    try {
-                        GitBranchWorker.loadTotalDiff(repository, branchName).asSequence()
-                    } catch (e: Exception) {
-                        logger.error("Failed to load diff for branch '$branchName' in repository: ${repository.presentableUrl}", e)
-                        emptySequence()
-                    }
-                }
-                .toList()
-
-            if (changes.isEmpty()) {
-                logger.warn("No changes found for the current branch.")
-            }
-
+            val changes = ChangeListManager.getInstance(project).allChanges.toList()
             branch = getCommonBranch(changes, project)
             diff = computeDiff(changes, true, project)
 
