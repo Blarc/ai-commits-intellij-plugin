@@ -13,11 +13,16 @@ import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
 import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.changes.Change
+import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.tasks.TaskManager
 import com.intellij.util.text.DateFormatUtil
+import com.intellij.vcsUtil.VcsUtil
+import git4idea.GitVcs
 import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.idea.svn.SvnUtil
+import org.jetbrains.idea.svn.SvnVcs
 import java.io.StringWriter
 import java.nio.file.FileSystems
 import java.util.*
@@ -39,11 +44,11 @@ object AICommitsUtils {
         return false
     }
 
-    fun constructPrompt(promptContent: String, diff: String, branch: String, hint: String?, project: Project): String {
+    fun constructPrompt(promptContent: String, diff: String, branch: String?, hint: String?, project: Project): String {
         var content = promptContent
         val locale = project.service<ProjectSettings>().locale
         content = content.replace("{locale}", locale.getDisplayLanguage(Locale.ENGLISH))
-        content = content.replace("{branch}", branch)
+        content = replaceBranch(content, branch)
         content = replaceHint(content, hint)
 
         // TODO @Blarc: If TaskManager is null, the prompt might be incorrect...
@@ -62,6 +67,18 @@ object AICommitsUtils {
         }
     }
 
+    fun replaceBranch(promptContent: String, branch: String?): String {
+        if (promptContent.contains("{branch}")) {
+            if (branch != null) {
+                return promptContent.replace("{branch}", branch)
+            } else {
+                sendNotification(Notification.noCommonBranch())
+                return promptContent.replace("{branch}", "main")
+            }
+        }
+        return promptContent
+    }
+
     fun replaceHint(promptContent: String, hint: String?): String {
         val hintRegex = Regex("\\{[^{}]*(\\\$hint)[^{}]*}")
 
@@ -78,25 +95,29 @@ object AICommitsUtils {
         return promptContent.replace("{hint}", hint.orEmpty())
     }
 
-    suspend fun getCommonBranchOrDefault(changes: List<Change>, project: Project, showNotification: Boolean = true): String {
-        var branch = getCommonBranch(changes, project)
-        if (branch == null) {
-            // Can't show notification in edit prompt dialog
-            if (showNotification) {
-                sendNotification(Notification.noCommonBranch())
-            }
-            // hardcoded fallback branch
-            branch = "main"
-        }
-        return branch
-    }
-
     suspend fun getCommonBranch(changes: List<Change>, project: Project): String? {
-        val repositoryManager = GitRepositoryManager.getInstance(project)
         return withContext(Dispatchers.IO) {
-            changes.map {
-                repositoryManager.getRepositoryForFile(it.virtualFile)?.currentBranchName
-            }.filterNotNull().groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
+            changes.mapNotNull {
+                it.virtualFile?.let { virtualFile ->
+                    VcsUtil.getVcsFor(project, virtualFile)?.let { vcs ->
+                        when (vcs) {
+                            is SvnVcs -> {
+                                SvnUtil.getUrl(vcs, VfsUtilCore.virtualToIoFile(virtualFile))?.let { url ->
+                                    extractSvnBranchName(url.toDecodedString())
+                                }
+                            }
+                            is GitVcs -> {
+                                GitRepositoryManager.getInstance(project)
+                                    .getRepositoryForFile(it.virtualFile)
+                                    ?.currentBranchName
+                            }
+                            else -> {
+                                null
+                            }
+                        }
+                    }
+                }
+            }.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
         }
     }
 
@@ -140,22 +161,27 @@ object AICommitsUtils {
             .joinToString("\n")
     }
 
-    // TODO @Blarc: This only works for OpenAI
-//    fun isPromptTooLarge(prompt: String): Boolean {
-//        val registry = Encodings.newDefaultEncodingRegistry()
-//
-//        /*
-//         * Try to find the model type based on the model id by finding the longest matching model type
-//         * If no model type matches, let the request go through and let the OpenAI API handle it
-//         */
-//        val modelType = ModelType.entries
-//            .filter { AppSettings2.instance.getActiveLLMClient().modelId.contains(it.name) }
-//            .maxByOrNull { it.name.length }
-//            ?: return false
-//
-//        val encoding = registry.getEncoding(modelType.encodingType)
-//        return encoding.countTokens(prompt) > modelType.maxContextLength
-//    }
+    private fun extractSvnBranchName(url: String): String? {
+        val normalizedUrl = url.lowercase()
+
+        // Standard SVN layout: repository/trunk, repository/branches/name, repository/tags/name
+        return when {
+            normalizedUrl.contains("/branches/") -> {
+                val branchPart = url.substringAfter("/branches/")
+                val endIndex = branchPart.indexOf('/')
+                if (endIndex > 0) branchPart.substring(0, endIndex) else branchPart
+            }
+
+            normalizedUrl.contains("/tags/") -> {
+                val tagPart = url.substringAfter("/tags/")
+                val endIndex = tagPart.indexOf('/')
+                if (endIndex > 0) "tag: ${tagPart.substring(0, endIndex)}" else "tag: $tagPart"
+            }
+
+            normalizedUrl.contains("/trunk") -> "trunk"
+            else -> null // fallback: no branch concept available
+        }
+    }
 
     suspend fun retrieveToken(title: String): OneTimeString? {
         val credentialAttributes = getCredentialAttributes(title)

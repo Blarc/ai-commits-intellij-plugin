@@ -4,7 +4,7 @@ import ai.grazie.utils.applyIf
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCommonBranchOrDefault
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCommonBranch
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
@@ -119,7 +119,7 @@ class PromptTable(private val cs: CoroutineScope) {
         val promptHintTextField = JBTextField()
         val promptContentTextArea = JBTextArea()
         val promptPreviewTextArea = JBTextArea()
-        lateinit var branch: String
+        var branch: String? = null
         lateinit var diff: String
         lateinit var project: Project
         private val logger = Logger.getInstance(PromptDialog::class.java)
@@ -233,7 +233,7 @@ class PromptTable(private val cs: CoroutineScope) {
                 logger.warn("No changes found for the current branch.")
             }
 
-            branch = getCommonBranchOrDefault(changes, project, false)
+            branch = getCommonBranch(changes, project)
             diff = computeDiff(changes, true, project)
 
             withContext(Dispatchers.EDT) {
