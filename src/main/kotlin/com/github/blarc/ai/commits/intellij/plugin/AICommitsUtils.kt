@@ -100,17 +100,19 @@ object AICommitsUtils {
             changes.mapNotNull {
                 it.virtualFile?.let { virtualFile ->
                     VcsUtil.getVcsFor(project, virtualFile)?.let { vcs ->
-                        when (vcs) {
-                            is SvnVcs -> {
+                        when {
+                            isSvnAvailable() && vcs is SvnVcs -> {
                                 SvnUtil.getUrl(vcs, VfsUtilCore.virtualToIoFile(virtualFile))?.let { url ->
                                     extractSvnBranchName(url.toDecodedString())
                                 }
                             }
-                            is GitVcs -> {
+
+                            vcs is GitVcs -> {
                                 GitRepositoryManager.getInstance(project)
                                     .getRepositoryForFile(it.virtualFile)
                                     ?.currentBranchName
                             }
+
                             else -> {
                                 null
                             }
@@ -202,5 +204,18 @@ object AICommitsUtils {
 
     fun getIDELocale(): Locale {
         return DynamicBundle.getLocale()
+    }
+
+    private fun isClassAvailable(className: String): Boolean {
+        return try {
+            Class.forName(className)
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+    }
+
+    private fun isSvnAvailable(): Boolean {
+        return isClassAvailable("org.jetbrains.idea.svn.SvnVcs") && isClassAvailable("org.jetbrains.idea.svn.SvnUtil")
     }
 }

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Make SVN dependency optional.
+
 ## [2.11.0] - 2025-04-24
 
 ### Added
