@@ -9,16 +9,13 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.openai.OpenAiChatModel
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.net.URI
 import java.time.Duration
 
 @Service(Service.Level.APP)
@@ -29,7 +26,7 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
         fun getInstance(): OpenAiClientService = service()
     }
 
-    override suspend fun buildChatModel(client: OpenAiClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: OpenAiClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = OpenAiChatModel.builder()
             .apiKey(token ?: "")
@@ -39,11 +36,6 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
             .topP(client.topP)
             .baseUrl(client.host)
 
-        client.proxyUrl?.takeIf { it.isNotBlank() }?.let {
-            val uri = URI(it)
-            builder.proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(uri.host, uri.port)))
-        }
-
         client.organizationId?.takeIf { it.isNotBlank() }?.let {
             builder.organizationId(it)
         }
@@ -51,7 +43,7 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
         return builder.build()
     }
 
-    override suspend fun buildStreamingChatModel(client: OpenAiClientConfiguration): StreamingChatLanguageModel {
+    override suspend fun buildStreamingChatModel(client: OpenAiClientConfiguration): StreamingChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = OpenAiStreamingChatModel.builder()
             .apiKey(token ?: "")
@@ -60,11 +52,6 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
             .topP(client.topP)
             .baseUrl(client.host)
-
-        client.proxyUrl?.takeIf { it.isNotBlank() }?.let {
-            val uri = URI(it)
-            builder.proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(uri.host, uri.port)))
-        }
 
         client.organizationId?.takeIf { it.isNotBlank() }?.let {
             builder.organizationId(it)

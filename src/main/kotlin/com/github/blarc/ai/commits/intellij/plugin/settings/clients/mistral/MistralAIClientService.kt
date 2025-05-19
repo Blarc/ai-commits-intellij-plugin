@@ -9,8 +9,8 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.mistralai.MistralAiChatModel
 import dev.langchain4j.model.mistralai.MistralAiModels
 import dev.langchain4j.model.mistralai.MistralAiStreamingChatModel
@@ -39,7 +39,7 @@ class MistralAIClientService(private val cs: CoroutineScope) : LLMClientService<
         return availableModels.map { it.id }
     }
 
-    override suspend fun buildChatModel(client: MistralAIClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: MistralAIClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return MistralAiChatModel.builder()
             .modelName(client.modelId)
@@ -50,7 +50,7 @@ class MistralAIClientService(private val cs: CoroutineScope) : LLMClientService<
             .build()
     }
 
-    override suspend fun buildStreamingChatModel(client: MistralAIClientConfiguration): StreamingChatLanguageModel? {
+    override suspend fun buildStreamingChatModel(client: MistralAIClientConfiguration): StreamingChatModel? {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return MistralAiStreamingChatModel.builder()
             .modelName(client.modelId)

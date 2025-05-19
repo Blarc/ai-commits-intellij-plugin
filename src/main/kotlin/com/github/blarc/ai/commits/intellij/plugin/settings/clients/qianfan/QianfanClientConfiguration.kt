@@ -7,7 +7,7 @@ import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
+import dev.langchain4j.community.model.qianfan.QianfanChatModelNameEnum
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 

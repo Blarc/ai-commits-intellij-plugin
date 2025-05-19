@@ -114,7 +114,6 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         openAiLlmClientConfiguration?.apply {
             host = appSettings.openAIHost
             appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
-            proxyUrl = appSettings.proxyUrl
             modelId = appSettings.openAIModelId
             temperature = appSettings.openAITemperature
 

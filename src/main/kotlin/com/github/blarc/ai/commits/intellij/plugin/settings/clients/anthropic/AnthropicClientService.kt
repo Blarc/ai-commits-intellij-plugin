@@ -11,8 +11,8 @@ import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
 import dev.langchain4j.model.anthropic.AnthropicChatModel
 import dev.langchain4j.model.anthropic.AnthropicStreamingChatModel
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class AnthropicClientService(private val cs: CoroutineScope) : LLMClientService<
         fun getInstance(): AnthropicClientService = service()
     }
 
-    override suspend fun buildChatModel(client: AnthropicClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: AnthropicClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = AnthropicChatModel.builder()
             .modelName(client.modelId)
@@ -49,7 +49,7 @@ class AnthropicClientService(private val cs: CoroutineScope) : LLMClientService<
 
     }
 
-    override suspend fun buildStreamingChatModel(client: AnthropicClientConfiguration): StreamingChatLanguageModel {
+    override suspend fun buildStreamingChatModel(client: AnthropicClientConfiguration): StreamingChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = AnthropicStreamingChatModel.builder()
             .modelName(client.modelId)

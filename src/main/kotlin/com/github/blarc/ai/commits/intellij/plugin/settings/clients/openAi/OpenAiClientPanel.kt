@@ -8,7 +8,6 @@ import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 
 class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfiguration) : LLMClientPanel(clientConfiguration) {
-    private val proxyTextField = JBTextField()
     private val tokenPasswordField = JBPasswordField()
     private val organizationIdTextField = JBTextField()
     private val topPTextField = JBTextField()
@@ -16,7 +15,6 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
     override fun create() = panel {
         nameRow()
         hostRow(clientConfiguration::host.toNullableProperty())
-        proxyRow()
         timeoutRow(clientConfiguration::timeout)
         tokenRow()
         modelIdRow()
@@ -30,7 +28,6 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
     override fun verifyConfiguration() {
 
         clientConfiguration.host = hostComboBox.item
-        clientConfiguration.proxyUrl = proxyTextField.text
         clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.organizationId = organizationIdTextField.text
@@ -39,18 +36,6 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
 
         OpenAiClientService.getInstance().verifyConfiguration(clientConfiguration, verifyLabel)
-    }
-
-    private fun Panel.proxyRow() {
-        row {
-            label(message("settings.llmClient.proxy"))
-                .widthGroup("label")
-            cell(proxyTextField)
-                .bindText(clientConfiguration::proxyUrl.toNonNullableProperty(""))
-                .resizableColumn()
-                .align(Align.FILL)
-                .comment(message("settings.llmClient.proxy.comment"))
-        }
     }
 
     private fun Panel.tokenRow() {

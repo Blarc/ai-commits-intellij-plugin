@@ -9,11 +9,11 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
-import dev.langchain4j.model.qianfan.QianfanChatModel
-import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
-import dev.langchain4j.model.qianfan.QianfanStreamingChatModel
+import dev.langchain4j.community.model.qianfan.QianfanChatModel
+import dev.langchain4j.community.model.qianfan.QianfanChatModelNameEnum
+import dev.langchain4j.community.model.qianfan.QianfanStreamingChatModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<Qi
         fun getInstance(): QianfanClientService = service()
     }
 
-    override suspend fun buildChatModel(client: QianfanClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: QianfanClientConfiguration): ChatModel {
         val apiKey = client.apiKey.nullize(true) ?: retrieveToken(client.id + "apiKey")?.toString(true)
         val secretKey = client.secretKey.nullize(true) ?: retrieveToken(client.id + "secretKey")?.toString(true)
 
@@ -45,7 +45,7 @@ class QianfanClientService(private val cs: CoroutineScope) : LLMClientService<Qi
         return builder.build()
     }
 
-    override suspend fun buildStreamingChatModel(client: QianfanClientConfiguration): StreamingChatLanguageModel {
+    override suspend fun buildStreamingChatModel(client: QianfanClientConfiguration): StreamingChatModel {
         val apiKey = client.apiKey.nullize(true) ?: retrieveToken(client.id + "apiKey")?.toString(true)
         val secretKey = client.secretKey.nullize(true) ?: retrieveToken(client.id + "secretKey")?.toString(true)
 

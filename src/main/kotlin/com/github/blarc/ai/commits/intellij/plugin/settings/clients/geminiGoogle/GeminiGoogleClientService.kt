@@ -9,8 +9,8 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel
 import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +25,7 @@ class GeminiGoogleClientService(private val cs: CoroutineScope) : LLMClientServi
         fun getInstance(): GeminiGoogleClientService = service()
     }
 
-    override suspend fun buildChatModel(client: GeminiGoogleClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: GeminiGoogleClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return GoogleAiGeminiChatModel.builder()
             .apiKey(token)
@@ -36,7 +36,7 @@ class GeminiGoogleClientService(private val cs: CoroutineScope) : LLMClientServi
             .build()
     }
 
-    override suspend fun buildStreamingChatModel(client: GeminiGoogleClientConfiguration) : StreamingChatLanguageModel {
+    override suspend fun buildStreamingChatModel(client: GeminiGoogleClientConfiguration) : StreamingChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return GoogleAiGeminiStreamingChatModel.builder()
             .apiKey(token)

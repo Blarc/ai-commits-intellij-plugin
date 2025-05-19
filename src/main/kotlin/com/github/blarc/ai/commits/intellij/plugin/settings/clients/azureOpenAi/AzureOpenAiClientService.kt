@@ -11,8 +11,8 @@ import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
 import dev.langchain4j.model.azure.AzureOpenAiChatModel
 import dev.langchain4j.model.azure.AzureOpenAiStreamingChatModel
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class AzureOpenAiClientService(private val cs: CoroutineScope) : LLMClientServic
         fun getInstance(): AzureOpenAiClientService = service()
     }
 
-    override suspend fun buildChatModel(client: AzureOpenAiClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: AzureOpenAiClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return AzureOpenAiChatModel.builder()
             .deploymentName(client.modelId)
@@ -39,7 +39,7 @@ class AzureOpenAiClientService(private val cs: CoroutineScope) : LLMClientServic
             .build()
     }
 
-    override suspend fun buildStreamingChatModel(client: AzureOpenAiClientConfiguration): StreamingChatLanguageModel {
+    override suspend fun buildStreamingChatModel(client: AzureOpenAiClientConfiguration): StreamingChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return AzureOpenAiStreamingChatModel.builder()
             .deploymentName(client.modelId)

@@ -3,7 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
-import dev.langchain4j.model.qianfan.QianfanChatModelNameEnum
+import dev.langchain4j.community.model.qianfan.QianfanChatModelNameEnum
 
 @Service(Service.Level.APP)
 @State(name = "QianfanClientSharedState", storages = [Storage("AICommitsOpenAi.xml")])

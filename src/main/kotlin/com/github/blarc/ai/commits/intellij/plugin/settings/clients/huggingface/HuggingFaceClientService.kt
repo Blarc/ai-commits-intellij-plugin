@@ -9,7 +9,7 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
-import dev.langchain4j.model.chat.ChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
 import dev.langchain4j.model.huggingface.HuggingFaceChatModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ class HuggingFaceClientService(private val cs: CoroutineScope) : LLMClientServic
         fun getInstance(): HuggingFaceClientService = service()
     }
 
-    override suspend fun buildChatModel(client: HuggingFaceClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: HuggingFaceClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
 
         return HuggingFaceChatModel.builder()

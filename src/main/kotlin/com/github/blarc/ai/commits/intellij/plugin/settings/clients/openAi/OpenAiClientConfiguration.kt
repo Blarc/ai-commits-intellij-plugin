@@ -21,8 +21,6 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
     @Attribute
     var timeout: Int = 30
     @Attribute
-    var proxyUrl: String? = null
-    @Attribute
     var organizationId: String? = null
     @Attribute
     var tokenIsStored: Boolean = false
@@ -60,7 +58,6 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
         copy.id = id
         copy.name = name
         copy.host = host
-        copy.proxyUrl = proxyUrl
         copy.timeout = timeout
         copy.modelId = modelId
         copy.organizationId = organizationId

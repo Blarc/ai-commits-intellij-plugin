@@ -9,8 +9,8 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.util.text.nullize
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.github.GitHubModelsChatModel
 import dev.langchain4j.model.github.GitHubModelsStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +26,7 @@ class GitHubModelsClientService(private val cs: CoroutineScope) : LLMClientServi
         fun getInstance(): GitHubModelsClientService = service()
     }
 
-    override suspend fun buildChatModel(client: GitHubModelsClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: GitHubModelsClientConfiguration): ChatModel {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return GitHubModelsChatModel.builder()
             .gitHubToken(token)
@@ -37,7 +37,7 @@ class GitHubModelsClientService(private val cs: CoroutineScope) : LLMClientServi
             .build()
     }
 
-    override suspend fun buildStreamingChatModel(client: GitHubModelsClientConfiguration): StreamingChatLanguageModel? {
+    override suspend fun buildStreamingChatModel(client: GitHubModelsClientConfiguration): StreamingChatModel? {
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         return GitHubModelsStreamingChatModel.builder()
             .gitHubToken(token)

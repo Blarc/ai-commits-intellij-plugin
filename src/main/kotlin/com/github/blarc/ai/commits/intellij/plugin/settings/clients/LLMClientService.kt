@@ -24,12 +24,11 @@ import com.intellij.platform.ide.progress.withBackgroundProgress
 import com.intellij.ui.components.JBLabel
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import com.intellij.vcs.commit.isAmendCommitMode
-import dev.langchain4j.data.message.AiMessage
 import dev.langchain4j.data.message.UserMessage
-import dev.langchain4j.model.StreamingResponseHandler
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
-import dev.langchain4j.model.output.Response
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
+import dev.langchain4j.model.chat.response.ChatResponse
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler
 import git4idea.GitCommit
 import git4idea.history.GitHistoryUtils
 import git4idea.repo.GitRepositoryManager
@@ -45,9 +44,9 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         return listOf()
     }
 
-    abstract suspend fun buildChatModel(client: C): ChatLanguageModel
+    abstract suspend fun buildChatModel(client: C): ChatModel
 
-    abstract suspend fun buildStreamingChatModel(client: C): StreamingChatLanguageModel?
+    abstract suspend fun buildStreamingChatModel(client: C): StreamingChatModel?
 
     fun refreshModels(client: C, comboBox: ComboBox<String>, label: JBLabel) {
         label.text = message("settings.refreshModels.running")
@@ -155,33 +154,32 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         }, onError = onError)
     }
 
-    private suspend fun sendStreamingRequest(streamingModel: StreamingChatLanguageModel, text: String, onSuccess: suspend (r: String) -> Unit) {
+    private suspend fun sendStreamingRequest(streamingModel: StreamingChatModel, text: String, onSuccess: suspend (r: String) -> Unit) {
         var response = ""
         val completionDeferred = CompletableDeferred<String>()
 
         withContext(Dispatchers.IO) {
-            streamingModel.generate(
+            streamingModel.chat(
                 listOf(
                     UserMessage.from(
                         "user",
                         text
                     )
                 ),
-                object : StreamingResponseHandler<AiMessage> {
-                    override fun onNext(token: String?) {
-                        response += token
+                object : StreamingChatResponseHandler {
+                    override fun onPartialResponse(partialResponse: String?) {
+                        response += partialResponse
                         cs.launch {
                             onSuccess(response)
                         }
                     }
 
-                    override fun onError(error: Throwable) {
-                        completionDeferred.completeExceptionally(error)
+                    override fun onCompleteResponse(completeResponse: ChatResponse) {
+                        completionDeferred.complete(completeResponse.aiMessage().text())
                     }
 
-                    override fun onComplete(response: Response<AiMessage>) {
-                        super.onComplete(response)
-                        completionDeferred.complete(response.content().text())
+                    override fun onError(error: Throwable) {
+                        completionDeferred.completeExceptionally(error)
                     }
                 }
             )
@@ -194,14 +192,14 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
     private suspend fun sendRequest(client: C, text: String, onSuccess: suspend (r: String) -> Unit) {
         val model = buildChatModel(client)
         val response = withContext(Dispatchers.IO) {
-            model.generate(
+            model.chat(
                 listOf(
                     UserMessage.from(
                         "user",
                         text
                     )
                 )
-            ).content().text()
+            ).aiMessage().text()
         }
         onSuccess(response)
     }

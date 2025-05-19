@@ -3,8 +3,8 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVerte
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import dev.langchain4j.model.chat.ChatLanguageModel
-import dev.langchain4j.model.chat.StreamingChatLanguageModel
+import dev.langchain4j.model.chat.ChatModel
+import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel
 import dev.langchain4j.model.vertexai.VertexAiGeminiStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +17,7 @@ class GeminiVertexClientService(private val cs: CoroutineScope): LLMClientServic
         fun getInstance(): GeminiVertexClientService = service()
     }
 
-    override suspend fun buildChatModel(client: GeminiClientConfiguration): ChatLanguageModel {
+    override suspend fun buildChatModel(client: GeminiClientConfiguration): ChatModel {
         return VertexAiGeminiChatModel.builder()
             .project(client.projectId)
             .location(client.location)
@@ -28,7 +28,7 @@ class GeminiVertexClientService(private val cs: CoroutineScope): LLMClientServic
             .build()
     }
 
-    override suspend fun buildStreamingChatModel(client: GeminiClientConfiguration): StreamingChatLanguageModel {
+    override suspend fun buildStreamingChatModel(client: GeminiClientConfiguration): StreamingChatModel {
         return VertexAiGeminiStreamingChatModel.builder()
             .project(client.projectId)
             .location(client.location)
