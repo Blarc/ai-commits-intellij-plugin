@@ -36,7 +36,7 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
 
         row {
             label(message("settings.llmClient")).widthGroup("labelPrompt")
-            llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations, AICommitsListCellRenderer())
+            llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations.sortedBy { it.name }, AICommitsListCellRenderer())
                 .bindItem(getter = { projectSettings.getActiveLLMClientConfiguration() }, setter = { setActiveLLMClientConfiguration(it) })
                 .widthGroup("input")
                 .component

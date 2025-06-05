@@ -5,6 +5,7 @@
 ### Added 
 
 - Generate commit action button is now a split button with a dropdown from which the user can change the LLM client from the commit dialog.
+- Sort LLM clients in settings dropdown.
 
 ## [2.11.1] - 2025-04-25
 
