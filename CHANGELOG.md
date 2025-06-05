@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-### Added 
+## [2.12.0] - 2025-06-05
+
+### Added
 
 - Generate commit action button is now a split button with a dropdown from which the user can change the LLM client from the commit dialog.
 - Sort LLM clients in settings dropdown.
@@ -380,7 +382,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.1...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.12.0...HEAD
+[2.12.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.1...v2.12.0
 [2.11.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.0...v2.11.1
 [2.11.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.1...v2.11.0
 [2.10.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.0...v2.10.1
