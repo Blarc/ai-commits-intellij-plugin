@@ -4,7 +4,6 @@ import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
@@ -47,17 +46,17 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
         return HuggingFaceClientSharedState.getInstance()
     }
 
-    override fun setCommitMessage(commitMessage: CommitMessage, prompt: String, result: String) {
+    override fun setCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, prompt: String, result: String) {
         var newResult = result
         if (removePrompt) {
             // https://github.com/Blarc/ai-commits-intellij-plugin/issues/294
             newResult = result.substring(prompt.length+1)
         }
-        super.setCommitMessage(commitMessage, prompt, newResult)
+        super.setCommitMessage(commitWorkflowHandler, prompt, newResult)
     }
 
-    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
-        return HuggingFaceClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, commitMessage, project)
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
+        return HuggingFaceClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, project)
     }
 
     override fun getGenerateCommitMessageJob(): Job? {

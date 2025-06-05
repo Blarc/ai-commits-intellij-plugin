@@ -19,7 +19,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.naturalSorted
 import com.intellij.openapi.vcs.changes.Change
-import com.intellij.openapi.vcs.ui.CommitMessage
 import com.intellij.platform.ide.progress.withBackgroundProgress
 import com.intellij.ui.components.JBLabel
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
@@ -75,7 +74,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         }
     }
 
-    fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, commitMessage: CommitMessage, project: Project) {
+    fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
 
         val commitContext = commitWorkflowHandler.workflow.commitContext
         val includedChanges = commitWorkflowHandler.ui.getIncludedChanges().toMutableList()
@@ -96,16 +95,16 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
                 }
 
                 val branch = getCommonBranch(includedChanges, project)
-                val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitMessage.text, project)
+                val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitWorkflowHandler.getCommitMessage(), project)
 
                 makeRequest(clientConfiguration, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
-                        clientConfiguration.setCommitMessage(commitMessage, prompt, it)
+                        clientConfiguration.setCommitMessage(commitWorkflowHandler, prompt, it)
                     }
                     AppSettings2.instance.recordHit()
                 }, onError = {
                     withContext(Dispatchers.EDT) {
-                        commitMessage.setCommitMessage(it)
+                        commitWorkflowHandler.setCommitMessage(it)
                     }
                 })
             }
