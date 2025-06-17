@@ -29,7 +29,7 @@ class AnthropicClientPanel private constructor(
         versionRow()
         betaRow()
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
-        topPDoubleRow(topKTextField, clientConfiguration::topP.toNullableProperty())
+        topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         verifyRow()
     }
 
