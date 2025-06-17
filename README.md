@@ -37,6 +37,7 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 
 ## Supported models
 
+- Amazon Bedrock
 - Anthropic
 - Azure Open AI
 - Gemini Google AI

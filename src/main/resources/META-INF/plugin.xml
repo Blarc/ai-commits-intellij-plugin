@@ -25,6 +25,7 @@
         </ul>
         <h3>Supported models</h3>
         <ul>
+            <li>Amazon Bedrock</li>
             <li>Anthropic</li>
             <li>Azure Open AI</li>
             <li>Gemini Google AI</li>

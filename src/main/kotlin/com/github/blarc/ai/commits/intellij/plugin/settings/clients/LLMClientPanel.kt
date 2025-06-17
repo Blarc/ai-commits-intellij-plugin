@@ -62,7 +62,7 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.modelIdRow(labelKey: String = "settings.llmClient.modelId") {
+    open fun Panel.modelIdRow(labelKey: String = "settings.llmClient.modelId", commentKey: String? = null) {
         row {
             label(message(labelKey))
                 .widthGroup("label")
@@ -79,6 +79,7 @@ abstract class LLMClientPanel(
                 })
                 .align(Align.FILL)
                 .resizableColumn()
+                .apply { commentKey?.let { comment(message(commentKey)) } }
 
             getRefreshModelsFunction()?.let { f ->
                 button(message("settings.refreshModels")) {

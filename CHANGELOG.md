@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support Amazon Bedrock client.
+
 ## [2.12.0] - 2025-06-05
 
 ### Added

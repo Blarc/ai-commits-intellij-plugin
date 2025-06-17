@@ -5,6 +5,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialA
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock.AmazonBedrockClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
@@ -65,7 +66,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             AzureOpenAiClientConfiguration::class,
             HuggingFaceClientConfiguration::class,
             GitHubModelsClientConfiguration::class,
-            MistralAIClientConfiguration::class
+            MistralAIClientConfiguration::class,
+            AmazonBedrockClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )

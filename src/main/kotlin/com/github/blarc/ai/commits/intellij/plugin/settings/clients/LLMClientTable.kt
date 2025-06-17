@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.createColumn
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock.AmazonBedrockClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
@@ -157,7 +158,8 @@ class LLMClientTable {
                     AzureOpenAiClientConfiguration(),
                     HuggingFaceClientConfiguration(),
                     GitHubModelsClientConfiguration(),
-                    MistralAIClientConfiguration()
+                    MistralAIClientConfiguration(),
+                    AmazonBedrockClientConfiguration()
                 ).sortedBy { it.getClientName() }
             } else {
                 listOf(newLLMClientConfiguration)
