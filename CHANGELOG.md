@@ -5,6 +5,7 @@
 ### Added
 
 - Support Amazon Bedrock client.
+- Ollama icon for dark theme and Anthropic & OpenAI icons for dark theme in SVG format (thanks to @yaoxinghuo).
 
 ## [2.12.0] - 2025-06-05
 
