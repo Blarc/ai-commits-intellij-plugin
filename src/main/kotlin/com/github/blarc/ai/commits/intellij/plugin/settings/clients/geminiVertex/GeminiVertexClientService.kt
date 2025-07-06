@@ -5,8 +5,8 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import dev.langchain4j.model.chat.ChatModel
 import dev.langchain4j.model.chat.StreamingChatModel
-import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel
-import dev.langchain4j.model.vertexai.VertexAiGeminiStreamingChatModel
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiChatModel
+import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 
 @Service(Service.Level.APP)
