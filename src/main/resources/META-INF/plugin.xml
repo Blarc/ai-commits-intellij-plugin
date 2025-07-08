@@ -124,6 +124,15 @@
                 icon="/icons/aiCommits15.svg"
                 class="com.github.blarc.ai.commits.intellij.plugin.AICommitAction">
 
+            <keyboard-shortcut
+                    keymap="Mac OS X"
+                    first-keystroke="cmd alt C"
+            />
+            <keyboard-shortcut
+                    keymap="$default"
+                    first-keystroke="control alt C"
+            />
+
             <add-to-group group-id="Vcs.MessageActionGroup" anchor="last"/>
         </action>
     </actions>

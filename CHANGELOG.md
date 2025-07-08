@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add a shortcut (`CMD + option + C` / `control + alt + C`) for generating a commit message (#362).
+
 ### Changed
 
 - Temperature is no longer a required field for OpenAI client configuration (#360).
