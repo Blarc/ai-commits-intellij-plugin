@@ -36,6 +36,19 @@ fun ValidationInfoBuilder.temperatureValid(value: String): ValidationInfo? {
     return error(message("validation.temperature"))
 }
 
+fun ValidationInfoBuilder.temperatureValidNullable(value: String): ValidationInfo? {
+    if (value.isNotBlank()) {
+        value.toFloatOrNull().let {
+            return if (it != null && it in 0.0..2.0) {
+                null
+            } else {
+                error(message("validation.temperature"))
+            }
+        }
+    }
+    return null
+}
+
 fun ValidationInfoBuilder.unique(value: String, existingValues: Set<String>): ValidationInfo? =
     if (existingValues.contains(value)) error(message("validation.unique")) else null
 

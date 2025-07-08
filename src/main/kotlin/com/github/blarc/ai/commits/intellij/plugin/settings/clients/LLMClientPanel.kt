@@ -3,9 +3,11 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
+import com.intellij.ui.layout.ValidationInfoBuilder
 import kotlin.reflect.KMutableProperty0
 
 
@@ -94,7 +96,7 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.temperatureRow() {
+    open fun Panel.temperatureRow(validation: ValidationInfoBuilder.(String) -> ValidationInfo? = ValidationInfoBuilder::temperatureValid) {
         row {
             label(message("settings.llmClient.temperature"))
                 .widthGroup("label")
@@ -102,7 +104,7 @@ abstract class LLMClientPanel(
             cell(temperatureTextField)
                 .bindText(clientConfiguration::temperature)
                 .align(Align.FILL)
-                .validationOnInput { temperatureValid(it.text) }
+                .validationOnInput { validation(it.text) }
                 .resizableColumn()
 
             contextHelp(message("settings.llmClient.temperature.comment"))

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Temperature is no longer a required field for OpenAI client configuration (#360).
+
 ## [2.13.0] - 2025-06-17
 
 ### Added

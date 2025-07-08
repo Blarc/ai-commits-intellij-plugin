@@ -3,9 +3,11 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.temperatureValidNullable
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
+import com.intellij.ui.layout.ValidationInfoBuilder
 
 class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfiguration) : LLMClientPanel(clientConfiguration) {
     private val tokenPasswordField = JBPasswordField()
@@ -19,7 +21,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         tokenRow()
         modelIdRow()
         organizationIdRow()
-        temperatureRow()
+        temperatureRow(ValidationInfoBuilder::temperatureValidNullable)
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
 

@@ -31,10 +31,13 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
         val builder = OpenAiChatModel.builder()
             .apiKey(token ?: "")
             .modelName(client.modelId)
-            .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
             .topP(client.topP)
             .baseUrl(client.host)
+
+        client.temperature.takeIf { it.isNotBlank() }?.let {
+            builder.temperature(it.toDouble())
+        }
 
         client.organizationId?.takeIf { it.isNotBlank() }?.let {
             builder.organizationId(it)
@@ -48,10 +51,13 @@ class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<Ope
         val builder = OpenAiStreamingChatModel.builder()
             .apiKey(token ?: "")
             .modelName(client.modelId)
-            .temperature(client.temperature.toDouble())
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
             .topP(client.topP)
             .baseUrl(client.host)
+
+        client.temperature.takeIf { it.isNotBlank() }?.let {
+            builder.temperature(it.toDouble())
+        }
 
         client.organizationId?.takeIf { it.isNotBlank() }?.let {
             builder.organizationId(it)
