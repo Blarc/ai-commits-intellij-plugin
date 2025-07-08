@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.14.0] - 2025-07-08
+
 ### Added
 
 - Add a shortcut (`CMD + option + C` / `control + alt + C`) for generating a commit message (#362).
@@ -397,7 +399,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.13.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.14.0...HEAD
+[2.14.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.1...v2.12.0
 [2.11.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.0...v2.11.1
