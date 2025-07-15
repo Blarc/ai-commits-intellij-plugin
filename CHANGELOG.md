@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Invalid first-keystroke attribute value in plugin.xml causes PluginException (#366).
+
 ## [2.14.0] - 2025-07-08
 
 ### Added
