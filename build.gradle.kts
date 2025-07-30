@@ -100,7 +100,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     // langchain4j integrations
-    implementation(platform("dev.langchain4j:langchain4j-bom:1.1.0"))
+    implementation(platform("dev.langchain4j:langchain4j-bom:1.2.0"))
     implementation("dev.langchain4j:langchain4j-open-ai")
     implementation("dev.langchain4j:langchain4j-ollama")
     implementation("dev.langchain4j:langchain4j-vertex-ai-gemini")
@@ -113,7 +113,7 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-mistral-ai")
     implementation("dev.langchain4j:langchain4j-bedrock")
 
-    implementation(platform("dev.langchain4j:langchain4j-community-bom:1.1.0-beta7"))
+    implementation(platform("dev.langchain4j:langchain4j-community-bom:1.2.0-beta7"))
     // The Baidu Qianfan Large Model Platform, including the ERNIE series, can be accessed at https://docs.langchain4j.dev/integrations/language-models/qianfan/.
     implementation("dev.langchain4j:langchain4j-community-qianfan")
 
