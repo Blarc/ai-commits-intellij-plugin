@@ -13,7 +13,7 @@ import javax.swing.Icon
 
 class AnthropicClientConfiguration : LLMClientConfiguration(
     "Anthropic",
-    AnthropicChatModelName.CLAUDE_2_1.toString(),
+    AnthropicChatModelName.CLAUDE_3_5_SONNET_20240620.toString(),
     "0.7"
 ) {
     @Attribute
