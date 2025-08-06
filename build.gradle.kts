@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.serialization") version "2.2.0"
 
     // Gradle Changelog Plugin
-    id("org.jetbrains.changelog") version "2.3.0"
+    id("org.jetbrains.changelog") version "2.4.0"
 }
 
 group = properties("pluginGroup")
