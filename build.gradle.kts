@@ -3,7 +3,7 @@ import org.jetbrains.changelog.Changelog
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.2.0"
+    id("org.jetbrains.kotlin.jvm") version "2.2.10"
     id("org.jetbrains.intellij") version "1.17.4"
     kotlin("plugin.serialization") version "2.2.0"
 
