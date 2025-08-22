@@ -25,7 +25,7 @@ jobs:
 
       # Setup Java 14 environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: adopt
           java-version: 17
