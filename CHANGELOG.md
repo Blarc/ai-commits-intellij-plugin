@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Removed
+
+- Remove deprecated Gemini models (#376).
+
 ## [2.14.1] - 2025-07-15
 
 ### Fixed

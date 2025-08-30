@@ -18,20 +18,18 @@ class GeminiGoogleClientSharedState : PersistentStateComponent<GeminiGoogleClien
 
     @XCollection(style = XCollection.Style.v2)
     override val modelIds: MutableSet<String> = mutableSetOf(
-        "gemini-1.5-pro-latest",
-        "gemini-1.5-pro",
-        "gemini-1.5-pro-001",
-        "gemini-1.5-pro-002",
-        "gemini-1.5-flash-latest",
-        "gemini-1.5-flash",
-        "gemini-1.5-flash-001",
-        "gemini-1.5-flash-002",
-        "gemini-1.5-flash-8b-latest",
-        "gemini-1.5-flash-8b",
-        "gemini-1.5-flash-8b-001",
-        "gemini-1.5-flash-8b-exp-0924",
-        "gemini-1.5-flash-8b-exp-0827",
-        "gemini-1.5-flash-exp-0827"
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash-preview-native-audio-dialog",
+        "gemini-2.5-flash-exp-native-audio-thinking-dialog",
+        "gemini-2.5-flash-image-preview",
+        "gemini-2.5-flash-preview-tts",
+        "gemini-2.5-pro-preview-tts",
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-preview-image-generation",
+        "gemini-2.0-flash-lite",
+        "gemini-2.0-flash-live-001"
     )
 
     override fun getState(): GeminiGoogleClientSharedState = this
