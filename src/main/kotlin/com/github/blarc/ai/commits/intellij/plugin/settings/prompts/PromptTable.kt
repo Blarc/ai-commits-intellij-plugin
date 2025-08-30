@@ -19,10 +19,7 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.text
+import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ListTableModel
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +112,7 @@ class PromptTable(private val cs: CoroutineScope) {
         val promptNameTextField = JBTextField()
         val promptDescriptionTextField = JBTextField()
         val promptHintTextField = JBTextField()
-        val promptContentTextArea = JBTextArea()
+        val promptContentTextArea = PromptTextArea(prompt.content)
         val promptPreviewTextArea = JBTextArea()
         var branch: String? = null
         lateinit var diff: String
@@ -127,17 +124,13 @@ class PromptTable(private val cs: CoroutineScope) {
             title = newPrompt?.let { message("settings.prompt.edit.title") } ?: message("settings.prompt.add.title")
             setOKButtonText(newPrompt?.let { message("actions.update") } ?: message("actions.add"))
 
-            promptContentTextArea.wrapStyleWord = true
-            promptContentTextArea.lineWrap = true
-            promptContentTextArea.rows = 5
-            promptContentTextArea.autoscrolls = false
-
             if (!prompt.canBeChanged) {
                 isOKActionEnabled = false
                 promptNameTextField.isEditable = false
                 promptDescriptionTextField.isEditable = false
                 promptContentTextArea.isEditable = false
             }
+            promptContentTextArea.addOnChangeListener { text -> setPreview(text, promptHintTextField.text) }
 
             promptPreviewTextArea.wrapStyleWord = true
             promptPreviewTextArea.lineWrap = true
@@ -181,9 +174,18 @@ class PromptTable(private val cs: CoroutineScope) {
             }
             row {
                 scrollCell(promptContentTextArea)
-                    .bindText(prompt::content)
+                    .bind(
+                        componentGet = { it.text },
+                        componentSet = { component, value -> component.text = value },
+                        prop = prompt::content.toMutableProperty()
+                    )
+                    .validationRequestor { validationCallback ->
+                        // The validationCallback is a function that triggers validation
+                        // We need to call it whenever validation should happen (e.g., on text change)
+                        // because this is a custom component
+                        promptContentTextArea.addOnChangeListener { validationCallback() }
+                    }
                     .validationOnApply { notBlank(it.text) }
-                    .onChanged { setPreview(it.text, promptHintTextField.text) }
                     .align(Align.FILL)
             }.resizableRow()
             row {
