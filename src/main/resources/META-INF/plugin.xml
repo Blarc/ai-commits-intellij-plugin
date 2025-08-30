@@ -117,19 +117,29 @@
     </extensions>
 
     <actions>
+        <!-- Keyboard shortcut action that directly executes -->
         <action
-                id="AICommit.Button"
+                id="AICommit"
                 text="AI Commit"
                 description="Create commit message with AI"
-                icon="/icons/aiCommits15.svg"
                 class="com.github.blarc.ai.commits.intellij.plugin.AICommitAction">
 
             <keyboard-shortcut
                     keymap="$default"
                     first-keystroke="control alt C"
             />
+        </action>
+
+        <!-- Button action with split dropdown -->
+        <action
+                id="AICommitSplitButton"
+                text="AI Commit"
+                description="Create commit message with AI"
+                icon="/icons/aiCommits15.svg"
+                class="com.github.blarc.ai.commits.intellij.plugin.AICommitSplitButtonAction">
 
             <add-to-group group-id="Vcs.MessageActionGroup" anchor="last"/>
         </action>
     </actions>
+
 </idea-plugin>

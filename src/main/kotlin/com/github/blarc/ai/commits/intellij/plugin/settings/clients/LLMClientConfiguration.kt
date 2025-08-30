@@ -3,9 +3,11 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
+import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.VcsDataKeys
 import com.intellij.util.xmlb.annotations.Attribute
@@ -75,6 +77,10 @@ abstract class LLMClientConfiguration(
             sendNotification(Notification.noCommitMessage())
             return
         }
+
+        // Remember which LLM client was used for the shortcut action
+        val projectSettings = project.service<ProjectSettings>()
+        projectSettings.splitButtonActionSelectedLLMClientId = this.id
 
         generateCommitMessage(commitWorkflowHandler, project)
     }

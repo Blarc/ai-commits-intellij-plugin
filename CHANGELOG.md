@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Generate commit action triggered via shortcut no longer opens the dropdown but instead runs the commit generation with the currently selected LLM client (#370).
+
 ### Removed
 
 - Remove deprecated Gemini models (#376).
@@ -399,7 +403,8 @@
 ### Added
 
 - Show notification when diff is empty.
-- - This allows to compute diff only from files and **lines** selected in the commit dialog.
+-
+    - This allows to compute diff only from files and **lines** selected in the commit dialog.
 
 ## [0.2.0] - 2023-03-27
 
@@ -410,46 +415,89 @@
 - Create commit message only for selected files.
 
 [Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.14.1...HEAD
+
 [2.14.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.14.0...v2.14.1
+
 [2.14.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.13.0...v2.14.0
+
 [2.13.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.12.0...v2.13.0
+
 [2.12.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.1...v2.12.0
+
 [2.11.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.11.0...v2.11.1
+
 [2.11.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.1...v2.11.0
+
 [2.10.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.10.0...v2.10.1
+
 [2.10.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.9.1...v2.10.0
+
 [2.9.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.9.0...v2.9.1
+
 [2.9.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.8.0...v2.9.0
+
 [2.8.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.7.1...v2.8.0
+
 [2.7.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.7.0...v2.7.1
+
 [2.7.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.6.0...v2.7.0
+
 [2.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.5.0...v2.6.0
+
 [2.5.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.4.1...v2.5.0
+
 [2.4.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.4.0...v2.4.1
+
 [2.4.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.3.1...v2.4.0
+
 [2.3.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.3.0...v2.3.1
+
 [2.3.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.2.0...v2.3.0
+
 [2.2.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.1...v2.2.0
+
 [2.1.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.1.0...v2.1.1
+
 [2.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.0.0...v2.1.0
+
 [2.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.6.0...v2.0.0
+
 [1.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.1...v1.6.0
+
 [1.5.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.5.0...v1.5.1
+
 [1.5.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.4.0...v1.5.0
+
 [1.4.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.3.0...v1.4.0
+
 [1.3.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.1...v1.3.0
+
 [1.2.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.2.0...v1.2.1
+
 [1.2.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.1.0...v1.2.0
+
 [1.1.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v1.0.0...v1.1.0
+
 [1.0.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.9.0...v1.0.0
+
 [0.9.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.8.0...v0.9.0
+
 [0.8.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.7.0...v0.8.0
+
 [0.7.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.2...v0.7.0
+
 [0.6.2]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.1...v0.6.2
+
 [0.6.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.6.0...v0.6.1
+
 [0.6.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.5.1...v0.6.0
+
 [0.5.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.5.0...v0.5.1
+
 [0.5.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.4.0...v0.5.0
+
 [0.4.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.3.0...v0.4.0
+
 [0.3.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v0.2.0...v0.3.0
+
 [0.2.0]: https://github.com/Blarc/ai-commits-intellij-plugin/commits/v0.2.0
