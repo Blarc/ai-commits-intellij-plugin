@@ -185,7 +185,11 @@ class PromptTable(private val cs: CoroutineScope) {
                         // because this is a custom component
                         promptContentTextArea.addOnChangeListener { validationCallback() }
                     }
-                    .validationOnApply { notBlank(it.text) }
+                    .validationOnApply {
+                        val validationInfo = notBlank(it.text)
+                        promptContentTextArea.updateBorder(validationInfo != null)
+                        validationInfo
+                    }
                     .align(Align.FILL)
             }.resizableRow()
             row {

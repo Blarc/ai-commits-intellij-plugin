@@ -4,6 +4,8 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextArea
 import com.intellij.util.ui.JBUI
 import java.awt.*
+import java.awt.event.FocusEvent
+import java.awt.event.FocusListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JLabel
@@ -35,19 +37,47 @@ class PromptTextArea(initialText: String = "") : JPanel(BorderLayout()) {
         text = initialText
     }
 
-    init {
-        // Create the main text area in a scroll pane
-        val scrollPane = JBScrollPane(textArea).apply {
-            verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
-            horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
-            border = null
+    var text: String
+        get() = textArea.text
+        set(value) {
+            textArea.text = value
         }
 
+    var isEditable: Boolean
+        get() = textArea.isEditable
+        set(value) {
+            textArea.isEditable = value
+        }
+
+    private val scrollPane = JBScrollPane(textArea).apply {
+        verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        border = null
+    }
+
+    private var isFocused = false
+
+    init {
         // Create the variables panel at the bottom
         val variablesPanel = createVariablesPanel()
 
         add(scrollPane, BorderLayout.CENTER)
         add(variablesPanel, BorderLayout.SOUTH)
+
+        addOnChangeListener { _ -> updateBorder() }
+
+        textArea.addFocusListener(object : FocusListener {
+            override fun focusGained(e: FocusEvent?) {
+                isFocused = true
+                updateBorder()
+            }
+
+            override fun focusLost(e: FocusEvent?) {
+                isFocused = false
+                updateBorder()
+            }
+        })
+
     }
 
     fun addOnChangeListener(onTextChanged: ((String) -> Unit)) {
@@ -57,6 +87,31 @@ class PromptTextArea(initialText: String = "") : JPanel(BorderLayout()) {
             override fun changedUpdate(e: DocumentEvent?) = onTextChanged(textArea.text)
         })
     }
+
+    fun updateBorder(isError: Boolean = false) {
+        when {
+            isError && isFocused -> {
+                // Redder/thicker border when error and focused
+                scrollPane.border = JBUI.Borders.customLine(
+                    JBUI.CurrentTheme.Validator.errorBorderColor().darker(),
+                    3
+                )
+            }
+            isError && !isFocused -> {
+                // Normal error border when error but not focused
+                scrollPane.border = JBUI.Borders.customLine(
+                    JBUI.CurrentTheme.Validator.errorBorderColor(),
+                    3
+                )
+            }
+            else -> {
+                // Clear border when no error
+                scrollPane.border = null
+            }
+        }
+        repaint()
+    }
+
 
     private fun createVariablesPanel(): JPanel {
         val panel = JPanel(FlowLayout(FlowLayout.LEFT, 5, 5)).apply {
@@ -124,17 +179,4 @@ class PromptTextArea(initialText: String = "") : JPanel(BorderLayout()) {
         textArea.caretPosition = caretPosition + variable.length
         textArea.requestFocus()
     }
-
-    // Delegate methods to make it easy to use like a regular text area
-    var text: String
-        get() = textArea.text
-        set(value) {
-            textArea.text = value
-        }
-
-    var isEditable: Boolean
-        get() = textArea.isEditable
-        set(value) {
-            textArea.isEditable = value
-        }
 }
