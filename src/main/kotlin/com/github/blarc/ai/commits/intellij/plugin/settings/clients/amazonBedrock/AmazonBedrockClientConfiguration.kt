@@ -20,11 +20,15 @@ class AmazonBedrockClientConfiguration : LLMClientConfiguration(
 ) {
 
     @Attribute
+    var useStaticCredentialsProvider: Boolean? = null
+    @Attribute
     var accessKeyId: String? = null
     @Attribute
     var accessKeyIsStored: Boolean = false
     @Transient
     var accessKey: String? = null
+    @Attribute
+    var profileName: String? = null
     @Attribute
     var timeout: Int = 30
     @Attribute
@@ -66,9 +70,11 @@ class AmazonBedrockClientConfiguration : LLMClientConfiguration(
         copy.name = name
         copy.modelId = modelId
         copy.temperature = temperature
+        copy.useStaticCredentialsProvider = useStaticCredentialsProvider
         copy.accessKeyId = accessKeyId
         copy.accessKeyIsStored = accessKeyIsStored
         copy.accessKey = accessKey
+        copy.profileName = profileName
         copy.timeout = timeout
         copy.topP = topP
         copy.topK = topK
@@ -79,6 +85,14 @@ class AmazonBedrockClientConfiguration : LLMClientConfiguration(
     }
 
     override fun panel() = AmazonBedrockClientPanel(this)
+
+    override fun afterSerialization() {
+        // All new configurations should have this property set upon creation
+        if (useStaticCredentialsProvider == null) {
+            // Old version supported only static provider
+            useStaticCredentialsProvider = true
+        }
+    }
 
     class RegionConverter : Converter<Region>() {
         override fun toString(value: Region): String? {

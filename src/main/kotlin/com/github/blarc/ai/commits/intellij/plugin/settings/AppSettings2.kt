@@ -93,6 +93,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
 
     override fun loadState(state: AppSettings2) {
         XmlSerializerUtil.copyBean(state, this)
+        llmClientConfigurations.forEach { it.afterSerialization() }
     }
 
     override fun noStateLoaded() {

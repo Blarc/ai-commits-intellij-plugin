@@ -18,6 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeAsyncClient
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient
@@ -32,19 +34,16 @@ class AmazonBedrockClientService(private val cs: CoroutineScope) : LLMClientServ
     }
 
     override suspend fun buildChatModel(client: AmazonBedrockClientConfiguration): ChatModel {
-        val accessKey = client.accessKeyId.nullize(true) ?: retrieveToken(client.id)?.toString(true)
-        val credentials = AwsBasicCredentials.builder()
-            .accessKeyId(client.accessKeyId)
-            .secretAccessKey(accessKey)
-            .build()
-
         return BedrockChatModel.builder()
             .modelId(client.modelId)
             .region(client.region)
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
-            .client(BedrockRuntimeClient.builder()
-                .region(client.region)
-                .credentialsProvider(StaticCredentialsProvider.create(credentials)).build())
+            .client(
+                BedrockRuntimeClient.builder()
+                    .region(client.region)
+                    .credentialsProvider(getCredentialProvider(client))
+                    .build()
+            )
             .defaultRequestParameters(
                 BedrockChatRequestParameters.builder()
                     .topP(client.topP)
@@ -57,20 +56,16 @@ class AmazonBedrockClientService(private val cs: CoroutineScope) : LLMClientServ
     }
 
     override suspend fun buildStreamingChatModel(client: AmazonBedrockClientConfiguration): StreamingChatModel? {
-        val accessKey = client.accessKeyId.nullize(true) ?: retrieveToken(client.id)?.toString(true)
-        val credentials = AwsBasicCredentials.builder()
-            .accessKeyId(client.accessKeyId)
-            .secretAccessKey(accessKey)
-            .build()
-
         return BedrockStreamingChatModel.builder()
             .modelId(client.modelId)
             .region(client.region)
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
             .client(
                 BedrockRuntimeAsyncClient.builder()
-                .region(client.region)
-                .credentialsProvider(StaticCredentialsProvider.create(credentials)).build())
+                    .region(client.region)
+                    .credentialsProvider(getCredentialProvider(client))
+                    .build()
+            )
             .defaultRequestParameters(
                 BedrockChatRequestParameters.builder()
                     .topP(client.topP)
@@ -79,6 +74,21 @@ class AmazonBedrockClientService(private val cs: CoroutineScope) : LLMClientServ
                     .maxOutputTokens(client.maxOutputTokens)
                     .build()
             )
+            .build()
+    }
+
+    suspend fun getCredentialProvider(client: AmazonBedrockClientConfiguration): AwsCredentialsProvider {
+        if (client.useStaticCredentialsProvider == true) {
+            val accessKey = client.accessKeyId.nullize(true) ?: retrieveToken(client.id)?.toString(true)
+            return StaticCredentialsProvider.create(
+                AwsBasicCredentials.builder()
+                    .accessKeyId(client.accessKeyId)
+                    .secretAccessKey(accessKey)
+                    .build()
+            )
+        }
+        return DefaultCredentialsProvider.builder()
+            .profileName(client.profileName)
             .build()
     }
 
