@@ -1,4 +1,4 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.isInt
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.components.JBPasswordField
+import com.intellij.ui.components.JBRadioButton
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import software.amazon.awssdk.regions.Region
@@ -17,6 +18,9 @@ class AmazonBedrockClientPanel private constructor(
 
     private val accessKeyIdField = JBTextField()
     private val accessKeyPasswordField = JBPasswordField()
+    private val profileNameField = JBTextField()
+    private lateinit var useDefaultCredentialsProviderRadioButton: Cell<JBRadioButton>
+    private lateinit var useStaticCredentialsProviderRadioButton: Cell<JBRadioButton>
     private val regionComboBox = ComboBox(Region.regions().toTypedArray())
     private val maxOutputTokensTextField = JBTextField()
     private val topPTextField = JBTextField()
@@ -29,6 +33,8 @@ class AmazonBedrockClientPanel private constructor(
         modelIdRow(commentKey = "settings.amazonBedrock.modelId.comment")
         temperatureRow()
         timeoutRow(clientConfiguration::timeout)
+        credentialsProviderRow()
+        profileNameRow()
         accessKeyIdRow()
         accessKeyRow()
         regionRow()
@@ -36,6 +42,34 @@ class AmazonBedrockClientPanel private constructor(
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         verifyRow()
+    }
+
+    private fun Panel.credentialsProviderRow() {
+        buttonsGroup {
+            row {
+                label(message("settings.amazonBedrock.credentialsProvider"))
+                    .widthGroup("label")
+                useDefaultCredentialsProviderRadioButton = radioButton(message("settings.amazonBedrock.defaultCredentialsProvider"))
+                    .bindSelected({ !(clientConfiguration.useStaticCredentialsProvider ?: false) }, { clientConfiguration.useStaticCredentialsProvider = !it })
+                    .align(Align.FILL)
+                useStaticCredentialsProviderRadioButton = radioButton(message("settings.amazonBedrock.staticCredentialsProvider"))
+                    .bindSelected(clientConfiguration::useStaticCredentialsProvider.toNonNullableProperty(true))
+                    .align(Align.FILL)
+                contextHelp(message("settings.amazonBedrock.defaultCredentialsProvider.comment"))
+                    .align(AlignX.RIGHT)
+            }
+        }
+    }
+
+    private fun Panel.profileNameRow() {
+        row {
+            label(message("settings.amazonBedrock.profileName"))
+                .widthGroup("label")
+            cell(profileNameField)
+                .bindText(clientConfiguration::profileName.toNonNullableProperty(""))
+                .resizableColumn()
+                .align(Align.FILL)
+        }.visibleIf(useDefaultCredentialsProviderRadioButton.selected)
     }
 
     private fun Panel.accessKeyIdRow() {
@@ -47,7 +81,7 @@ class AmazonBedrockClientPanel private constructor(
                 .emptyText(message("settings.amazonBedrock.accessKeyId.example"))
                 .resizableColumn()
                 .align(Align.FILL)
-        }
+        }.visibleIf(useStaticCredentialsProviderRadioButton.selected)
     }
 
     private fun Panel.accessKeyRow() {
@@ -63,7 +97,7 @@ class AmazonBedrockClientPanel private constructor(
                 .align(Align.FILL)
                 // maxLineLength was eye-balled, but prevents the dialog getting wider
                 .comment(message("settings.amazonBedrock.accessKey.comment"), 50)
-        }
+        }.visibleIf(useStaticCredentialsProviderRadioButton.selected)
     }
 
     private fun Panel.regionRow() {
@@ -96,6 +130,8 @@ class AmazonBedrockClientPanel private constructor(
         // Configuration passed to panel is already a copy of the original or a new configuration
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.temperature = temperatureTextField.text
+        clientConfiguration.useStaticCredentialsProvider = useStaticCredentialsProviderRadioButton.component.isSelected
+        clientConfiguration.profileName = profileNameField.text
         clientConfiguration.accessKeyId = accessKeyIdField.text
         clientConfiguration.accessKey = String(accessKeyPasswordField.password)
         clientConfiguration.timeout = socketTimeoutTextField.text.toInt()

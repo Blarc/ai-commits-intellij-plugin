@@ -100,6 +100,10 @@ abstract class LLMClientConfiguration(
         return ActionUpdateThread.EDT
     }
 
+    open fun afterSerialization() {
+        // Allow overriding
+    }
+
 //    override fun equals(other: Any?): Boolean {
 //        return other is LLMClientConfiguration && other.id == id
 //    }

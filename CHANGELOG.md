@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support AWS SDK default credential locations for Bedrock Integration (#368).
+
 ## [2.15.0] - 2025-08-30
 
 ### Changed
