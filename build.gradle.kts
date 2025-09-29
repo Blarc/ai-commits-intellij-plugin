@@ -113,7 +113,7 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-mistral-ai")
     implementation("dev.langchain4j:langchain4j-bedrock")
 
-    implementation(platform("dev.langchain4j:langchain4j-community-bom:1.6.0-beta11"))
+    implementation(platform("dev.langchain4j:langchain4j-community-bom:1.6.0-beta12"))
     // The Baidu Qianfan Large Model Platform, including the ERNIE series, can be accessed at https://docs.langchain4j.dev/integrations/language-models/qianfan/.
     implementation("dev.langchain4j:langchain4j-community-qianfan")
 
