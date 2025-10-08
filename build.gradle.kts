@@ -4,7 +4,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.20"
-    id("org.jetbrains.intellij") version "1.17.4"
+    id("org.jetbrains.intellij.platform") version "2.9.0"
     kotlin("plugin.serialization") version "2.2.20"
 
     // Gradle Changelog Plugin
@@ -14,88 +14,36 @@ plugins {
 group = properties("pluginGroup")
 version = properties("pluginVersion")
 
-// Configure project's dependencies
-repositories {
-    mavenCentral()
-}
-
 // Set the JVM language level used to build the project.
 kotlin {
     jvmToolchain(properties("javaVersion").toInt())
 }
 
-// Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-intellij {
-    pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
-    type.set(properties("platformType"))
-    updateSinceUntilBuild.set(false)
+// Configure project's dependencies
+repositories {
+    mavenCentral()
 
-    plugins.set(
-        properties("platformPlugins").split(',')
-            .map(String::trim)
-            .filter(String::isNotEmpty)
-    )
-}
-
-changelog {
-//    version.set(properties("pluginVersion"))
-    groups.empty()
-    repositoryUrl.set(properties("pluginRepositoryUrl"))
-}
-
-tasks {
-    wrapper {
-        gradleVersion = properties("gradleVersion")
+    intellijPlatform {
+        defaultRepositories()
     }
-
-    patchPluginXml {
-        version.set(properties("pluginVersion"))
-        sinceBuild.set(properties("pluginSinceBuild"))
-        // untilBuild.set(properties("pluginUntilBuild"))
-
-        // Get the latest available change notes from the changelog file
-        changeNotes.set(provider {
-            with(changelog) {
-                renderItem(
-                    getOrNull(properties("pluginVersion")) ?: getUnreleased()
-                        .withHeader(false)
-                        .withEmptySections(false),
-                    Changelog.OutputType.HTML,
-                )
-            }
-        })
-    }
-
-    signPlugin {
-        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-        privateKey.set(System.getenv("PRIVATE_KEY"))
-        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-    }
-
-    publishPlugin {
-        dependsOn("patchChangelog")
-        token.set(System.getenv("PUBLISH_TOKEN"))
-    }
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 dependencies {
-//    implementation("com.aallam.openai:openai-client:3.7.2") {
-//        exclude(group = "org.slf4j", module = "slf4j-api")
-//        // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation:when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
-//        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-//    }
-//    implementation("io.ktor:ktor-client-cio:2.3.11") {
-//        exclude(group = "org.slf4j", module = "slf4j-api")
-//        // Prevents java.lang.LinkageError: java.lang.LinkageError: loader constraint violation: when resolving method 'long kotlin.time.Duration.toLong-impl(long, kotlin.time.DurationUnit)'
-//        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-//    }
-//
-//    implementation("com.knuddels:jtokkit:1.0.0")
+    intellijPlatform {
+        create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
+
+        // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
+        bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })
+
+        // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
+        plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
+
+        // Module Dependencies. Uses `platformBundledModules` property from the gradle.properties file for bundled IntelliJ Platform modules.
+        bundledModules(providers.gradleProperty("platformBundledModules").map { it.split(',') })
+
+        // testFramework(TestFrameworkType.Platform)
+    }
+
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
@@ -121,4 +69,68 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+// Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
+intellijPlatform {
+    pluginConfiguration {
+        name = providers.gradleProperty("pluginName")
+        version = providers.gradleProperty("platformVersion")
+
+        val changelog = project.changelog // local variable for configuration cache compatibility
+        // Get the latest available change notes from the changelog file
+        changeNotes = providers.gradleProperty("pluginVersion").map { pluginVersion ->
+            with(changelog) {
+                renderItem(
+                    (getOrNull(pluginVersion) ?: getUnreleased())
+                        .withHeader(false)
+                        .withEmptySections(false),
+                    Changelog.OutputType.HTML,
+                )
+            }
+        }
+
+        ideaVersion {
+            sinceBuild.set(providers.gradleProperty("pluginSinceBuild"))
+        }
+    }
+
+    signing {
+        certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
+        privateKey = providers.environmentVariable("PRIVATE_KEY")
+        password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+    }
+
+    publishing {
+        token = providers.environmentVariable("PUBLISH_TOKEN")
+        // The pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
+        // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
+        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
+        channels = providers.gradleProperty("pluginVersion").map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
+}
+
+changelog {
+//    version.set(properties("pluginVersion"))
+    groups.empty()
+    repositoryUrl.set(properties("pluginRepositoryUrl"))
+}
+
+tasks {
+    wrapper {
+        gradleVersion = properties("gradleVersion")
+    }
+
+    publishPlugin {
+        dependsOn("patchChangelog")
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
