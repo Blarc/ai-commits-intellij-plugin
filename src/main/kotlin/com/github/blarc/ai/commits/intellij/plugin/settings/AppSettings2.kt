@@ -10,6 +10,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.An
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.gigachat.GigachatClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels.GitHubModelsClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface.HuggingFaceClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral.MistralAIClientConfiguration
@@ -67,7 +68,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             HuggingFaceClientConfiguration::class,
             GitHubModelsClientConfiguration::class,
             MistralAIClientConfiguration::class,
-            AmazonBedrockClientConfiguration::class
+            AmazonBedrockClientConfiguration::class,
+            GigachatClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )
