@@ -100,7 +100,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     override fun noStateLoaded() {
         val appSettings = AppSettings.instance
         migrateSettingsFromVersion1(appSettings)
-        val openAiLlmClient = llmClientConfigurations.find { it.getClientName() == OpenAiClientConfiguration.CLIENT_NAME }
+        val openAiLlmClient =
+            llmClientConfigurations.find { it.getClientName() == OpenAiClientConfiguration.CLIENT_NAME }
         migrateOpenAiClientFromVersion1(openAiLlmClient as OpenAiClientConfiguration, appSettings)
     }
 
@@ -114,7 +115,10 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         appExclusions = appSettings.appExclusions
     }
 
-    private fun migrateOpenAiClientFromVersion1(openAiLlmClientConfiguration: OpenAiClientConfiguration?, appSettings: AppSettings) {
+    private fun migrateOpenAiClientFromVersion1(
+        openAiLlmClientConfiguration: OpenAiClientConfiguration?,
+        appSettings: AppSettings
+    ) {
         openAiLlmClientConfiguration?.apply {
             host = appSettings.openAIHost
             appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
@@ -122,25 +126,19 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             temperature = appSettings.openAITemperature
 
             val credentialAttributes = getCredentialAttributes(appSettings.openAITokenTitle)
-            migrateToken(credentialAttributes)
-        }
-
-        OpenAiClientSharedState.getInstance().hosts.addAll(appSettings.openAIHosts)
-        OpenAiClientSharedState.getInstance().modelIds.addAll(appSettings.openAIModelIds)
-    }
-
-    private fun OpenAiClientConfiguration.migrateToken(credentialAttributes: CredentialAttributes) {
-        PasswordSafe.instance.getAsync(credentialAttributes)
-            .onSuccess {
-                it?.password?.let { token ->
+            AppService.instance.retrieveToken(credentialAttributes) { token ->
+                token?.let {
                     try {
                         PasswordSafe.instance.setPassword(getCredentialAttributes(id), token.toString(false))
                     } catch (e: Exception) {
                         sendNotification(Notification.unableToSaveToken(e.message))
                     }
-                    tokenIsStored = true
                 }
             }
+        }
+
+        OpenAiClientSharedState.getInstance().hosts.addAll(appSettings.openAIHosts)
+        OpenAiClientSharedState.getInstance().modelIds.addAll(appSettings.openAIModelIds)
     }
 
     fun recordHit() {
