@@ -19,6 +19,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenA
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.intellij.credentialStore.CredentialAttributes
+import com.intellij.credentialStore.CredentialStoreManager
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent

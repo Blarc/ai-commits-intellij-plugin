@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## Fixed
+
+- Method actionPerformed violates override-only method usage.
+
 ## [2.16.0] - 2025-09-04
 
 ### Added

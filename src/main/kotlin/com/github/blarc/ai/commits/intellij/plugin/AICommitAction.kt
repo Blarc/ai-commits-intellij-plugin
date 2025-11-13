@@ -34,7 +34,7 @@ class AICommitAction : AnAction(), DumbAware {
             return
         }
 
-        llmClient.actionPerformed(e)
+        llmClient.generateCommitMessageAction(e)
     }
 
 }

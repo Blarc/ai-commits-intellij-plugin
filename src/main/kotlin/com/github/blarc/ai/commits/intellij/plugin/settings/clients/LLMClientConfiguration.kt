@@ -47,23 +47,7 @@ abstract class LLMClientConfiguration(
         getSharedState().modelIds.add(modelId)
     }
 
-    open fun setCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, prompt: String, result: String) {
-        commitWorkflowHandler.setCommitMessage(result)
-    }
-
-    abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project)
-
-    abstract fun getGenerateCommitMessageJob(): Job?
-
-    public abstract override fun clone(): LLMClientConfiguration
-
-    abstract fun panel(): LLMClientPanel
-
-    override fun compareTo(other: LLMClientConfiguration): Int {
-        return name.compareTo(other.name)
-    }
-
-    override fun actionPerformed(e: AnActionEvent) {
+    fun generateCommitMessageAction(e: AnActionEvent) {
         val project = e.project ?: return
 
         val generateCommitMessageJob = getGenerateCommitMessageJob()
@@ -83,6 +67,26 @@ abstract class LLMClientConfiguration(
         projectSettings.splitButtonActionSelectedLLMClientId = this.id
 
         generateCommitMessage(commitWorkflowHandler, project)
+    }
+
+    open fun setCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, prompt: String, result: String) {
+        commitWorkflowHandler.setCommitMessage(result)
+    }
+
+    abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project)
+
+    abstract fun getGenerateCommitMessageJob(): Job?
+
+    public abstract override fun clone(): LLMClientConfiguration
+
+    abstract fun panel(): LLMClientPanel
+
+    override fun compareTo(other: LLMClientConfiguration): Int {
+        return name.compareTo(other.name)
+    }
+
+    override fun actionPerformed(e: AnActionEvent) {
+        generateCommitMessageAction(e)
     }
 
     override fun update(e: AnActionEvent) {
