@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## Fixed
+### Fixed
 
 - Method actionPerformed violates override-only method usage.
 - Invocation of unresolved method PasswordSafe.getAsync(CredentialAttributes) in AppSettings2.
