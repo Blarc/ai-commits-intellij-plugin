@@ -8,7 +8,6 @@ import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral.MistralAIClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
@@ -54,7 +53,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
             makeRequestWithTryCatch(function = {
                 val availableModels = getAvailableModels(client);
 
-                MistralAIClientSharedState.getInstance().modelIds.addAll(availableModels)
+                client.getSharedState().modelIds.addAll(availableModels)
 
                 withContext(Dispatchers.EDT) {
                     label.text = message("settings.refreshModels.success")
