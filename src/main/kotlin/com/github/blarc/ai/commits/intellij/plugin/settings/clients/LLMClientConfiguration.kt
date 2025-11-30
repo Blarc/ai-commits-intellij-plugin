@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
+import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
@@ -66,7 +67,10 @@ abstract class LLMClientConfiguration(
         val projectSettings = project.service<ProjectSettings>()
         projectSettings.splitButtonActionSelectedLLMClientId = this.id
 
-        generateCommitMessage(commitWorkflowHandler, project)
+        // Look up the current configuration by ID to ensure we use the latest settings
+        // (AnAction instances may be cached by IntelliJ and hold stale values)
+        val currentConfig = AppSettings2.instance.llmClientConfigurations.find { it.id == this.id } ?: this
+        currentConfig.generateCommitMessage(commitWorkflowHandler, project)
     }
 
     open fun setCommitMessage(
