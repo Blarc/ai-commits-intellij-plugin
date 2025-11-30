@@ -38,12 +38,23 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMClientService
         @JvmStatic
         fun getInstance(): ClaudeCodeClientService = service()
 
-        private val CLAUDE_PATHS = listOf(
-            "claude",  // In PATH
-            System.getProperty("user.home") + "/.claude/local/claude",
-            System.getProperty("user.home") + "/.local/bin/claude",
-            System.getenv("LOCALAPPDATA")?.let { "$it\\Claude\\claude.exe" }
-        ).filterNotNull()
+        private val HOME = System.getProperty("user.home")
+
+        private val CLAUDE_PATHS = listOfNotNull(
+            // Common npm global locations
+            "$HOME/.npm-global/bin/claude",
+            "$HOME/.npm/bin/claude",
+            "/usr/local/bin/claude",
+            "/usr/bin/claude",
+            // nvm installations
+            "$HOME/.nvm/versions/node/*/bin/claude",
+            // Claude-specific locations
+            "$HOME/.claude/local/claude",
+            "$HOME/.local/bin/claude",
+            // Windows
+            System.getenv("LOCALAPPDATA")?.let { "$it\\Claude\\claude.exe" },
+            System.getenv("APPDATA")?.let { "$it\\npm\\claude.cmd" }
+        )
     }
 
     override suspend fun buildChatModel(client: ClaudeCodeClientConfiguration): ChatModel {
@@ -64,22 +75,61 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMClientService
             return null
         }
 
-        // Try to find claude in common locations
-        for (path in CLAUDE_PATHS) {
+        // Try to find claude using shell (inherits user's PATH)
+        try {
+            val isWindows = System.getProperty("os.name").lowercase().contains("win")
+            val shellCommand = if (isWindows) {
+                arrayOf("cmd", "/c", "where claude")
+            } else {
+                // Use interactive shell to get user's PATH from .bashrc
+                arrayOf("/bin/bash", "-i", "-c", "which claude 2>/dev/null")
+            }
+            val process = ProcessBuilder(*shellCommand)
+                .start()  // Don't redirect stderr - we only want stdout
+            process.outputStream.close() // Close stdin
+            val completed = process.waitFor(5, TimeUnit.SECONDS)
+            val exitValue = if (completed) process.exitValue() else -1
+            if (completed && exitValue == 0) {
+                // Read all lines and find one that looks like a path (interactive bash may print warnings)
+                val lines = process.inputStream.bufferedReader().readLines()
+                val result = lines.firstOrNull { it.trim().startsWith("/") }?.trim()
+                if (!result.isNullOrBlank()) {
+                    val file = File(result)
+                    if (file.exists()) {
+                        // Resolve symlinks to get the real path
+                        return try {
+                            file.toPath().toRealPath().toString()
+                        } catch (e: Exception) {
+                            result
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Fall through to hardcoded paths
+        }
+
+        // Try hardcoded common locations
+        for (pathPattern in CLAUDE_PATHS) {
             try {
-                // Check if it's in PATH using 'which' (Unix) or 'where' (Windows)
-                if (path == "claude") {
-                    val whichProcess = ProcessBuilder(
-                        if (System.getProperty("os.name").lowercase().contains("win")) "where" else "which",
-                        "claude"
-                    ).start()
-                    if (whichProcess.waitFor(5, TimeUnit.SECONDS) && whichProcess.exitValue() == 0) {
-                        return whichProcess.inputStream.bufferedReader().readLine()?.trim()
+                if (pathPattern.contains("*")) {
+                    // Handle glob patterns (e.g., nvm paths)
+                    val parts = pathPattern.split("*")
+                    if (parts.size == 2) {
+                        val parentDir = File(parts[0]).parentFile
+                        if (parentDir?.exists() == true) {
+                            parentDir.listFiles()?.forEach { dir ->
+                                val candidate = File(dir, parts[1].removePrefix("/"))
+                                if (candidate.exists() && candidate.canExecute()) {
+                                    return candidate.absolutePath
+                                }
+                            }
+                        }
                     }
                 } else {
-                    val file = File(path)
+                    val file = File(pathPattern)
                     if (file.exists() && file.canExecute()) {
-                        return path
+                        return pathPattern
                     }
                 }
             } catch (e: Exception) {
@@ -114,15 +164,28 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMClientService
                 .redirectErrorStream(true)
                 .start()
 
+            // Close stdin immediately to prevent CLI from waiting for input
+            process.outputStream.close()
+
+            // Read output in a separate thread to prevent buffer deadlock
+            val outputFuture = java.util.concurrent.CompletableFuture.supplyAsync {
+                process.inputStream.bufferedReader().readText()
+            }
+
             val completed = process.waitFor(client.timeout.toLong(), TimeUnit.SECONDS)
             if (!completed) {
                 process.destroyForcibly()
+                outputFuture.cancel(true)
                 return@withContext Result.failure(
                     IllegalStateException(message("claudeCode.timeout"))
                 )
             }
 
-            val output = process.inputStream.bufferedReader().readText()
+            val output = try {
+                outputFuture.get(5, TimeUnit.SECONDS)
+            } catch (e: Exception) {
+                ""
+            }
 
             if (process.exitValue() != 0) {
                 return@withContext Result.failure(
