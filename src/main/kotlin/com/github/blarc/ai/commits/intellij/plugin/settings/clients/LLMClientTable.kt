@@ -120,6 +120,7 @@ class LLMClientTable {
         var llmClient = newLlmClientConfiguration ?: llmClientConfigurations[0]
 
         private val cardLayout = JBCardLayout()
+        private var editPanel: DialogPanel? = null
 
         init {
             title = newLlmClientConfiguration?.let { "Edit LLM Client" } ?: "Add LLM Client"
@@ -130,15 +131,17 @@ class LLMClientTable {
         override fun doOKAction() {
             if (newLlmClientConfiguration == null) {
                 (cardLayout.findComponentById(llmClient.getClientName()) as DialogPanel).apply()
+            } else {
+                // Apply the edit panel to save typed values from editable comboboxes
+                editPanel?.apply()
             }
-            // TODO: Figure out how to call apply of the currently active panel
             super.doOKAction()
         }
 
         override fun createCenterPanel() = if (newLlmClientConfiguration == null) {
             createCardSplitter()
         } else {
-            llmClient.panel().create()
+            llmClient.panel().create().also { editPanel = it }
         }.apply {
             isResizable = false
             // Add 200 so there is space for verification message.
