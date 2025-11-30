@@ -74,6 +74,11 @@ class ClaudeCodeClientPanel private constructor(
                         clientConfiguration.modelId = it
                     }
                 })
+                .onApply {
+                    // Explicitly capture typed value from editable combobox
+                    // bindItem doesn't reliably capture typed values not in the dropdown
+                    modelComboBox.item?.let { clientConfiguration.modelId = it }
+                }
                 .align(Align.FILL)
                 .resizableColumn()
                 .comment(message("settings.claudeCode.model.comment"))
