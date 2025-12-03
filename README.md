@@ -40,6 +40,7 @@ plugin and configure a LLM API client in plugin's settings: <kbd>Settings</kbd> 
 - Amazon Bedrock
 - Anthropic
 - Azure Open AI
+- Claude Code (via CLI)
 - Gemini Google AI
 - Gemini Vertex AI
 - GitHub Models
