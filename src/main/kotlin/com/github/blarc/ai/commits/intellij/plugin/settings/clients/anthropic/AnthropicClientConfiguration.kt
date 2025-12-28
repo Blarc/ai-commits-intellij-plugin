@@ -12,10 +12,12 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class AnthropicClientConfiguration : LLMClientConfiguration(
-    "Anthropic",
-    AnthropicChatModelName.CLAUDE_3_5_SONNET_20240620.toString(),
-    "0.7"
+    "Anthropic"
 ) {
+    @Attribute
+    var modelId: String = AnthropicChatModelName.CLAUDE_3_5_SONNET_20240620.toString()
+    @Attribute
+    var temperature: String = "0.7"
     @Attribute
     var host: String = "https://api.anthropic.com/v1/"
     @Attribute

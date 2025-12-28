@@ -21,8 +21,8 @@ class GitHubModelsClientPanel private constructor(
         nameRow()
         timeoutRow(clientConfiguration::timeout)
         tokenRow()
-        modelIdRow()
-        temperatureRow()
+        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
     }

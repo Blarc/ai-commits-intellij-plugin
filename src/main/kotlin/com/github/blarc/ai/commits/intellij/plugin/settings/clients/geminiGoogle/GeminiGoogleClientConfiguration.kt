@@ -12,10 +12,12 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class GeminiGoogleClientConfiguration : LLMClientConfiguration(
-    "Gemini Google",
-    "gemini-1.5-pro",
-    "0.7"
+    "Gemini Google"
 ) {
+    @Attribute
+    var modelId: String = "gemini-1.5-pro"
+    @Attribute
+    var temperature: String = "0.7"
     @Attribute
     var tokenIsStored: Boolean = false
     @Transient

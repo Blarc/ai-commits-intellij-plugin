@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
@@ -21,12 +22,7 @@ abstract class LLMClientPanel(
     val temperatureTextField = JBTextField()
     val verifyLabel = JBLabel()
 
-    open fun create() = panel {
-        nameRow()
-        modelIdRow()
-        temperatureRow()
-        verifyRow()
-    }
+    abstract fun create(): DialogPanel
 
     open fun Panel.nameRow() {
         row {
@@ -64,7 +60,7 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.modelIdRow(labelKey: String = "settings.llmClient.modelId", commentKey: String? = null) {
+    open fun Panel.modelIdRow(property: MutableProperty<String>, labelKey: String = "settings.llmClient.modelId", commentKey: String? = null) {
         row {
             label(message(labelKey))
                 .widthGroup("label")
@@ -73,10 +69,10 @@ abstract class LLMClientPanel(
                 .applyToComponent {
                     isEditable = true
                 }
-                .bindItem({ clientConfiguration.modelId }, {
+                .bindItem({ property.get() }, {
                     if (it != null) {
                         clientConfiguration.addModelId(modelComboBox.item)
-                        clientConfiguration.modelId = it
+                        property.set(it)
                     }
                 })
                 .align(Align.FILL)
@@ -96,13 +92,13 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.temperatureRow(validation: ValidationInfoBuilder.(String) -> ValidationInfo? = ValidationInfoBuilder::temperatureValid) {
+    open fun Panel.temperatureRow(property: MutableProperty<String>, validation: ValidationInfoBuilder.(String) -> ValidationInfo? = ValidationInfoBuilder::temperatureValid) {
         row {
             label(message("settings.llmClient.temperature"))
                 .widthGroup("label")
 
             cell(temperatureTextField)
-                .bindText(clientConfiguration::temperature)
+                .bindText(property)
                 .align(Align.FILL)
                 .validationOnInput { validation(it.text) }
                 .resizableColumn()

@@ -19,9 +19,9 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         hostRow(clientConfiguration::host.toNullableProperty())
         timeoutRow(clientConfiguration::timeout)
         tokenRow()
-        modelIdRow()
+        modelIdRow(clientConfiguration::modelId.toMutableProperty())
         organizationIdRow()
-        temperatureRow(ValidationInfoBuilder::temperatureValidNullable)
+        temperatureRow(clientConfiguration::temperature.toMutableProperty(), ValidationInfoBuilder::temperatureValidNullable)
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
 

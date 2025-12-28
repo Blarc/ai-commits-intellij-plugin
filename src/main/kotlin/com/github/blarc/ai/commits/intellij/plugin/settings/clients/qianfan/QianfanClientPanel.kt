@@ -5,10 +5,7 @@ import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toNullableProperty
+import com.intellij.ui.dsl.builder.*
 
 class QianfanClientPanel(private val clientConfiguration: QianfanClientConfiguration) : LLMClientPanel(clientConfiguration) {
 
@@ -19,7 +16,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
     override fun create() = panel {
         nameRow()
         hostRow(clientConfiguration::host.toNullableProperty())
-        modelIdRow()
+        modelIdRow(clientConfiguration::modelId.toMutableProperty())
 
         row {
             label(message("settings.qianfan.apiKey"))
@@ -44,7 +41,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
                 .align(Align.FILL)
         }
 
-        temperatureRow()
+        temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()
     }

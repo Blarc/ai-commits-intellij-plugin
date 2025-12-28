@@ -22,8 +22,8 @@ class GeminiGoogleClientPanel private constructor(
     override fun create() = panel {
         nameRow()
         tokenRow()
-        modelIdRow()
-        temperatureRow()
+        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()

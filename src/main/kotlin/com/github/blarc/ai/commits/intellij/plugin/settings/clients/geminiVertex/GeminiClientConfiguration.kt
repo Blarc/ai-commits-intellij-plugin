@@ -12,10 +12,12 @@ import javax.swing.Icon
 // Can not rename this class because of backwards compatibility
 // with persistent component - AppSettings2
 class GeminiClientConfiguration : LLMClientConfiguration(
-    "Gemini Vertex",
-    "gemini-pro",
-    "0.7"
+    "Gemini Vertex"
 ) {
+    @Attribute
+    var modelId: String = "gemini-pro"
+    @Attribute
+    var temperature: String = "0.7"
     @Attribute
     var projectId: String = "project-id"
     @Attribute

@@ -17,9 +17,7 @@ import java.util.*
 import javax.swing.Icon
 
 abstract class LLMClientConfiguration(
-    @Attribute var name: String,
-    @Attribute var modelId: String,
-    @Attribute var temperature: String,
+    @Attribute var name: String
 ) : Cloneable, Comparable<LLMClientConfiguration>, AnAction() {
 
     @Attribute
@@ -56,7 +54,8 @@ abstract class LLMClientConfiguration(
             return
         }
 
-        val commitWorkflowHandler = e.getData(VcsDataKeys.COMMIT_WORKFLOW_HANDLER) as AbstractCommitWorkflowHandler<*, *>?
+        val commitWorkflowHandler =
+            e.getData(VcsDataKeys.COMMIT_WORKFLOW_HANDLER) as AbstractCommitWorkflowHandler<*, *>?
         if (commitWorkflowHandler == null) {
             sendNotification(Notification.noCommitMessage())
             return
@@ -69,7 +68,11 @@ abstract class LLMClientConfiguration(
         generateCommitMessage(commitWorkflowHandler, project)
     }
 
-    open fun setCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, prompt: String, result: String) {
+    open fun setCommitMessage(
+        commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>,
+        prompt: String,
+        result: String
+    ) {
         commitWorkflowHandler.setCommitMessage(result)
     }
 

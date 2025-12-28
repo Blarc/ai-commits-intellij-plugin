@@ -11,11 +11,13 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class AzureOpenAiClientConfiguration : LLMClientConfiguration(
-    CLIENT_NAME,
-    "",
-    "0.7"
+    CLIENT_NAME
 ) {
 
+    @Attribute
+    var modelId: String = ""
+    @Attribute
+    var temperature: String = "0.7"
     @Attribute
     var host: String = ""
     @Attribute

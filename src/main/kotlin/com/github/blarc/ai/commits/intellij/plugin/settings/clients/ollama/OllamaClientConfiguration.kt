@@ -10,11 +10,13 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class OllamaClientConfiguration : LLMClientConfiguration(
-    "Ollama",
-    "llama3",
-    "0.7"
+    "Ollama"
 ) {
 
+    @Attribute
+    var modelId: String = "llama3"
+    @Attribute
+    var temperature: String = "0.7"
     @Attribute
     var host: String = "http://localhost:11434/"
     @Attribute
