@@ -21,13 +21,6 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCliClientServ
     companion object {
         @JvmStatic
         fun getInstance(): ClaudeCodeClientService = service()
-
-        private val CLAUDE_PATHS = listOf(
-            "claude",  // In PATH
-            System.getProperty("user.home") + "/.claude/local/claude",
-            System.getProperty("user.home") + "/.local/bin/claude",
-            System.getenv("LOCALAPPDATA")?.let { "$it\\Claude\\claude.exe" }
-        ).filterNotNull()
     }
 
     override suspend fun executeCli(
@@ -37,51 +30,25 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCliClientServ
         return executeClaudeCli(client, prompt)
     }
 
-    fun findClaudePath(configuredPath: String): String? {
-        // Use configured path if provided
-        if (configuredPath.isNotBlank()) {
-            val file = File(configuredPath)
-            if (file.exists() && file.canExecute()) {
-                return configuredPath
-            }
-            return null
-        }
-
-        // Try to find claude in common locations
-        for (path in CLAUDE_PATHS) {
-            try {
-                // Check if it's in PATH using 'which' (Unix) or 'where' (Windows)
-                if (path == "claude") {
-                    val whichProcess = ProcessBuilder(
-                        if (System.getProperty("os.name").lowercase().contains("win")) "where" else "which",
-                        "claude"
-                    ).start()
-                    if (whichProcess.waitFor(5, TimeUnit.SECONDS) && whichProcess.exitValue() == 0) {
-                        return whichProcess.inputStream.bufferedReader().readLine()?.trim()
-                    }
-                } else {
-                    val file = File(path)
-                    if (file.exists() && file.canExecute()) {
-                        return path
-                    }
-                }
-            } catch (e: Exception) {
-                // Continue to next path
-            }
-        }
-        return null
-    }
-
     private suspend fun executeClaudeCli(
         client: ClaudeCodeClientConfiguration,
         prompt: String
     ): Result<String> = withContext(Dispatchers.IO) {
-        val claudePath = findClaudePath(client.cliPath)
-            ?: return@withContext Result.failure(
-                IllegalStateException(message("claudeCode.cliNotFound"))
+        // Require explicit path configuration
+        if (client.cliPath.isBlank()) {
+            return@withContext Result.failure(
+                IllegalStateException(message("claudeCode.pathNotConfigured"))
             )
+        }
 
-        val command = mutableListOf(claudePath, "-p", "--output-format", "json")
+        val file = File(client.cliPath)
+        if (!file.exists() || !file.canExecute()) {
+            return@withContext Result.failure(
+                IllegalStateException(message("claudeCode.pathNotFound", client.cliPath))
+            )
+        }
+
+        val command = mutableListOf(client.cliPath, "-p", "--output-format", "json")
 
         // Add model if specified
         if (client.modelId.isNotBlank()) {
@@ -160,16 +127,7 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCliClientServ
         label.text = message("settings.verify.running")
         label.icon = AllIcons.General.InlineRefresh
         cs.launch(ModalityState.current().asContextElement()) {
-            val claudePath = findClaudePath(client.cliPath)
-            if (claudePath == null) {
-                withContext(Dispatchers.EDT) {
-                    label.text = message("claudeCode.cliNotFound").wrap(60)
-                    label.icon = AllIcons.General.InspectionsError
-                }
-                return@launch
-            }
-
-            // Test with a simple prompt
+            // Test with a simple prompt - executeClaudeCli will validate the path
             val result = executeClaudeCli(client, "Say 'OK' in exactly one word")
             withContext(Dispatchers.EDT) {
                 result.fold(
