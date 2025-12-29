@@ -84,7 +84,10 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCliClientServ
             val output = try {
                 outputFuture.get(5, TimeUnit.SECONDS)
             } catch (e: Exception) {
-                ""
+                val cause = (e as? java.util.concurrent.ExecutionException)?.cause ?: e
+                return@withContext Result.failure(
+                    IllegalStateException("Failed to read CLI output: ${cause.message}", cause)
+                )
             }
 
             if (process.exitValue() != 0) {
