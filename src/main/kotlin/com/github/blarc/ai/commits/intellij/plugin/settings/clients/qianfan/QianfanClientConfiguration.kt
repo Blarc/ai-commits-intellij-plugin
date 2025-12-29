@@ -11,10 +11,9 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class QianfanClientConfiguration : LLMClientConfiguration(
-    "Qianfan"
+    "Qianfan",
+    QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName
 ) {
-    @Attribute
-    var modelId: String = QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName
     @Attribute
     var temperature: String = "0.7"
     @Attribute

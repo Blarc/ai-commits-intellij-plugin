@@ -30,7 +30,7 @@ class AmazonBedrockClientPanel private constructor(
 
     override fun create() = panel {
         nameRow()
-        modelIdRow(clientConfiguration::modelId.toMutableProperty(), commentKey = "settings.amazonBedrock.modelId.comment")
+        modelIdRow(commentKey = "settings.amazonBedrock.modelId.comment")
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         timeoutRow(clientConfiguration::timeout)
         credentialsProviderRow()

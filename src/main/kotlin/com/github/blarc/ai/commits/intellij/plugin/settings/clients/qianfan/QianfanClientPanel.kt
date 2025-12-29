@@ -16,7 +16,7 @@ class QianfanClientPanel(private val clientConfiguration: QianfanClientConfigura
     override fun create() = panel {
         nameRow()
         hostRow(clientConfiguration::host.toNullableProperty())
-        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        modelIdRow()
 
         row {
             label(message("settings.qianfan.apiKey"))

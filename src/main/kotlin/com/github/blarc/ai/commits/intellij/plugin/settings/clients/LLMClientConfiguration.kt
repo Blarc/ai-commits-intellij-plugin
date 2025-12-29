@@ -17,7 +17,8 @@ import java.util.*
 import javax.swing.Icon
 
 abstract class LLMClientConfiguration(
-    @Attribute var name: String
+    @Attribute var name: String,
+    @Attribute var modelId: String
 ) : Cloneable, Comparable<LLMClientConfiguration>, AnAction() {
 
     @Attribute

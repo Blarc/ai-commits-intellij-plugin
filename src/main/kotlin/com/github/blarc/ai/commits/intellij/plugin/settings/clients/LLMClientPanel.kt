@@ -60,7 +60,7 @@ abstract class LLMClientPanel(
         }
     }
 
-    open fun Panel.modelIdRow(property: MutableProperty<String>, labelKey: String = "settings.llmClient.modelId", commentKey: String? = null) {
+    open fun Panel.modelIdRow(labelKey: String = "settings.llmClient.modelId", commentKey: String? = null) {
         row {
             label(message(labelKey))
                 .widthGroup("label")
@@ -69,10 +69,10 @@ abstract class LLMClientPanel(
                 .applyToComponent {
                     isEditable = true
                 }
-                .bindItem({ property.get() }, {
+                .bindItem({ clientConfiguration.modelId }, {
                     if (it != null) {
                         clientConfiguration.addModelId(modelComboBox.item)
-                        property.set(it)
+                        clientConfiguration.modelId = it
                     }
                 })
                 .align(Align.FILL)
