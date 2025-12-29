@@ -34,9 +34,8 @@ import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.*
 import javax.swing.DefaultComboBoxModel
 
-abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope) {
-
-    var generateCommitMessageJob : Job? = null
+abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope)
+    : LLMServiceBase<C>(cs) {
 
     // This function should be implemented only by LLM services that can refresh models via API
     open suspend fun getAvailableModels(client: C): List<String>  {
@@ -74,28 +73,12 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         }
     }
 
-    fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
-
-        val commitContext = commitWorkflowHandler.workflow.commitContext
-        val includedChanges = commitWorkflowHandler.ui.getIncludedChanges().toMutableList()
-
+    override fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
         generateCommitMessageJob = cs.launch(ModalityState.current().asContextElement()) {
             withBackgroundProgress(project, message("action.background")) {
-
-                if (commitContext.isAmendCommitMode) {
-                    includedChanges += getLastCommitChanges(project)
-                }
-
-                val diff = computeDiff(includedChanges, false, project)
-                if (diff.isBlank()) {
-                    withContext(Dispatchers.EDT) {
-                        sendNotification(Notification.emptyDiff())
-                    }
-                    return@withBackgroundProgress
-                }
-
-                val branch = getCommonBranch(includedChanges, project)
-                val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitWorkflowHandler.getCommitMessage(), project)
+                val (_, prompt) = prepareCommitMessageRequest(
+                    commitWorkflowHandler, project
+                ) ?: return@withBackgroundProgress
 
                 makeRequest(clientConfiguration, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
@@ -201,17 +184,5 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
             ).aiMessage().text()
         }
         onSuccess(response)
-    }
-
-    private suspend fun getLastCommitChanges(project: Project): List<Change> {
-        return withContext(Dispatchers.IO) {
-            GitRepositoryManager.getInstance(project).repositories.map { repo ->
-                GitHistoryUtils.history(project, repo.root, "--max-count=1")
-            }.filter { commits ->
-                commits.isNotEmpty()
-            }.map { commits ->
-                (commits.first() as GitCommit).changes
-            }.flatten()
-        }
     }
 }

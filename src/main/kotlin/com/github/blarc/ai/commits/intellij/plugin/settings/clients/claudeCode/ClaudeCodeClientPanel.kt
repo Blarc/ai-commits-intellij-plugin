@@ -90,6 +90,6 @@ class ClaudeCodeClientPanel private constructor(
         clientConfiguration.timeout = timeoutTextField.text.toIntOrNull() ?: 120
         clientConfiguration.modelId = modelComboBox.item ?: ""
 
-        service.verifyConfigurationCli(clientConfiguration, verifyLabel)
+        service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }
