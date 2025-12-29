@@ -11,10 +11,9 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class GitHubModelsClientConfiguration : LLMClientConfiguration(
-    "GitHub Models"
+    "GitHub Models",
+    "gpt-4o-mini"
 ) {
-    @Attribute
-    var modelId: String = "gpt-4o-mini"
     @Attribute
     var temperature: String = "0.7"
     @Attribute

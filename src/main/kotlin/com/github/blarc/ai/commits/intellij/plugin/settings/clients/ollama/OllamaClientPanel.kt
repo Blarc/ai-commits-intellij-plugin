@@ -22,7 +22,7 @@ class OllamaClientPanel private constructor(
         nameRow()
         hostRow(clientConfiguration::host.toNullableProperty())
         timeoutRow(clientConfiguration::timeout)
-        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        modelIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())

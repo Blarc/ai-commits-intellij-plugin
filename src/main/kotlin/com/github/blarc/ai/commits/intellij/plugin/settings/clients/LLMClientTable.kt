@@ -59,8 +59,7 @@ class LLMClientTable {
     private fun createTableModel(): ListTableModel<LLMClientConfiguration> = ListTableModel(
         arrayOf(
             createColumn<LLMClientConfiguration, LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient },
-            createColumn<LLMClientConfiguration, String>(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId },
-            createColumn(message("settings.llmClient.temperature")) { llmClient -> llmClient.temperature }
+            createColumn<LLMClientConfiguration, String>(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId }
         ),
         llmClients.toList()
     )

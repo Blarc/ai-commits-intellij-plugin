@@ -24,7 +24,7 @@ class HuggingFaceClientPanel private constructor(
         nameRow()
         timeoutRow(clientConfiguration::timeout)
         tokenRow()
-        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        modelIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         maxNewTokens()
         waitForModel()

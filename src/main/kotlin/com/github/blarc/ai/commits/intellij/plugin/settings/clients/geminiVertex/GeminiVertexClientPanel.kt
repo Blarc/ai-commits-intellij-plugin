@@ -22,7 +22,7 @@ class GeminiVertexClientPanel private constructor(
         nameRow()
         projectIdRow()
         locationRow()
-        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        modelIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         topPFloatRow(topPTextField, clientConfiguration::topP.toNullableProperty())

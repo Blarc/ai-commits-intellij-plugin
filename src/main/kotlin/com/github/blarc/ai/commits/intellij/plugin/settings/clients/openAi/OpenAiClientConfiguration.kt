@@ -10,11 +10,10 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class OpenAiClientConfiguration : LLMClientConfiguration(
-    "OpenAI"
+    "OpenAI",
+    "gpt-3.5-turbo"
 ) {
 
-    @Attribute
-    var modelId: String = "gpt-3.5-turbo"
     @Attribute
     var temperature: String = "0.7"
     @Attribute

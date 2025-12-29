@@ -12,11 +12,10 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class HuggingFaceClientConfiguration : LLMClientConfiguration(
-    "HuggingFace"
+    "HuggingFace",
+    HuggingFaceModelName.TII_UAE_FALCON_7B_INSTRUCT
 ) {
 
-    @Attribute
-    var modelId: String = HuggingFaceModelName.TII_UAE_FALCON_7B_INSTRUCT
     @Attribute
     var temperature: String = "0.7"
     @Attribute

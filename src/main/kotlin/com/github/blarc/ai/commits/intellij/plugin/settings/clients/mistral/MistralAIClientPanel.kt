@@ -21,7 +21,7 @@ class MistralAIClientPanel private constructor(
 
     override fun create() = panel {
         nameRow()
-        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        modelIdRow()
         tokenRow()
         maxTokens()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())

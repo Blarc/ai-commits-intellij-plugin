@@ -22,7 +22,7 @@ class AnthropicClientPanel private constructor(
     override fun create() = panel {
         nameRow()
         hostRow(clientConfiguration::host.toNullableProperty())
-        modelIdRow(clientConfiguration::modelId.toMutableProperty())
+        modelIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         timeoutRow(clientConfiguration::timeout)
         tokenRow()

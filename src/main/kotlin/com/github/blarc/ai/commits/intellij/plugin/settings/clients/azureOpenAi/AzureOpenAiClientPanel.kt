@@ -22,7 +22,7 @@ class AzureOpenAiClientPanel private constructor(
         hostRow(clientConfiguration::host.toNullableProperty(), "settings.azureOpenAi.host")
         timeoutRow(clientConfiguration::timeout)
         tokenRow()
-        modelIdRow(clientConfiguration::modelId.toMutableProperty(), "settings.azureOpenAi.modelId")
+        modelIdRow("settings.azureOpenAi.modelId")
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         verifyRow()

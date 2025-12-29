@@ -14,11 +14,10 @@ import software.amazon.awssdk.regions.Region
 import javax.swing.Icon
 
 class AmazonBedrockClientConfiguration : LLMClientConfiguration(
-    "Amazon Bedrock"
+    "Amazon Bedrock",
+    "us.amazon.nova-lite-v1:0"
 ) {
 
-    @Attribute
-    var modelId: String = "us.amazon.nova-lite-v1:0"
     @Attribute
     var temperature: String = "0.7"
     @Attribute

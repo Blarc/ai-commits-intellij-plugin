@@ -12,10 +12,9 @@ import kotlinx.coroutines.Job
 import javax.swing.Icon
 
 class MistralAIClientConfiguration : LLMClientConfiguration(
-    "MistralAI"
+    "MistralAI",
+    MistralAiChatModelName.OPEN_MISTRAL_7B.toString()
 ) {
-    @Attribute
-    var modelId: String = MistralAiChatModelName.OPEN_MISTRAL_7B.toString()
     @Attribute
     var temperature: String = "0.7"
     @Attribute
