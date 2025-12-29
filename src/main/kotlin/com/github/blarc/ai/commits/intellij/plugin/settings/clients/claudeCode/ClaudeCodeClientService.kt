@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMCommandLineAgent
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMCliClientService
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
@@ -16,7 +16,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 @Service(Service.Level.APP)
-class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCommandLineAgent<ClaudeCodeClientConfiguration>(cs) {
+class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCliClientService<ClaudeCodeClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

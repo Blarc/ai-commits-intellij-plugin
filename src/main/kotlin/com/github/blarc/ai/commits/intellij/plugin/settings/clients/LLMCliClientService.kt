@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
  * Base class for CLI-based LLM agents (e.g., Claude Code, Codex).
  * These agents execute via command-line interface rather than HTTP APIs.
  */
-abstract class LLMCommandLineAgent<C : LLMClientConfiguration>(coroutineScope: CoroutineScope)
+abstract class LLMCliClientService<C : LLMClientConfiguration>(coroutineScope: CoroutineScope)
     : LLMServiceBase<C>(coroutineScope) {
 
     /**
