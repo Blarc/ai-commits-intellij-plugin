@@ -40,12 +40,6 @@ class ClaudeCodeClientPanel private constructor(
                     cliPathTextField.text = it.path
                 }
             }.widthGroup("button")
-            button(message("settings.claudeCode.detectPath")) {
-                val detectedPath = service.findClaudePath("")
-                if (detectedPath != null) {
-                    cliPathTextField.text = detectedPath
-                }
-            }.widthGroup("button")
         }
     }
 

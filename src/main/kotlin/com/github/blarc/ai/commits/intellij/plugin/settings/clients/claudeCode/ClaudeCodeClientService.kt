@@ -21,24 +21,6 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCommandLineAg
     companion object {
         @JvmStatic
         fun getInstance(): ClaudeCodeClientService = service()
-
-        private val HOME = System.getProperty("user.home")
-
-        private val CLAUDE_PATHS = listOfNotNull(
-            // Common npm global locations
-            "$HOME/.npm-global/bin/claude",
-            "$HOME/.npm/bin/claude",
-            "/usr/local/bin/claude",
-            "/usr/bin/claude",
-            // nvm installations
-            "$HOME/.nvm/versions/node/*/bin/claude",
-            // Claude-specific locations
-            "$HOME/.claude/local/claude",
-            "$HOME/.local/bin/claude",
-            // Windows
-            System.getenv("LOCALAPPDATA")?.let { "$it\\Claude\\claude.exe" },
-            System.getenv("APPDATA")?.let { "$it\\npm\\claude.cmd" }
-        )
     }
 
     override suspend fun executeCli(
@@ -48,90 +30,25 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCommandLineAg
         return executeClaudeCli(client, prompt)
     }
 
-    fun findClaudePath(configuredPath: String): String? {
-        // Use configured path if provided
-        if (configuredPath.isNotBlank()) {
-            val file = File(configuredPath)
-            if (file.exists() && file.canExecute()) {
-                return configuredPath
-            }
-            return null
-        }
-
-        // Try to find claude using shell (inherits user's PATH)
-        try {
-            val isWindows = System.getProperty("os.name").lowercase().contains("win")
-            val shellCommand = if (isWindows) {
-                arrayOf("cmd", "/c", "where claude")
-            } else {
-                // Use interactive shell to get user's PATH from .bashrc
-                arrayOf("/bin/bash", "-i", "-c", "which claude 2>/dev/null")
-            }
-            val process = ProcessBuilder(*shellCommand)
-                .start()  // Don't redirect stderr - we only want stdout
-            process.outputStream.close() // Close stdin
-            val completed = process.waitFor(5, TimeUnit.SECONDS)
-            val exitValue = if (completed) process.exitValue() else -1
-            if (completed && exitValue == 0) {
-                // Read all lines and find one that looks like a path (interactive bash may print warnings)
-                val lines = process.inputStream.bufferedReader().readLines()
-                val result = lines.firstOrNull { it.trim().startsWith("/") }?.trim()
-                if (!result.isNullOrBlank()) {
-                    val file = File(result)
-                    if (file.exists()) {
-                        // Resolve symlinks to get the real path
-                        return try {
-                            file.toPath().toRealPath().toString()
-                        } catch (e: Exception) {
-                            result
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            // Fall through to hardcoded paths
-        }
-
-        // Try hardcoded common locations
-        for (pathPattern in CLAUDE_PATHS) {
-            try {
-                if (pathPattern.contains("*")) {
-                    // Handle glob patterns (e.g., nvm paths)
-                    val parts = pathPattern.split("*")
-                    if (parts.size == 2) {
-                        val parentDir = File(parts[0]).parentFile
-                        if (parentDir?.exists() == true) {
-                            parentDir.listFiles()?.forEach { dir ->
-                                val candidate = File(dir, parts[1].removePrefix("/"))
-                                if (candidate.exists() && candidate.canExecute()) {
-                                    return candidate.absolutePath
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    val file = File(pathPattern)
-                    if (file.exists() && file.canExecute()) {
-                        return pathPattern
-                    }
-                }
-            } catch (e: Exception) {
-                // Continue to next path
-            }
-        }
-        return null
-    }
-
     private suspend fun executeClaudeCli(
         client: ClaudeCodeClientConfiguration,
         prompt: String
     ): Result<String> = withContext(Dispatchers.IO) {
-        val claudePath = findClaudePath(client.cliPath)
-            ?: return@withContext Result.failure(
-                IllegalStateException(message("claudeCode.cliNotFound"))
+        // Require explicit path configuration
+        if (client.cliPath.isBlank()) {
+            return@withContext Result.failure(
+                IllegalStateException(message("claudeCode.pathNotConfigured"))
             )
+        }
 
-        val command = mutableListOf(claudePath, "-p", "--output-format", "json")
+        val file = File(client.cliPath)
+        if (!file.exists() || !file.canExecute()) {
+            return@withContext Result.failure(
+                IllegalStateException(message("claudeCode.pathNotFound", client.cliPath))
+            )
+        }
+
+        val command = mutableListOf(client.cliPath, "-p", "--output-format", "json")
 
         // Add model if specified
         if (client.modelId.isNotBlank()) {
@@ -207,16 +124,7 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LLMCommandLineAg
         label.text = message("settings.verify.running")
         label.icon = AllIcons.General.InlineRefresh
         cs.launch(ModalityState.current().asContextElement()) {
-            val claudePath = findClaudePath(client.cliPath)
-            if (claudePath == null) {
-                withContext(Dispatchers.EDT) {
-                    label.text = message("claudeCode.cliNotFound").wrap(60)
-                    label.icon = AllIcons.General.InspectionsError
-                }
-                return@launch
-            }
-
-            // Test with a simple prompt
+            // Test with a simple prompt - executeClaudeCli will validate the path
             val result = executeClaudeCli(client, "Say 'OK' in exactly one word")
             withContext(Dispatchers.EDT) {
                 result.fold(
