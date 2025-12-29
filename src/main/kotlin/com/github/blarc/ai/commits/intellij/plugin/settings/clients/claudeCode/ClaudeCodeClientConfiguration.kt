@@ -12,7 +12,6 @@ import javax.swing.Icon
 class ClaudeCodeClientConfiguration : LLMClientConfiguration(
     "Claude Code",
     "",  // No default model - uses CLI's configured model
-    ""   // No temperature - CLI doesn't support it
 ) {
 
     @Attribute
@@ -52,7 +51,6 @@ class ClaudeCodeClientConfiguration : LLMClientConfiguration(
         copy.cliPath = cliPath
         copy.timeout = timeout
         copy.modelId = modelId
-        copy.temperature = temperature
         return copy
     }
 
