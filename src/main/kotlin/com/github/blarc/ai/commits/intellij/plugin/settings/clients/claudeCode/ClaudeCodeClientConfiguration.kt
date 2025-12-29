@@ -37,7 +37,7 @@ class ClaudeCodeClientConfiguration : LLMClientConfiguration(
     }
 
     override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
-        return ClaudeCodeClientService.getInstance().generateCommitMessageCli(this, commitWorkflowHandler, project)
+        return ClaudeCodeClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, project)
     }
 
     override fun getGenerateCommitMessageJob(): Job? {
