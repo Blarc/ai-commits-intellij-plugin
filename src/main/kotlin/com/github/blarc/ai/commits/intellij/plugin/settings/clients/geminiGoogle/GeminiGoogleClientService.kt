@@ -3,7 +3,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialA
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Service(Service.Level.APP)
-class GeminiGoogleClientService(private val cs: CoroutineScope) : LLMClientService<GeminiGoogleClientConfiguration>(cs) {
+class GeminiGoogleClientService(private val cs: CoroutineScope) : LlmClientService<GeminiGoogleClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

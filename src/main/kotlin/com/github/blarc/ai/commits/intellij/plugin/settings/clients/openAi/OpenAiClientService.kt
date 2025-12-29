@@ -4,7 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialA
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 
 @Service(Service.Level.APP)
-class OpenAiClientService(private val cs: CoroutineScope) : LLMClientService<OpenAiClientConfiguration>(cs) {
+class OpenAiClientService(private val cs: CoroutineScope) : LlmClientService<OpenAiClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

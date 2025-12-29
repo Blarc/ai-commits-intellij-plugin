@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModel
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
@@ -10,7 +10,7 @@ import com.intellij.ui.dsl.builder.*
 class GitHubModelsClientPanel private constructor(
     private val clientConfiguration: GitHubModelsClientConfiguration,
     val service: GitHubModelsClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
 
     private val tokenPasswordField = JBPasswordField()
     private val topPTextField = JBTextField()

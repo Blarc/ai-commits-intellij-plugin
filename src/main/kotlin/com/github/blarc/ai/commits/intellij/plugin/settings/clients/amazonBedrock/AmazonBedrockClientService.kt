@@ -4,7 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialA
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -26,7 +26,7 @@ import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient
 import java.time.Duration
 
 @Service(Service.Level.APP)
-class AmazonBedrockClientService(private val cs: CoroutineScope) : LLMClientService<AmazonBedrockClientConfiguration>(cs) {
+class AmazonBedrockClientService(private val cs: CoroutineScope) : LlmClientService<AmazonBedrockClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

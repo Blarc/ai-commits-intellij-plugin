@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import dev.langchain4j.model.chat.ChatModel
@@ -10,7 +10,7 @@ import dev.langchain4j.model.vertexai.gemini.VertexAiGeminiStreamingChatModel
 import kotlinx.coroutines.CoroutineScope
 
 @Service(Service.Level.APP)
-class GeminiVertexClientService(private val cs: CoroutineScope): LLMClientService<GeminiClientConfiguration>(cs) {
+class GeminiVertexClientService(private val cs: CoroutineScope): LlmClientService<GeminiClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

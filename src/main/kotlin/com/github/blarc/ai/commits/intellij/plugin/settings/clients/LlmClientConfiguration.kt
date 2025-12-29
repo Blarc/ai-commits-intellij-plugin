@@ -17,10 +17,10 @@ import kotlinx.coroutines.Job
 import java.util.*
 import javax.swing.Icon
 
-abstract class LLMClientConfiguration(
+abstract class LlmClientConfiguration(
     @Attribute var name: String,
     @Attribute var modelId: String
-) : Cloneable, Comparable<LLMClientConfiguration>, AnAction() {
+) : Cloneable, Comparable<LlmClientConfiguration>, AnAction() {
 
     @Attribute
     var id: String = UUID.randomUUID().toString()
@@ -29,7 +29,7 @@ abstract class LLMClientConfiguration(
 
     abstract fun getClientIcon(): Icon
 
-    abstract fun getSharedState(): LLMClientSharedState
+    abstract fun getSharedState(): LlmClientSharedState
 
     fun getHosts(): Set<String> {
         return getSharedState().hosts
@@ -65,7 +65,7 @@ abstract class LLMClientConfiguration(
 
         // Remember which LLM client was used for the shortcut action
         val projectSettings = project.service<ProjectSettings>()
-        projectSettings.splitButtonActionSelectedLLMClientId = this.id
+        projectSettings.splitButtonActionSelectedLlmClientId = this.id
 
         // Look up the current configuration by ID to ensure we use the latest settings
         // (AnAction instances may be cached by IntelliJ and hold stale values)
@@ -85,11 +85,11 @@ abstract class LLMClientConfiguration(
 
     abstract fun getGenerateCommitMessageJob(): Job?
 
-    public abstract override fun clone(): LLMClientConfiguration
+    public abstract override fun clone(): LlmClientConfiguration
 
-    abstract fun panel(): LLMClientPanel
+    abstract fun panel(): LlmClientPanel
 
-    override fun compareTo(other: LLMClientConfiguration): Int {
+    override fun compareTo(other: LlmClientConfiguration): Int {
         return name.compareTo(other.name)
     }
 
@@ -117,7 +117,7 @@ abstract class LLMClientConfiguration(
     }
 
 //    override fun equals(other: Any?): Boolean {
-//        return other is LLMClientConfiguration && other.id == id
+//        return other is LlmClientConfiguration && other.id == id
 //    }
 //
 //    override fun hashCode(): Int {

@@ -1,12 +1,12 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "OllamaClientSharedState", storages = [Storage("AICommitsOllama.xml")])
-class OllamaClientSharedState : PersistentStateComponent<OllamaClientSharedState>, LLMClientSharedState {
+class OllamaClientSharedState : PersistentStateComponent<OllamaClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

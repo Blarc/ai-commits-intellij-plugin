@@ -3,8 +3,8 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
 import com.intellij.openapi.components.service
@@ -23,9 +23,9 @@ import java.util.*
 class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundConfigurable(message("settings.general.group.title")) {
 
     private val projectSettings = project.service<ProjectSettings>()
-    private val llmClientTable = LLMClientTable()
-    private lateinit var llmClientConfigurationComboBox: ComboBox<LLMClientConfiguration>
-    private var isProjectSpecificLLMClientCheckBox = JBCheckBox(message("settings.llmClient.projectSpecific"))
+    private val llmClientTable = LlmClientTable()
+    private lateinit var llmClientConfigurationComboBox: ComboBox<LlmClientConfiguration>
+    private var isProjectSpecificLlmClientCheckBox = JBCheckBox(message("settings.llmClient.projectSpecific"))
     private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private val promptTable = PromptTable(cs)
     private val isProjectSpecificPromptCheckBox = JBCheckBox(message("settings.prompt.projectSpecific"))
@@ -37,11 +37,11 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
         row {
             label(message("settings.llmClient")).widthGroup("labelPrompt")
             llmClientConfigurationComboBox = comboBox(AppSettings2.instance.llmClientConfigurations.sortedBy { it.name }, AICommitsListCellRenderer())
-                .bindItem(getter = { projectSettings.getActiveLLMClientConfiguration() }, setter = { setActiveLLMClientConfiguration(it) })
+                .bindItem(getter = { projectSettings.getActiveLlmClientConfiguration() }, setter = { setActiveLlmClientConfiguration(it) })
                 .widthGroup("input")
                 .component
-            cell(isProjectSpecificLLMClientCheckBox)
-                .bindSelected(project.service<ProjectSettings>()::isProjectSpecificLLMClient)
+            cell(isProjectSpecificLlmClientCheckBox)
+                .bindSelected(project.service<ProjectSettings>()::isProjectSpecificLlmClient)
             contextHelp(message("settings.llmClient.projectSpecific.contextHelp"))
                 .align(AlignX.LEFT)
             checkBox(message("settings.llmClient.streamingResponse"))
@@ -166,9 +166,9 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
         }
     }
 
-    private fun setActiveLLMClientConfiguration(llmClientConfiguration: LLMClientConfiguration?) {
+    private fun setActiveLlmClientConfiguration(llmClientConfiguration: LlmClientConfiguration?) {
         llmClientConfiguration?.let {
-            if (isProjectSpecificLLMClientCheckBox.isSelected) {
+            if (isProjectSpecificLlmClientCheckBox.isSelected) {
                 project.service<ProjectSettings>().activeLlmClientId = it.id
             } else {
                 AppSettings2.instance.activeLlmClientId = it.id

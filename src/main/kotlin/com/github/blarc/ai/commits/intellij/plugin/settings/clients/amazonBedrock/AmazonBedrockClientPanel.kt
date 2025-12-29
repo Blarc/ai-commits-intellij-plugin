@@ -3,7 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedro
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.isInt
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBRadioButton
@@ -14,7 +14,7 @@ import software.amazon.awssdk.regions.Region
 class AmazonBedrockClientPanel private constructor(
     private val clientConfiguration: AmazonBedrockClientConfiguration,
     val service: AmazonBedrockClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
 
     private val accessKeyIdField = JBTextField()
     private val accessKeyPasswordField = JBPasswordField()

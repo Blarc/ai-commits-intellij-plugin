@@ -2,8 +2,8 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogl
 
 import GeminiGoogleClientService
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -11,7 +11,7 @@ import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class GeminiGoogleClientConfiguration : LLMClientConfiguration(
+class GeminiGoogleClientConfiguration : LlmClientConfiguration(
     "Gemini Google",
     "gemini-1.5-pro"
 ) {
@@ -36,7 +36,7 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
         return Icons.GEMINI_GOOGLE.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return GeminiGoogleClientSharedState.getInstance()
     }
 
@@ -48,7 +48,7 @@ class GeminiGoogleClientConfiguration : LLMClientConfiguration(
         return GeminiGoogleClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = GeminiGoogleClientConfiguration()
         copy.id = id
         copy.name = name

@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -10,7 +10,7 @@ import dev.langchain4j.community.model.qianfan.QianfanChatModelNameEnum
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class QianfanClientConfiguration : LLMClientConfiguration(
+class QianfanClientConfiguration : LlmClientConfiguration(
     "Qianfan",
     QianfanChatModelNameEnum.ERNIE_SPEED_128K.modelName
 ) {
@@ -53,7 +53,7 @@ class QianfanClientConfiguration : LLMClientConfiguration(
         return QianfanClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = QianfanClientConfiguration()
         copy.id = id
         copy.apiKey = apiKey

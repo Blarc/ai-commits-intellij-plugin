@@ -1,12 +1,12 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "ClaudeCodeClientSharedState", storages = [Storage("AICommitsClaudeCode.xml")])
-class ClaudeCodeClientSharedState : PersistentStateComponent<ClaudeCodeClientSharedState>, LLMClientSharedState {
+class ClaudeCodeClientSharedState : PersistentStateComponent<ClaudeCodeClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

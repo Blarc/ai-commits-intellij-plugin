@@ -1,13 +1,13 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 import dev.langchain4j.model.openai.OpenAiChatModelName
 
 @Service(Service.Level.APP)
 @State(name = "OpenAiClientSharedState", storages = [Storage("AICommitsOpenAi.xml")])
-class OpenAiClientSharedState : PersistentStateComponent<OpenAiClientSharedState>, LLMClientSharedState {
+class OpenAiClientSharedState : PersistentStateComponent<OpenAiClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

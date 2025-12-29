@@ -1,12 +1,12 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "GeminiApiClientSharedState", storages = [Storage("AICommitsGeminiApi.xml")])
-class GeminiGoogleClientSharedState : PersistentStateComponent<GeminiGoogleClientSharedState>, LLMClientSharedState {
+class GeminiGoogleClientSharedState : PersistentStateComponent<GeminiGoogleClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

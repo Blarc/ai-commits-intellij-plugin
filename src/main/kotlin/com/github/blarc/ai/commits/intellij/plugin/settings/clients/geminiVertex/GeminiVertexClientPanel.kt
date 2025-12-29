@@ -2,14 +2,14 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVerte
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.notBlank
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 
 class GeminiVertexClientPanel private constructor(
     private val clientConfiguration: GeminiClientConfiguration,
     val service: GeminiVertexClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
 
     private val projectIdTextField = JBTextField()
     private val locationTextField = JBTextField()

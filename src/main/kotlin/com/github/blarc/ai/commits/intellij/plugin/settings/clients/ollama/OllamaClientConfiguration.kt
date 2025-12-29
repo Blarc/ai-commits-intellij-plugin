@@ -1,15 +1,15 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class OllamaClientConfiguration : LLMClientConfiguration(
+class OllamaClientConfiguration : LlmClientConfiguration(
     "Ollama",
     "llama3"
 ) {
@@ -41,7 +41,7 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         return Icons.OLLAMA.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return OllamaClientSharedState.getInstance()
     }
 
@@ -53,7 +53,7 @@ class OllamaClientConfiguration : LLMClientConfiguration(
         return OllamaClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = OllamaClientConfiguration()
         copy.id = id
         copy.name = name

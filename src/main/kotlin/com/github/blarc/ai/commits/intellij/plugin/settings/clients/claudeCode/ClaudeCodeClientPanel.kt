@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBTextField
@@ -10,7 +10,7 @@ import com.intellij.ui.dsl.builder.*
 class ClaudeCodeClientPanel private constructor(
     private val clientConfiguration: ClaudeCodeClientConfiguration,
     val service: ClaudeCodeClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
 
     private val cliPathTextField = TextFieldWithBrowseButton()
     private val timeoutTextField = JBTextField()

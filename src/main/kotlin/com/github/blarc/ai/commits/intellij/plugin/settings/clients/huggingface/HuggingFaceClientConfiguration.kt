@@ -1,8 +1,8 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -11,7 +11,7 @@ import dev.langchain4j.model.huggingface.HuggingFaceModelName
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class HuggingFaceClientConfiguration : LLMClientConfiguration(
+class HuggingFaceClientConfiguration : LlmClientConfiguration(
     "HuggingFace",
     HuggingFaceModelName.TII_UAE_FALCON_7B_INSTRUCT
 ) {
@@ -43,7 +43,7 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
         return Icons.HUGGING_FACE.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return HuggingFaceClientSharedState.getInstance()
     }
 
@@ -64,7 +64,7 @@ class HuggingFaceClientConfiguration : LLMClientConfiguration(
         return HuggingFaceClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = HuggingFaceClientConfiguration()
         copy.id = id
         copy.name = name

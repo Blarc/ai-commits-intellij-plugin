@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -9,7 +9,7 @@ import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class OpenAiClientConfiguration : LLMClientConfiguration(
+class OpenAiClientConfiguration : LlmClientConfiguration(
     "OpenAI",
     "gpt-3.5-turbo"
 ) {
@@ -53,7 +53,7 @@ class OpenAiClientConfiguration : LLMClientConfiguration(
         return OpenAiClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = OpenAiClientConfiguration()
         copy.id = id
         copy.name = name

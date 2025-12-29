@@ -2,14 +2,14 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.isInt
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 
 class OllamaClientPanel private constructor(
     private val clientConfiguration: OllamaClientConfiguration,
     val service: OllamaClientService
-): LLMClientPanel(clientConfiguration) {
+): LlmClientPanel(clientConfiguration) {
 
     private val topKTextField = JBTextField()
     private val topPTextField = JBTextField()

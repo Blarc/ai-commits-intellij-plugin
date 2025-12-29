@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2.LocaleConverter
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.intellij.openapi.components.PersistentStateComponent
@@ -31,10 +31,10 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     @Attribute
     var activeLlmClientId: String? = null
     @Attribute
-    var isProjectSpecificLLMClient: Boolean = false
+    var isProjectSpecificLlmClient: Boolean = false
 
     @Transient
-    var splitButtonActionSelectedLLMClientId: String? = null
+    var splitButtonActionSelectedLlmClientId: String? = null
 
     @Property
     var activePrompt = DefaultPrompts.BASIC.prompt
@@ -56,19 +56,19 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
         return AICommitsUtils.matchesGlobs(path, projectExclusions)
     }
 
-    fun getActiveLLMClientConfiguration(): LLMClientConfiguration? {
-        return if (isProjectSpecificLLMClient) {
-            AppSettings2.instance.getActiveLLMClientConfiguration(activeLlmClientId)
+    fun getActiveLlmClientConfiguration(): LlmClientConfiguration? {
+        return if (isProjectSpecificLlmClient) {
+            AppSettings2.instance.getActiveLlmClientConfiguration(activeLlmClientId)
         } else {
-            AppSettings2.instance.getActiveLLMClientConfiguration()
+            AppSettings2.instance.getActiveLlmClientConfiguration()
         }
     }
 
-    fun getSplitButtonActionSelectedOrActiveLLMClient(): LLMClientConfiguration? {
+    fun getSplitButtonActionSelectedOrActiveLlmClient(): LlmClientConfiguration? {
         // First try to get the session client, then fall back to the active client
-        return splitButtonActionSelectedLLMClientId?.let {
-            AppSettings2.instance.getActiveLLMClientConfiguration(it)
-        } ?: getActiveLLMClientConfiguration()
+        return splitButtonActionSelectedLlmClientId?.let {
+            AppSettings2.instance.getActiveLlmClientConfiguration(it)
+        } ?: getActiveLlmClientConfiguration()
     }
 
     private fun getActivePrompt(activePrompt: Prompt): Prompt {

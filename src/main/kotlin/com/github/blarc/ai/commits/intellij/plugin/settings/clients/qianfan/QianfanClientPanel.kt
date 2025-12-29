@@ -2,12 +2,12 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 
-class QianfanClientPanel(private val clientConfiguration: QianfanClientConfiguration) : LLMClientPanel(clientConfiguration) {
+class QianfanClientPanel(private val clientConfiguration: QianfanClientConfiguration) : LlmClientPanel(clientConfiguration) {
 
     private val apiKeyField = JBPasswordField()
     private val secretKeyField = JBPasswordField()

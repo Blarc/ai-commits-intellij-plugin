@@ -18,7 +18,7 @@ class AICommitAction : AnAction(), DumbAware {
     override fun update(e: AnActionEvent) {
         // Only enable this action when the commit dialog is open (COMMIT_WORKFLOW_HANDLER is available)
         val commitWorkflowHandler = e.getData(VcsDataKeys.COMMIT_WORKFLOW_HANDLER)
-        val hasActiveLlmClient = e.project?.service<ProjectSettings>()?.getSplitButtonActionSelectedOrActiveLLMClient() != null
+        val hasActiveLlmClient = e.project?.service<ProjectSettings>()?.getSplitButtonActionSelectedOrActiveLlmClient() != null
 
         e.presentation.isEnabledAndVisible = commitWorkflowHandler != null && hasActiveLlmClient
     }
@@ -27,7 +27,7 @@ class AICommitAction : AnAction(), DumbAware {
         val project = e.project ?: return
 
         val projectSettings = project.service<ProjectSettings>()
-        val llmClient = projectSettings.getSplitButtonActionSelectedOrActiveLLMClient()
+        val llmClient = projectSettings.getSplitButtonActionSelectedOrActiveLlmClient()
 
         if (llmClient == null) {
             Notification.clientNotSet()

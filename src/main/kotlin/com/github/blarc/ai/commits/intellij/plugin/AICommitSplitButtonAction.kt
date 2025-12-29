@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin
 
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.DumbAware
 
@@ -9,7 +9,7 @@ class AICommitSplitButtonAction : SplitButtonAction(object : ActionGroup() {
 
     override fun getChildren(e: AnActionEvent?): Array<AnAction> {
         val configurations = AppSettings2.instance.llmClientConfigurations.sortedWith(
-            compareBy<LLMClientConfiguration> {
+            compareBy<LlmClientConfiguration> {
                 it.id != AppSettings2.instance.activeLlmClientId
             }.thenBy {
                 it.name

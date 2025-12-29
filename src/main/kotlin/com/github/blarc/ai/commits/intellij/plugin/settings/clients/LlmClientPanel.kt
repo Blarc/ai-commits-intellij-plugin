@@ -12,8 +12,8 @@ import com.intellij.ui.layout.ValidationInfoBuilder
 import kotlin.reflect.KMutableProperty0
 
 
-abstract class LLMClientPanel(
-    private val clientConfiguration: LLMClientConfiguration,
+abstract class LlmClientPanel(
+    private val clientConfiguration: LlmClientConfiguration,
 ) {
 
     val hostComboBox = ComboBox(clientConfiguration.getHosts().toTypedArray())
