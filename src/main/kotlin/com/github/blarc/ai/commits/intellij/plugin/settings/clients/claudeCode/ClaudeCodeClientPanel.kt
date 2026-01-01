@@ -3,6 +3,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 
@@ -11,7 +12,7 @@ class ClaudeCodeClientPanel private constructor(
     val service: ClaudeCodeClientService
 ) : LLMClientPanel(clientConfiguration) {
 
-    private val cliPathTextField = JBTextField()
+    private val cliPathTextField = TextFieldWithBrowseButton()
     private val timeoutTextField = JBTextField()
 
     constructor(configuration: ClaudeCodeClientConfiguration) : this(configuration, ClaudeCodeClientService.getInstance())
@@ -33,13 +34,14 @@ class ClaudeCodeClientPanel private constructor(
                 .align(Align.FILL)
                 .resizableColumn()
                 .comment(message("settings.claudeCode.cliPath.comment"))
-            button(message("settings.claudeCode.browse")) {
-                val descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor()
-                val chooser = com.intellij.openapi.fileChooser.FileChooser.chooseFile(descriptor, null, null)
-                chooser?.let {
-                    cliPathTextField.text = it.path
+                .applyToComponent {
+                    addBrowseFolderListener(
+                        message("settings.claudeCode.cliPath"),
+                        null,
+                        null,
+                        FileChooserDescriptorFactory.createSingleFileDescriptor()
+                    )
                 }
-            }.widthGroup("button")
         }
     }
 
