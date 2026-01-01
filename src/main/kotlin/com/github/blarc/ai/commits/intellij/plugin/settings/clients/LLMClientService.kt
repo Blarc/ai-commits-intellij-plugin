@@ -1,36 +1,24 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.constructPrompt
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCommonBranch
-import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
-import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
-import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral.MistralAIClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.asContextElement
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.naturalSorted
-import com.intellij.openapi.vcs.changes.Change
 import com.intellij.platform.ide.progress.withBackgroundProgress
 import com.intellij.ui.components.JBLabel
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import com.intellij.vcs.commit.isAmendCommitMode
 import dev.langchain4j.data.message.UserMessage
 import dev.langchain4j.model.chat.ChatModel
 import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.chat.response.ChatResponse
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler
-import git4idea.GitCommit
-import git4idea.history.GitHistoryUtils
-import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.*
 import javax.swing.DefaultComboBoxModel
 
@@ -51,7 +39,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         label.icon = AllIcons.General.InlineRefresh
         cs.launch(ModalityState.current().asContextElement()) {
             makeRequestWithTryCatch(function = {
-                val availableModels = getAvailableModels(client);
+                val availableModels = getAvailableModels(client)
 
                 MistralAIClientSharedState.getInstance().modelIds.addAll(availableModels)
 
