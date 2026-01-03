@@ -1,42 +1,29 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.computeDiff
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.constructPrompt
-import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCommonBranch
-import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
-import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
-import com.github.blarc.ai.commits.intellij.plugin.settings.ProjectSettings
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral.MistralAIClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.asContextElement
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.naturalSorted
-import com.intellij.openapi.vcs.changes.Change
 import com.intellij.platform.ide.progress.withBackgroundProgress
 import com.intellij.ui.components.JBLabel
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
-import com.intellij.vcs.commit.isAmendCommitMode
 import dev.langchain4j.data.message.UserMessage
 import dev.langchain4j.model.chat.ChatModel
 import dev.langchain4j.model.chat.StreamingChatModel
 import dev.langchain4j.model.chat.response.ChatResponse
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler
-import git4idea.GitCommit
-import git4idea.history.GitHistoryUtils
-import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.*
 import javax.swing.DefaultComboBoxModel
 
-abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope) {
-
-    var generateCommitMessageJob : Job? = null
+abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope)
+    : LLMServiceBase<C>(cs) {
 
     // This function should be implemented only by LLM services that can refresh models via API
     open suspend fun getAvailableModels(client: C): List<String>  {
@@ -52,7 +39,7 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         label.icon = AllIcons.General.InlineRefresh
         cs.launch(ModalityState.current().asContextElement()) {
             makeRequestWithTryCatch(function = {
-                val availableModels = getAvailableModels(client);
+                val availableModels = getAvailableModels(client)
 
                 MistralAIClientSharedState.getInstance().modelIds.addAll(availableModels)
 
@@ -74,28 +61,12 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
         }
     }
 
-    fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
-
-        val commitContext = commitWorkflowHandler.workflow.commitContext
-        val includedChanges = commitWorkflowHandler.ui.getIncludedChanges().toMutableList()
-
+    override fun generateCommitMessage(clientConfiguration: C, commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
         generateCommitMessageJob = cs.launch(ModalityState.current().asContextElement()) {
             withBackgroundProgress(project, message("action.background")) {
-
-                if (commitContext.isAmendCommitMode) {
-                    includedChanges += getLastCommitChanges(project)
-                }
-
-                val diff = computeDiff(includedChanges, false, project)
-                if (diff.isBlank()) {
-                    withContext(Dispatchers.EDT) {
-                        sendNotification(Notification.emptyDiff())
-                    }
-                    return@withBackgroundProgress
-                }
-
-                val branch = getCommonBranch(includedChanges, project)
-                val prompt = constructPrompt(project.service<ProjectSettings>().activePrompt.content, diff, branch, commitWorkflowHandler.getCommitMessage(), project)
+                val (_, prompt) = prepareCommitMessageRequest(
+                    commitWorkflowHandler, project
+                ) ?: return@withBackgroundProgress
 
                 makeRequest(clientConfiguration, prompt, onSuccess = {
                     withContext(Dispatchers.EDT) {
@@ -201,17 +172,5 @@ abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: Coro
             ).aiMessage().text()
         }
         onSuccess(response)
-    }
-
-    private suspend fun getLastCommitChanges(project: Project): List<Change> {
-        return withContext(Dispatchers.IO) {
-            GitRepositoryManager.getInstance(project).repositories.map { repo ->
-                GitHistoryUtils.history(project, repo.root, "--max-count=1")
-            }.filter { commits ->
-                commits.isNotEmpty()
-            }.map { commits ->
-                (commits.first() as GitCommit).changes
-            }.flatten()
-        }
     }
 }
