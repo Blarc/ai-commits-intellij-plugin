@@ -74,7 +74,9 @@ abstract class LLMClientConfiguration(
         prompt: String,
         result: String
     ) {
-        commitWorkflowHandler.setCommitMessage(result)
+        // Remove <think>content</think> style tags and their content
+        val cleanedResult = result.replace(Regex("<think>[\\s\\S]*?</think>", RegexOption.IGNORE_CASE), "").trim()
+        commitWorkflowHandler.setCommitMessage(cleanedResult)
     }
 
     abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project)
