@@ -1,10 +1,10 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Service(Service.Level.APP)
-class MistralAIClientService(private val cs: CoroutineScope) : LLMClientService<MistralAIClientConfiguration>(cs) {
+class MistralAIClientService(private val cs: CoroutineScope) : LlmClientService<MistralAIClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

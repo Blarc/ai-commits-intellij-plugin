@@ -22,8 +22,8 @@ import dev.langchain4j.model.chat.response.StreamingChatResponseHandler
 import kotlinx.coroutines.*
 import javax.swing.DefaultComboBoxModel
 
-abstract class LLMClientService<C : LLMClientConfiguration>(private val cs: CoroutineScope)
-    : LLMServiceBase<C>(cs) {
+abstract class LlmClientService<C : LlmClientConfiguration>(private val cs: CoroutineScope)
+    : LlmServiceBase<C>(cs) {
 
     // This function should be implemented only by LLM services that can refresh models via API
     open suspend fun getAvailableModels(client: C): List<String>  {

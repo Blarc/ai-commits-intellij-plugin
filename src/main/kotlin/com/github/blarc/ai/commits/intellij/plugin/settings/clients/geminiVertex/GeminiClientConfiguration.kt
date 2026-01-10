@@ -1,8 +1,8 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
@@ -11,7 +11,7 @@ import javax.swing.Icon
 
 // Can not rename this class because of backwards compatibility
 // with persistent component - AppSettings2
-class GeminiClientConfiguration : LLMClientConfiguration(
+class GeminiClientConfiguration : LlmClientConfiguration(
     "Gemini Vertex",
     "gemini-pro"
 ) {
@@ -38,7 +38,7 @@ class GeminiClientConfiguration : LLMClientConfiguration(
         return Icons.GEMINI_VERTEX.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return GeminiVertexClientSharedState.getInstance()
     }
 
@@ -50,7 +50,7 @@ class GeminiClientConfiguration : LLMClientConfiguration(
         return GeminiVertexClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = GeminiClientConfiguration()
         copy.id = id
         copy.name = name

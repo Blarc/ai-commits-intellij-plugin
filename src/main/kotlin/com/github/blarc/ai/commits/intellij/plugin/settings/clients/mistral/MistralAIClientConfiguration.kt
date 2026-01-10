@@ -1,8 +1,8 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -11,7 +11,7 @@ import dev.langchain4j.model.mistralai.MistralAiChatModelName
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class MistralAIClientConfiguration : LLMClientConfiguration(
+class MistralAIClientConfiguration : LlmClientConfiguration(
     "MistralAI",
     MistralAiChatModelName.OPEN_MISTRAL_7B.toString()
 ) {
@@ -38,7 +38,7 @@ class MistralAIClientConfiguration : LLMClientConfiguration(
         return Icons.MISTRAL.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return MistralAIClientSharedState.getInstance()
     }
 
@@ -50,7 +50,7 @@ class MistralAIClientConfiguration : LLMClientConfiguration(
         return MistralAIClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = MistralAIClientConfiguration()
         copy.id = id
         copy.name = name

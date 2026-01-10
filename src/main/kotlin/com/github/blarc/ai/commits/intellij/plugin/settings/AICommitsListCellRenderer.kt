@@ -1,7 +1,7 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import java.awt.Component
 import java.util.*
@@ -29,7 +29,7 @@ class AICommitsListCellRenderer : DefaultListCellRenderer() {
             }
 
             // This is used for combo box in settings dialog
-            is LLMClientConfiguration -> {
+            is LlmClientConfiguration -> {
                 text = value.name
                 icon = value.getClientIcon()
             }

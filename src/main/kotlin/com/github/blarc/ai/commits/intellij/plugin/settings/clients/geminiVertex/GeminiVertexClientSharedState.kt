@@ -1,12 +1,12 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "GeminiClientSharedState", storages = [Storage("AICommitsGemini.xml")])
-class GeminiVertexClientSharedState : PersistentStateComponent<GeminiVertexClientSharedState>, LLMClientSharedState {
+class GeminiVertexClientSharedState : PersistentStateComponent<GeminiVertexClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

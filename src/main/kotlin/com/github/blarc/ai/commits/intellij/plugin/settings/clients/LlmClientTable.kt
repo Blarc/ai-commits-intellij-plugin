@@ -36,7 +36,7 @@ import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import javax.swing.table.DefaultTableCellRenderer
 import kotlin.math.max
 
-class LLMClientTable {
+class LlmClientTable {
     private var llmClients = fetchSortedLlmClients()
     private val tableModel = createTableModel()
 
@@ -57,10 +57,10 @@ class LLMClientTable {
         })
     }
 
-    private fun createTableModel(): ListTableModel<LLMClientConfiguration> = ListTableModel(
+    private fun createTableModel(): ListTableModel<LlmClientConfiguration> = ListTableModel(
         arrayOf(
-            createColumn<LLMClientConfiguration, LLMClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient },
-            createColumn<LLMClientConfiguration, String>(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId }
+            createColumn<LlmClientConfiguration, LlmClientConfiguration>(message("settings.llmClient.name")) { llmClient -> llmClient },
+            createColumn<LlmClientConfiguration, String>(message("settings.llmClient.modelId")) { llmClient -> llmClient.modelId }
         ),
         llmClients.toList()
     )
@@ -69,12 +69,12 @@ class LLMClientTable {
         compareBy({ it.getClientName() }, { it.name })
     )
 
-    private fun updateLlmClients(newClients: List<LLMClientConfiguration>) {
+    private fun updateLlmClients(newClients: List<LlmClientConfiguration>) {
         llmClients = newClients.sortedWith(compareBy({ it.getClientName() }, { it.name }))
         refreshTableModel()
     }
 
-    fun addLlmClient(): LLMClientConfiguration? {
+    fun addLlmClient(): LlmClientConfiguration? {
         val dialog = LLMClientDialog()
         if (dialog.showAndGet()) {
             updateLlmClients(llmClients + dialog.llmClient)
@@ -83,13 +83,13 @@ class LLMClientTable {
         return null
     }
 
-    fun removeLlmClient(): LLMClientConfiguration? {
+    fun removeLlmClient(): LlmClientConfiguration? {
         val selectedLlmClient = table.selectedObject ?: return null
         updateLlmClients(llmClients - selectedLlmClient)
         return selectedLlmClient
     }
 
-    fun editLlmClient(): Pair<LLMClientConfiguration, LLMClientConfiguration>? {
+    fun editLlmClient(): Pair<LlmClientConfiguration, LlmClientConfiguration>? {
         val selectedLlmClient = table.selectedObject ?: return null
         val dialog = LLMClientDialog(selectedLlmClient.clone())
         if (dialog.showAndGet()) {
@@ -114,9 +114,9 @@ class LLMClientTable {
         AppSettings2.instance.llmClientConfigurations = llmClients.toSet()
     }
 
-    private class LLMClientDialog(val newLlmClientConfiguration: LLMClientConfiguration? = null) : DialogWrapper(true) {
+    private class LLMClientDialog(val newLlmClientConfiguration: LlmClientConfiguration? = null) : DialogWrapper(true) {
 
-        private val llmClientConfigurations: List<LLMClientConfiguration> = getLlmClients(newLlmClientConfiguration)
+        private val llmClientConfigurations: List<LlmClientConfiguration> = getLlmClients(newLlmClientConfiguration)
         var llmClient = newLlmClientConfiguration ?: llmClientConfigurations[0]
 
         private val cardLayout = JBCardLayout()
@@ -148,8 +148,8 @@ class LLMClientTable {
             minimumSize = Dimension(max(size.width, 500), max(size.height, 300) + 200)
         }
 
-        private fun getLlmClients(newLLMClientConfiguration: LLMClientConfiguration?): List<LLMClientConfiguration> {
-            return if (newLLMClientConfiguration == null) {
+        private fun getLlmClients(newLlmClientConfiguration: LlmClientConfiguration?): List<LlmClientConfiguration> {
+            return if (newLlmClientConfiguration == null) {
                 // TODO(@Blarc): Is there a better way to create the list of all possible LLM Clients that implement LLMClient abstract class
                 listOf(
                     OpenAiClientConfiguration(),
@@ -166,7 +166,7 @@ class LLMClientTable {
                     ClaudeCodeClientConfiguration()
                 ).sortedBy { it.getClientName() }
             } else {
-                listOf(newLLMClientConfiguration)
+                listOf(newLlmClientConfiguration)
             }
         }
 
@@ -180,12 +180,12 @@ class LLMClientTable {
                 }
 
                 val cardsList = JBList(llmClientConfigurations).apply {
-                    val descriptor = object : ListItemDescriptorAdapter<LLMClientConfiguration>() {
-                        override fun getTextFor(value: LLMClientConfiguration) = value.getClientName()
-                        override fun getIconFor(value: LLMClientConfiguration) = value.getClientIcon()
+                    val descriptor = object : ListItemDescriptorAdapter<LlmClientConfiguration>() {
+                        override fun getTextFor(value: LlmClientConfiguration) = value.getClientName()
+                        override fun getIconFor(value: LlmClientConfiguration) = value.getClientIcon()
                     }
-                    cellRenderer = object : GroupedItemsListRenderer<LLMClientConfiguration>(descriptor) {
-                        override fun customizeComponent(list: JList<out LLMClientConfiguration>?, value: LLMClientConfiguration?, isSelected: Boolean) {
+                    cellRenderer = object : GroupedItemsListRenderer<LlmClientConfiguration>(descriptor) {
+                        override fun customizeComponent(list: JList<out LlmClientConfiguration>?, value: LlmClientConfiguration?, isSelected: Boolean) {
                             myTextLabel.border = JBUI.Borders.empty(4)
                         }
                     }
@@ -210,7 +210,7 @@ class LLMClientTable {
 
     class IconTextCellRenderer : DefaultTableCellRenderer() {
         override fun getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean, hasFocus: Boolean, row: Int, column: Int): Component {
-            val llmClientConfiguration = value as LLMClientConfiguration
+            val llmClientConfiguration = value as LlmClientConfiguration
             return JLabel(llmClientConfiguration.name, llmClientConfiguration.getClientIcon(), SwingConstants.LEFT)
         }
     }

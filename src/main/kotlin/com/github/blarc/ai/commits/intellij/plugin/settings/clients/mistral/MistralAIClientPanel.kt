@@ -1,9 +1,9 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.isInt
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
@@ -11,7 +11,7 @@ import com.intellij.ui.dsl.builder.*
 class MistralAIClientPanel private constructor(
     private val clientConfiguration: MistralAIClientConfiguration,
     val service: MistralAIClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
 
     private val tokenPasswordField = JBPasswordField()
     private val topPTextField = JBTextField()

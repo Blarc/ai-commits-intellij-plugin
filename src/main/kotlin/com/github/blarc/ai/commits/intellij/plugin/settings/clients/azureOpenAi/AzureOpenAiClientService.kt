@@ -1,10 +1,10 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -20,7 +20,7 @@ import java.time.Duration
 
 
 @Service(Service.Level.APP)
-class AzureOpenAiClientService(private val cs: CoroutineScope) : LLMClientService<AzureOpenAiClientConfiguration>(cs) {
+class AzureOpenAiClientService(private val cs: CoroutineScope) : LlmClientService<AzureOpenAiClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

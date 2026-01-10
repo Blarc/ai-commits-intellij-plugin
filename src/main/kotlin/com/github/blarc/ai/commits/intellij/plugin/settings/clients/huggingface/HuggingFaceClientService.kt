@@ -1,10 +1,10 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 
 @Service(Service.Level.APP)
-class HuggingFaceClientService(private val cs: CoroutineScope) : LLMClientService<HuggingFaceClientConfiguration>(cs) {
+class HuggingFaceClientService(private val cs: CoroutineScope) : LlmClientService<HuggingFaceClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

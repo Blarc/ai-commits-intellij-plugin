@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2.LocaleConverter
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.intellij.openapi.components.PersistentStateComponent
@@ -56,7 +56,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
         return AICommitsUtils.matchesGlobs(path, projectExclusions)
     }
 
-    fun getActiveLLMClientConfiguration(): LLMClientConfiguration? {
+    fun getActiveLLMClientConfiguration(): LlmClientConfiguration? {
         return if (isProjectSpecificLLMClient) {
             AppSettings2.instance.getActiveLLMClientConfiguration(activeLlmClientId)
         } else {
@@ -64,7 +64,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
         }
     }
 
-    fun getSplitButtonActionSelectedOrActiveLLMClient(): LLMClientConfiguration? {
+    fun getSplitButtonActionSelectedOrActiveLLMClient(): LlmClientConfiguration? {
         // First try to get the session client, then fall back to the active client
         return splitButtonActionSelectedLLMClientId?.let {
             AppSettings2.instance.getActiveLLMClientConfiguration(it)

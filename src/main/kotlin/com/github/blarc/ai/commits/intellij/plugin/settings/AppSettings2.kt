@@ -4,7 +4,7 @@ import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock.AmazonBedrockClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
@@ -19,8 +19,6 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenA
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.DefaultPrompts
-import com.intellij.credentialStore.CredentialAttributes
-import com.intellij.credentialStore.CredentialStoreManager
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
@@ -74,7 +72,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         ],
         style = XCollection.Style.v2
     )
-    var llmClientConfigurations = setOf<LLMClientConfiguration>(
+    var llmClientConfigurations = setOf<LlmClientConfiguration>(
         OpenAiClientConfiguration()
     )
 
@@ -154,11 +152,11 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
         return AICommitsUtils.matchesGlobs(path, appExclusions)
     }
 
-    fun getActiveLLMClientConfiguration(): LLMClientConfiguration? {
+    fun getActiveLLMClientConfiguration(): LlmClientConfiguration? {
         return getActiveLLMClientConfiguration(activeLlmClientId)
     }
 
-    fun getActiveLLMClientConfiguration(activeLLMClientConfigurationId: String?): LLMClientConfiguration? {
+    fun getActiveLLMClientConfiguration(activeLLMClientConfigurationId: String?): LlmClientConfiguration? {
         return llmClientConfigurations.find { it.id == activeLLMClientConfigurationId }
             ?: llmClientConfigurations.firstOrNull()
     }

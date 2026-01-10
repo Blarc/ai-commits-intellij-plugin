@@ -1,8 +1,8 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -10,7 +10,7 @@ import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class GitHubModelsClientConfiguration : LLMClientConfiguration(
+class GitHubModelsClientConfiguration : LlmClientConfiguration(
     "GitHub Models",
     "gpt-4o-mini"
 ) {
@@ -36,7 +36,7 @@ class GitHubModelsClientConfiguration : LLMClientConfiguration(
         return Icons.GITHUB.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return GitHubModelsClientSharedState.getInstance()
     }
 
@@ -48,7 +48,7 @@ class GitHubModelsClientConfiguration : LLMClientConfiguration(
         return GitHubModelsClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = GitHubModelsClientConfiguration()
         copy.id = id
         copy.name = name

@@ -1,8 +1,8 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
@@ -10,7 +10,7 @@ import com.intellij.ui.dsl.builder.*
 class AnthropicClientPanel private constructor(
     private val clientConfiguration: AnthropicClientConfiguration,
     val service: AnthropicClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
     private val tokenPasswordField = JBPasswordField()
     private val versionTextField = JBTextField()
     private val betaTextField = JBTextField()

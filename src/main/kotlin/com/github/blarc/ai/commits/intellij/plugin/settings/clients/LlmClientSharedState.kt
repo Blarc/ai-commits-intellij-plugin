@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
-interface LLMClientSharedState {
+interface LlmClientSharedState {
 
     val hosts: MutableSet<String>
 

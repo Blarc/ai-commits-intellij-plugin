@@ -1,8 +1,8 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.util.xmlb.annotations.Transient
@@ -11,7 +11,7 @@ import dev.langchain4j.model.anthropic.AnthropicChatModelName
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class AnthropicClientConfiguration : LLMClientConfiguration(
+class AnthropicClientConfiguration : LlmClientConfiguration(
     "Anthropic",
     AnthropicChatModelName.CLAUDE_3_5_SONNET_20240620.toString()
 ) {
@@ -46,7 +46,7 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         return Icons.ANTHROPIC.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return AnthropicClientSharedState.getInstance()
     }
 
@@ -58,7 +58,7 @@ class AnthropicClientConfiguration : LLMClientConfiguration(
         return AnthropicClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = AnthropicClientConfiguration()
         copy.id = id
         copy.name = name

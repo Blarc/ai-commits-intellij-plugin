@@ -1,12 +1,12 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "GithubModelsClientSharedState", storages = [Storage("AICommitsGithubModels.xml")])
-class GitHubModelsClientSharedState : PersistentStateComponent<GitHubModelsClientSharedState>, LLMClientSharedState {
+class GitHubModelsClientSharedState : PersistentStateComponent<GitHubModelsClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

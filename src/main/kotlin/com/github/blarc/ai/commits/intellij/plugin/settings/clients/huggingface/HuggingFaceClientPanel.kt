@@ -1,8 +1,8 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.huggingface
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
@@ -11,7 +11,7 @@ import com.intellij.ui.dsl.builder.*
 class HuggingFaceClientPanel private constructor(
     private val clientConfiguration: HuggingFaceClientConfiguration,
     val service: HuggingFaceClientService
-) : LLMClientPanel(clientConfiguration) {
+) : LlmClientPanel(clientConfiguration) {
 
     private val tokenPasswordField = JBPasswordField()
     private val maxNewTokensTextField = JBTextField()

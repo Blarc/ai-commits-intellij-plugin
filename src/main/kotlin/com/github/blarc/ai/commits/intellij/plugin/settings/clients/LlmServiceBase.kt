@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
  * Base class for all LLM service implementations, providing shared functionality
  * for commit message generation regardless of execution model (API-based or CLI-based).
  */
-abstract class LLMServiceBase<C : LLMClientConfiguration>(protected val coroutineScope: CoroutineScope) {
+abstract class LlmServiceBase<C : LlmClientConfiguration>(protected val coroutineScope: CoroutineScope) {
 
     var generateCommitMessageJob: Job? = null
 

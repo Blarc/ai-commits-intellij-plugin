@@ -1,6 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.ollama
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientService
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientService
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
@@ -18,7 +18,7 @@ import java.time.Duration
 import javax.swing.DefaultComboBoxModel
 
 @Service(Service.Level.APP)
-class OllamaClientService(private val cs: CoroutineScope) : LLMClientService<OllamaClientConfiguration>(cs) {
+class OllamaClientService(private val cs: CoroutineScope) : LlmClientService<OllamaClientConfiguration>(cs) {
 
     companion object {
         @JvmStatic

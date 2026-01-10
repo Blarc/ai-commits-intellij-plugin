@@ -1,15 +1,15 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode
 
 import com.github.blarc.ai.commits.intellij.plugin.Icons
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.annotations.Attribute
 import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
 import kotlinx.coroutines.Job
 import javax.swing.Icon
 
-class ClaudeCodeClientConfiguration : LLMClientConfiguration(
+class ClaudeCodeClientConfiguration : LlmClientConfiguration(
     "Claude Code",
     "",  // No default model - uses CLI's configured model
 ) {
@@ -32,7 +32,7 @@ class ClaudeCodeClientConfiguration : LLMClientConfiguration(
         return Icons.CLAUDE_CODE.getThemeBasedIcon()
     }
 
-    override fun getSharedState(): LLMClientSharedState {
+    override fun getSharedState(): LlmClientSharedState {
         return ClaudeCodeClientSharedState.getInstance()
     }
 
@@ -44,7 +44,7 @@ class ClaudeCodeClientConfiguration : LLMClientConfiguration(
         return ClaudeCodeClientService.getInstance().generateCommitMessageJob
     }
 
-    override fun clone(): LLMClientConfiguration {
+    override fun clone(): LlmClientConfiguration {
         val copy = ClaudeCodeClientConfiguration()
         copy.id = id
         copy.name = name

@@ -1,12 +1,12 @@
-package com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock;
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 
 @Service(Service.Level.APP)
 @State(name = "AmazonBedrockClientSharedState", storages = [Storage("AICommitsAmazonBedrock.xml")])
-class AmazonBedrockClientSharedState : PersistentStateComponent<AmazonBedrockClientSharedState>, LLMClientSharedState {
+class AmazonBedrockClientSharedState : PersistentStateComponent<AmazonBedrockClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

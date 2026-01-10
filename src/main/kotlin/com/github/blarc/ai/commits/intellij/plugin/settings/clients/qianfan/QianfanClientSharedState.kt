@@ -1,13 +1,13 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.qianfan
 
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientSharedState
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.annotations.XCollection
 import dev.langchain4j.community.model.qianfan.QianfanChatModelNameEnum
 
 @Service(Service.Level.APP)
 @State(name = "QianfanClientSharedState", storages = [Storage("AICommitsOpenAi.xml")])
-class QianfanClientSharedState : PersistentStateComponent<QianfanClientSharedState>, LLMClientSharedState {
+class QianfanClientSharedState : PersistentStateComponent<QianfanClientSharedState>, LlmClientSharedState {
 
     companion object {
         @JvmStatic

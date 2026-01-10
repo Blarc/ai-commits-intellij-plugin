@@ -3,8 +3,8 @@ package com.github.blarc.ai.commits.intellij.plugin.settings
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientConfiguration
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LLMClientTable
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientTable
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.Prompt
 import com.github.blarc.ai.commits.intellij.plugin.settings.prompts.PromptTable
 import com.intellij.openapi.components.service
@@ -23,8 +23,8 @@ import java.util.*
 class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundConfigurable(message("settings.general.group.title")) {
 
     private val projectSettings = project.service<ProjectSettings>()
-    private val llmClientTable = LLMClientTable()
-    private lateinit var llmClientConfigurationComboBox: ComboBox<LLMClientConfiguration>
+    private val llmClientTable = LlmClientTable()
+    private lateinit var llmClientConfigurationComboBox: ComboBox<LlmClientConfiguration>
     private var isProjectSpecificLLMClientCheckBox = JBCheckBox(message("settings.llmClient.projectSpecific"))
     private lateinit var llmClientToolbarDecorator: ToolbarDecorator
     private val promptTable = PromptTable(cs)
@@ -166,7 +166,7 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
         }
     }
 
-    private fun setActiveLLMClientConfiguration(llmClientConfiguration: LLMClientConfiguration?) {
+    private fun setActiveLLMClientConfiguration(llmClientConfiguration: LlmClientConfiguration?) {
         llmClientConfiguration?.let {
             if (isProjectSpecificLLMClientCheckBox.isSelected) {
                 project.service<ProjectSettings>().activeLlmClientId = it.id
