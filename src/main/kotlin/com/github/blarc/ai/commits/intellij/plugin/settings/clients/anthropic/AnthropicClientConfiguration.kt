@@ -13,7 +13,7 @@ import javax.swing.Icon
 
 class AnthropicClientConfiguration : LlmClientConfiguration(
     "Anthropic",
-    AnthropicChatModelName.CLAUDE_3_5_SONNET_20240620.toString()
+    AnthropicChatModelName.CLAUDE_SONNET_4_20250514.toString()
 ) {
     @Attribute
     var temperature: String = "0.7"
