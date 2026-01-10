@@ -23,6 +23,7 @@ class OpenAiClientPanel(private val clientConfiguration: OpenAiClientConfigurati
         organizationIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty(), ValidationInfoBuilder::temperatureValidNullable)
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
 
     }

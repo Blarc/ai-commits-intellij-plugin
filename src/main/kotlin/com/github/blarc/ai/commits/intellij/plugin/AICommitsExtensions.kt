@@ -36,6 +36,17 @@ fun ValidationInfoBuilder.temperatureValid(value: String): ValidationInfo? {
     return error(message("validation.temperature"))
 }
 
+fun ValidationInfoBuilder.regexValid(string: String): ValidationInfo? {
+    if (string.isNotBlank()) {
+        try {
+            Regex(string)
+        } catch (e: Exception) {
+            return error(e.message ?: message("validation.regex"))
+        }
+    }
+    return null
+}
+
 fun ValidationInfoBuilder.temperatureValidNullable(value: String): ValidationInfo? {
     if (value.isNotBlank()) {
         value.toFloatOrNull().let {

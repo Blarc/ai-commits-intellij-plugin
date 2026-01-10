@@ -26,6 +26,7 @@ class GeminiGoogleClientPanel private constructor(
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
     }
 

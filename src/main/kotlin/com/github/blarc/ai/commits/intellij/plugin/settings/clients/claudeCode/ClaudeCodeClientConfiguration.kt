@@ -48,6 +48,7 @@ class ClaudeCodeClientConfiguration : LlmClientConfiguration(
         val copy = ClaudeCodeClientConfiguration()
         copy.id = id
         copy.name = name
+        copy.cleanupRegex = cleanupRegex
         copy.cliPath = cliPath
         copy.timeout = timeout
         copy.modelId = modelId

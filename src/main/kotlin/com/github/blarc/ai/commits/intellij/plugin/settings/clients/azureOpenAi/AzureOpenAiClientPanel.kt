@@ -25,6 +25,7 @@ class AzureOpenAiClientPanel private constructor(
         modelIdRow("settings.azureOpenAi.modelId")
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
 
     }

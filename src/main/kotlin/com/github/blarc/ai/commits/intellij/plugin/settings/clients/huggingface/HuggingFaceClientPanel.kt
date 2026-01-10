@@ -29,6 +29,7 @@ class HuggingFaceClientPanel private constructor(
         maxNewTokens()
         waitForModel()
         removePrompt()
+        cleanUpRegexRow()
         verifyRow()
     }
 

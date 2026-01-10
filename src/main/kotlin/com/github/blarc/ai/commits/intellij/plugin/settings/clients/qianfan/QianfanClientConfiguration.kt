@@ -61,6 +61,7 @@ class QianfanClientConfiguration : LlmClientConfiguration(
         copy.name = name
         copy.host = host
         copy.modelId = modelId
+        copy.cleanupRegex = cleanupRegex
         copy.temperature = temperature
         copy.apiKeyIsStored = apiKeyIsStored
         copy.secretKeyIsStored = secretKeyIsStored

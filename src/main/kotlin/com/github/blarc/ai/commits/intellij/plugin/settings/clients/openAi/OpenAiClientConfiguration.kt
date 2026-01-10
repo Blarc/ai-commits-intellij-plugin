@@ -57,6 +57,7 @@ class OpenAiClientConfiguration : LlmClientConfiguration(
         val copy = OpenAiClientConfiguration()
         copy.id = id
         copy.name = name
+        copy.cleanupRegex = cleanupRegex
         copy.host = host
         copy.timeout = timeout
         copy.modelId = modelId

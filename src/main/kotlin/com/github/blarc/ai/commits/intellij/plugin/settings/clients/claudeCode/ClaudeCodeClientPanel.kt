@@ -22,6 +22,7 @@ class ClaudeCodeClientPanel private constructor(
         cliPathRow()
         timeoutRow()
         modelRow()
+        cleanUpRegexRow()
         verifyRow()
     }
 

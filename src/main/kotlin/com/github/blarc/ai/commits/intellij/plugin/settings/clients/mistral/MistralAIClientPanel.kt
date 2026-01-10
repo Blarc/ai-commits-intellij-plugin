@@ -26,6 +26,7 @@ class MistralAIClientPanel private constructor(
         maxTokens()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
     }
 

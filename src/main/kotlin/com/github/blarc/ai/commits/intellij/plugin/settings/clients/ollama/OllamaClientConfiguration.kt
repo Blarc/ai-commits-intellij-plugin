@@ -57,6 +57,7 @@ class OllamaClientConfiguration : LlmClientConfiguration(
         val copy = OllamaClientConfiguration()
         copy.id = id
         copy.name = name
+        copy.cleanupRegex = cleanupRegex
         copy.host = host
         copy.timeout = timeout
         copy.modelId = modelId

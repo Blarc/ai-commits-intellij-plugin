@@ -28,6 +28,7 @@ class OllamaClientPanel private constructor(
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         numCtxRow()
         numPredictRow()
+        cleanUpRegexRow()
         verifyRow()
     }
 

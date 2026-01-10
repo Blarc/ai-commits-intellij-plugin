@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Setting for a cleanup regex that can be used to remove unwanted text from the generated commit message.
+
 ## [2.16.1] - 2025-11-13
 
 ### Fixed

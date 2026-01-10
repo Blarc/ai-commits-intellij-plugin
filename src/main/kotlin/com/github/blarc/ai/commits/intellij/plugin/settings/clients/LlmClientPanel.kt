@@ -35,6 +35,30 @@ abstract class LlmClientPanel(
         }
     }
 
+    open fun Panel.cleanUpRegexRow() {
+        row {
+            label(message("settings.llmClient.cleanUpRegex"))
+                .widthGroup("label")
+
+            textField()
+                .bindText(clientConfiguration::cleanupRegex)
+                .align(Align.FILL)
+                .validationOnInput { regexValid(it.text) }
+                .resizableColumn()
+
+            contextHelp(message("settings.llmClient.cleanUpRegex.comment"))
+        }
+
+        row {
+            // Empty label for spacing
+            label("")
+                .widthGroup("label")
+
+            checkBox(message("settings.llmClient.cleanUpRegexIgnoreCase"))
+                .bindSelected(clientConfiguration::cleanupRegexIgnoreCase)
+        }
+    }
+
     open fun Panel.hostRow(property: MutableProperty<String?>, labelKey: String = "settings.llmClient.host") {
         row {
             label(message("settings.llmClient.host"))

@@ -55,6 +55,7 @@ class GeminiClientConfiguration : LlmClientConfiguration(
         copy.id = id
         copy.name = name
         copy.modelId = modelId
+        copy.cleanupRegex = cleanupRegex
         copy.temperature = temperature
         copy.projectId = projectId
         copy.location = location

@@ -25,6 +25,12 @@ abstract class LlmClientConfiguration(
     @Attribute
     var id: String = UUID.randomUUID().toString()
 
+    @Attribute
+    var cleanupRegex: String = ""
+
+    @Attribute
+    var cleanupRegexIgnoreCase: Boolean = false
+
     abstract fun getClientName(): String
 
     abstract fun getClientIcon(): Icon
@@ -45,6 +51,14 @@ abstract class LlmClientConfiguration(
 
     fun addModelId(modelId: String) {
         getSharedState().modelIds.add(modelId)
+    }
+
+    fun getCleanUpRegex(): Regex {
+        return if (cleanupRegexIgnoreCase) {
+            Regex(cleanupRegex, RegexOption.IGNORE_CASE)
+        } else {
+            Regex(cleanupRegex)
+        }
     }
 
     fun generateCommitMessageAction(e: AnActionEvent) {
@@ -78,7 +92,8 @@ abstract class LlmClientConfiguration(
         prompt: String,
         result: String
     ) {
-        commitWorkflowHandler.setCommitMessage(result)
+        val cleanedResult = result.replace(getCleanUpRegex(), "").trim()
+        commitWorkflowHandler.setCommitMessage(cleanedResult)
     }
 
     abstract fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project)

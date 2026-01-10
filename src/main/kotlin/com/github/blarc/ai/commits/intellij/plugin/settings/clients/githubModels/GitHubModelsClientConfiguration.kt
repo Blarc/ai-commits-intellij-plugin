@@ -53,6 +53,7 @@ class GitHubModelsClientConfiguration : LlmClientConfiguration(
         copy.id = id
         copy.name = name
         copy.modelId = modelId
+        copy.cleanupRegex = cleanupRegex
         copy.temperature = temperature
         copy.timeout = timeout
         copy.topP = topP

@@ -41,6 +41,7 @@ class AmazonBedrockClientPanel private constructor(
         maxTokens()
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
     }
 

@@ -24,6 +24,7 @@ class GitHubModelsClientPanel private constructor(
         modelIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
     }
 

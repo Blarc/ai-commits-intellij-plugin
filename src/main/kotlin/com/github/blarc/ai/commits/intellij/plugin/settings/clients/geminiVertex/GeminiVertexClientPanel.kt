@@ -26,6 +26,7 @@ class GeminiVertexClientPanel private constructor(
         temperatureRow(clientConfiguration::temperature.toMutableProperty())
         topKRow(topKTextField, clientConfiguration::topK.toNullableProperty())
         topPFloatRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        cleanUpRegexRow()
         verifyRow()
     }
 
