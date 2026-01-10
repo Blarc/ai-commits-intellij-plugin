@@ -2,7 +2,6 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
-import com.github.blarc.ai.commits.intellij.plugin.settings.clients.mistral.MistralAIClientSharedState
 import com.github.blarc.ai.commits.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
@@ -40,8 +39,7 @@ abstract class LlmClientService<C : LlmClientConfiguration>(private val cs: Coro
         cs.launch(ModalityState.current().asContextElement()) {
             makeRequestWithTryCatch(function = {
                 val availableModels = getAvailableModels(client)
-
-                MistralAIClientSharedState.getInstance().modelIds.addAll(availableModels)
+                client.getSharedState().modelIds.addAll(availableModels)
 
                 withContext(Dispatchers.EDT) {
                     label.text = message("settings.refreshModels.success")
