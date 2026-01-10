@@ -4,11 +4,13 @@
 
 ### Added
 
+- Support for Claude Code CLI (thanks to @Algomorph)
 - Setting for a cleanup regex that can be used to remove unwanted text from the generated commit message.
 - Use JetBrains Exception Analyzer (EA) as a backend service for reporting plugin exceptions.
 
 ### Fixed
 
+- Editing an LLM client configuration (e.g., changing the model) would not take effect until the IDE restarts.
 - Model IDs are not correctly updated after refreshing models via API.
 
 ## [2.16.1] - 2025-11-13
