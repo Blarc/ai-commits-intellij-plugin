@@ -114,6 +114,7 @@
 
         <checkinHandlerFactory implementation="com.github.blarc.ai.commits.intellij.plugin.AICommitsCheckingHandlerFactory"/>
 
+        <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
     </extensions>
 
     <actions>

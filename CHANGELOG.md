@@ -5,6 +5,7 @@
 ### Added
 
 - Setting for a cleanup regex that can be used to remove unwanted text from the generated commit message.
+- Use JetBrains Exception Analyzer (EA) as a backend service for reporting plugin exceptions.
 
 ## [2.16.1] - 2025-11-13
 
