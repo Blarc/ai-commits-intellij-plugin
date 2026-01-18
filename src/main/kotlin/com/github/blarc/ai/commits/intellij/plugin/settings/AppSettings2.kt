@@ -9,6 +9,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedroc
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode.ClaudeCodeClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.codexCli.CodexCliClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.githubModels.GitHubModelsClientConfiguration
@@ -68,7 +69,8 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
             GitHubModelsClientConfiguration::class,
             MistralAIClientConfiguration::class,
             AmazonBedrockClientConfiguration::class,
-            ClaudeCodeClientConfiguration::class
+            ClaudeCodeClientConfiguration::class,
+            CodexCliClientConfiguration::class
         ],
         style = XCollection.Style.v2
     )
