@@ -45,7 +45,7 @@ dependencies {
     }
 
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
     // langchain4j integrations
     implementation(platform("dev.langchain4j:langchain4j-bom:1.10.0"))
