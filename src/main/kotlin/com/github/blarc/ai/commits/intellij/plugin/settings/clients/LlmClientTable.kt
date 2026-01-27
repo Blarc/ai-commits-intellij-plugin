@@ -6,6 +6,7 @@ import com.github.blarc.ai.commits.intellij.plugin.settings.AppSettings2
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.amazonBedrock.AmazonBedrockClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.claudeCode.ClaudeCodeClientConfiguration
+import com.github.blarc.ai.commits.intellij.plugin.settings.clients.codexCli.CodexCliClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
@@ -163,7 +164,8 @@ class LlmClientTable {
                     GitHubModelsClientConfiguration(),
                     MistralAIClientConfiguration(),
                     AmazonBedrockClientConfiguration(),
-                    ClaudeCodeClientConfiguration()
+                    ClaudeCodeClientConfiguration(),
+                    CodexCliClientConfiguration()
                 ).sortedBy { it.getClientName() }
             } else {
                 listOf(newLlmClientConfiguration)
