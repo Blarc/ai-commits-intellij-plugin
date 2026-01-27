@@ -93,6 +93,8 @@ abstract class LlmClientConfiguration(
         result: String
     ) {
         val cleanedResult = result.replace(getCleanUpRegex(), "").trim()
+        // Clear existing message first, then set the new one
+        commitWorkflowHandler.setCommitMessage("")
         commitWorkflowHandler.setCommitMessage(cleanedResult)
     }
 

@@ -52,9 +52,10 @@ abstract class LlmServiceBase<C : LlmClientConfiguration>(protected val coroutin
         }
 
         val branch = getCommonBranch(includedChanges, project)
+        // Pass null to avoid including the old commit message in the prompt
         val prompt = constructPrompt(
             project.service<ProjectSettings>().activePrompt.content,
-            diff, branch, commitWorkflowHandler.getCommitMessage(), project
+            diff, branch, null, project
         )
 
         return Pair(diff, prompt)
