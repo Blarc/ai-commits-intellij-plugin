@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Codex CLI (thanks to @Algomorph)
+
+
 ## [2.17.0] - 2026-01-10
 
 ### Added
