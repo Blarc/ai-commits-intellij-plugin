@@ -147,7 +147,19 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
     private fun parseClaudeResponse(jsonOutput: String): Result<String> {
         return try {
             val json = Json { ignoreUnknownKeys = true }
-            val response = json.parseToJsonElement(jsonOutput).jsonObject
+            val element = json.parseToJsonElement(jsonOutput)
+
+            val response: JsonObject = when (element) {
+                is JsonObject -> element
+                is JsonArray -> {
+                    // Newer Claude CLI versions emit a JSON array of streaming messages.
+                    // Find the message with "type": "result".
+                    element.filterIsInstance<JsonObject>()
+                        .firstOrNull { it["type"]?.jsonPrimitive?.contentOrNull == "result" }
+                        ?: return Result.failure(IllegalStateException("No result message found in Claude response array"))
+                }
+                else -> return Result.failure(IllegalStateException("Unexpected Claude response format"))
+            }
 
             val isError = response["is_error"]?.jsonPrimitive?.booleanOrNull ?: false
             val result = response["result"]?.jsonPrimitive?.contentOrNull
