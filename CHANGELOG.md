@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.19.1] - 2026-02-23
+
 ### Fixed
 
 - Commit message generation fails when SVN is not installed.
@@ -468,7 +470,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.1...HEAD
+[2.19.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.18.0...v2.19.0
 [2.18.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.16.1...v2.17.0
