@@ -48,8 +48,7 @@ class ClaudeCodeClientPanel private constructor(
                     result.fold(
                         onSuccess = { path -> cliPathTextField.text = path },
                         onFailure = { error ->
-                            cliPathTextField.text = ""
-                            cliPathTextField.emptyText.text = error.message ?: message("claudeCode.cliNotFound")
+                            cliPathTextField.toolTipText = error.message
                         }
                     )
                 }
