@@ -43,6 +43,16 @@ class ClaudeCodeClientPanel private constructor(
                         FileChooserDescriptorFactory.createSingleFileDescriptor()
                     )
                 }
+            button(message("settings.claudeCode.detectPath")) {
+                service.detectCliPathAsync { result ->
+                    result.fold(
+                        onSuccess = { path -> cliPathTextField.text = path },
+                        onFailure = { error ->
+                            cliPathTextField.toolTipText = error.message
+                        }
+                    )
+                }
+            }
         }
     }
 
