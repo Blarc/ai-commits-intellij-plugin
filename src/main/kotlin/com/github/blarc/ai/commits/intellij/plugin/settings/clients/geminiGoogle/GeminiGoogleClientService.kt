@@ -1,3 +1,4 @@
+package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle
 
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.getCredentialAttributes
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.retrieveToken
