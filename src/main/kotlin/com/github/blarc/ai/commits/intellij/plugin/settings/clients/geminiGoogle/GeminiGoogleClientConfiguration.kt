@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle
 
-import GeminiGoogleClientService
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientConfiguration
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientSharedState
@@ -21,8 +20,10 @@ class GeminiGoogleClientConfiguration : LlmClientConfiguration(
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
-    var topK = 40
-    var topP = 0.95
+    @Attribute
+    var topK: Int? = null
+    @Attribute
+    var topP: Double? = null
 
     companion object {
         const val CLIENT_NAME = "Gemini Google"
