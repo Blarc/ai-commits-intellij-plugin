@@ -18,24 +18,25 @@ jobs:
     steps:
       # Free GitHub Actions Environment Disk Space
       - name: Maximize Build Space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          large-packages: false
 
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v6.0.2
-        with:
-          ref: ${{ github.event.release.tag_name }}
 
-      # Setup Java 14 environment for the next steps
+      # Setup Java 21 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: adopt
-          java-version: 17
-          cache: gradle
+          java-version: 21
+
+      # Setup Gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
 
       # Set environment variables
       - name: Export Properties
