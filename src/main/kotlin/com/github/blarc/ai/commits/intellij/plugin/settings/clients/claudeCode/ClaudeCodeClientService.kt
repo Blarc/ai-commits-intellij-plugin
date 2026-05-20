@@ -61,43 +61,57 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
 
         try {
             val process = ProcessBuilder(command)
-                .redirectErrorStream(true)
                 .start()
 
             // Close stdin immediately to prevent CLI from waiting for input
             process.outputStream.close()
 
-            // Read output in a separate thread to prevent buffer deadlock
-            val outputFuture = java.util.concurrent.CompletableFuture.supplyAsync {
+            // Drain stdout and stderr in parallel to prevent buffer deadlock.
+            // Keep them separate: stderr can contain Claude Code's hook-execution
+            // logs (e.g. "SessionEnd hook [node ...]") which would otherwise
+            // corrupt the JSON payload on stdout.
+            val stdoutFuture = java.util.concurrent.CompletableFuture.supplyAsync {
                 process.inputStream.bufferedReader().readText()
+            }
+            val stderrFuture = java.util.concurrent.CompletableFuture.supplyAsync {
+                process.errorStream.bufferedReader().readText()
             }
 
             val completed = process.waitFor(client.timeout.toLong(), TimeUnit.SECONDS)
             if (!completed) {
                 process.destroyForcibly()
-                outputFuture.cancel(true)
+                stdoutFuture.cancel(true)
+                stderrFuture.cancel(true)
                 return@withContext Result.failure(
                     IllegalStateException(message("claudeCode.timeout"))
                 )
             }
 
-            val output = try {
-                outputFuture.get(5, TimeUnit.SECONDS)
+            val stdout = try {
+                stdoutFuture.get(5, TimeUnit.SECONDS)
             } catch (e: Exception) {
                 val cause = (e as? java.util.concurrent.ExecutionException)?.cause ?: e
                 return@withContext Result.failure(
                     IllegalStateException("Failed to read CLI output: ${cause.message}", cause)
                 )
             }
+            // Stderr is diagnostic-only; if reading fails, fall back to empty
+            // rather than masking the real stdout/exit-code result.
+            val stderr = try {
+                stderrFuture.get(5, TimeUnit.SECONDS)
+            } catch (_: Exception) {
+                ""
+            }
 
             if (process.exitValue() != 0) {
+                val details = listOf(stdout, stderr).filter { it.isNotBlank() }.joinToString("\n")
                 return@withContext Result.failure(
-                    IllegalStateException("CLI exited with code ${process.exitValue()}: $output")
+                    IllegalStateException("CLI exited with code ${process.exitValue()}: $details")
                 )
             }
 
-            // Parse JSON response
-            parseClaudeResponse(output)
+            // Parse JSON response (only stdout — stderr is hook/log noise)
+            parseClaudeResponse(stdout)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -106,7 +120,8 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
     private fun parseClaudeResponse(jsonOutput: String): Result<String> {
         return try {
             val json = Json { ignoreUnknownKeys = true }
-            val response = json.parseToJsonElement(jsonOutput).jsonObject
+            val payload = extractFirstJsonObject(jsonOutput) ?: jsonOutput
+            val response = json.parseToJsonElement(payload).jsonObject
 
             val isError = response["is_error"]?.jsonPrimitive?.booleanOrNull ?: false
             val result = response["result"]?.jsonPrimitive?.contentOrNull
@@ -121,6 +136,37 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
         } catch (e: Exception) {
             Result.failure(IllegalStateException("Failed to parse Claude response: ${e.message}"))
         }
+    }
+
+    /**
+     * Returns the substring covering the first complete top-level JSON object
+     * in [text], or null if no balanced object is found. Tracks string and
+     * escape state so braces inside strings don't throw off the count.
+     */
+    private fun extractFirstJsonObject(text: String): String? {
+        val start = text.indexOf('{')
+        if (start < 0) return null
+        var depth = 0
+        var inString = false
+        var escape = false
+        for (i in start until text.length) {
+            val c = text[i]
+            if (inString) {
+                if (escape) escape = false
+                else if (c == '\\') escape = true
+                else if (c == '"') inString = false
+            } else {
+                when (c) {
+                    '"' -> inString = true
+                    '{' -> depth++
+                    '}' -> {
+                        depth--
+                        if (depth == 0) return text.substring(start, i + 1)
+                    }
+                }
+            }
+        }
+        return null
     }
 
     override fun verifyConfiguration(client: ClaudeCodeClientConfiguration, label: JBLabel) {
