@@ -5,7 +5,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.4.0"
     id("org.jetbrains.intellij.platform") version "2.18.1"
-    kotlin("plugin.serialization") version "2.3.21"
+    kotlin("plugin.serialization") version "2.4.0"
 
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.5.0"
