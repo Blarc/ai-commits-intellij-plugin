@@ -26,7 +26,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       # Setup Java 21 environment for the next steps
       - name: Setup Java
@@ -121,7 +121,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       # Remove old release drafts by using the curl request for the available releases with draft flag
       - name: Remove Old Release Drafts
