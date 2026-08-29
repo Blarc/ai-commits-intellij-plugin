@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients.geminiGoogle
 
-import GeminiGoogleClientService
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
@@ -52,8 +51,8 @@ class GeminiGoogleClientPanel private constructor(
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.token = String(tokenPasswordField.password)
-        clientConfiguration.topP = topPTextField.text.toDouble()
-        clientConfiguration.topK = topKTextField.text.toInt()
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
+        clientConfiguration.topK = topKTextField.text.toIntOrNull()
         service.verifyConfiguration(clientConfiguration, verifyLabel)
     }
 }

@@ -79,12 +79,12 @@ class AmazonBedrockClientService(private val cs: CoroutineScope) : LlmClientServ
 
     suspend fun getCredentialProvider(client: AmazonBedrockClientConfiguration): AwsCredentialsProvider {
         if (client.useStaticCredentialsProvider == true) {
-            val accessKey = client.accessKeyId.nullize(true) ?: retrieveToken(client.id)?.toString(true)
+            val secretKey = client.accessKey.nullize(true) ?: retrieveToken(client.id)?.toString(true)
             return StaticCredentialsProvider.create(
-                AwsBasicCredentials.builder()
-                    .accessKeyId(client.accessKeyId)
-                    .secretAccessKey(accessKey)
-                    .build()
+                AwsBasicCredentials.create(
+                    client.accessKeyId ?: "",
+                    secretKey ?: ""
+                )
             )
         }
         return DefaultCredentialsProvider.builder()
