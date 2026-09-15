@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: adopt
-          java-version: 21
+          java-version: 21.0.12+101.0.LTS
 
       # Setup Gradle
       - name: Setup Gradle
