@@ -3,9 +3,9 @@ import org.jetbrains.changelog.Changelog
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.4.10"
-    id("org.jetbrains.intellij.platform") version "2.18.1"
-    kotlin("plugin.serialization") version "2.4.10"
+    id("org.jetbrains.kotlin.jvm") version "2.4.20"
+    id("org.jetbrains.intellij.platform") version "2.19.0"
+    kotlin("plugin.serialization") version "2.4.20"
 
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.5.0"
@@ -48,7 +48,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 
     // langchain4j integrations
-    implementation(platform("dev.langchain4j:langchain4j-bom:1.18.1"))
+    implementation(platform("dev.langchain4j:langchain4j-bom:1.20.0"))
     implementation("dev.langchain4j:langchain4j-open-ai")
     implementation("dev.langchain4j:langchain4j-ollama")
     implementation("dev.langchain4j:langchain4j-vertex-ai-gemini")
@@ -57,7 +57,8 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-hugging-face")
     implementation("dev.langchain4j:langchain4j-google-ai-gemini")
     implementation("dev.langchain4j:langchain4j-google-ai-gemini")
-    implementation("dev.langchain4j:langchain4j-github-models")
+    // Removed from the 1.20.0 BOM; keep the final published version until the integration is retired here.
+    implementation("dev.langchain4j:langchain4j-github-models:1.19.3-beta29")
     implementation("dev.langchain4j:langchain4j-mistral-ai")
     implementation("dev.langchain4j:langchain4j-bedrock")
 
@@ -66,8 +67,8 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-community-qianfan")
 
     // tests
-    testImplementation("org.junit.jupiter:junit-jupiter-params:6.1.2")
-    testImplementation("org.junit.jupiter:junit-jupiter:6.1.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:6.1.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
