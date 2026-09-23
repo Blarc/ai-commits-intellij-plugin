@@ -124,7 +124,6 @@ object AICommitsUtils {
         return CredentialAttributes(
             title,
             null,
-            this.javaClass,
             false
         )
     }

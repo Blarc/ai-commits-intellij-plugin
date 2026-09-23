@@ -70,6 +70,9 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
     <depends optional="true" config-file="subversion.xml">Subversion</depends>
+    <dependencies>
+        <module name="intellij.platform.tasks.impl"/>
+    </dependencies>
 
     <applicationListeners>
 
