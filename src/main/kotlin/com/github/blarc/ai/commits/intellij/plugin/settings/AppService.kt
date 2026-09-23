@@ -24,6 +24,10 @@ class AppService(private val cs: CoroutineScope) {
         credentialAttributes: CredentialAttributes,
         onToken: suspend (OneTimeString?) -> Unit,
     ) {
+        // Searchable-options generation runs a headless IDE and must not initialize
+        // the OS-backed credential store (libsecret is unavailable on CI runners).
+        if (ApplicationManager.getApplication().isHeadlessEnvironment) return
+
         cs.launch {
             withContext(Dispatchers.IO) {
                 PasswordSafe.instance.get(credentialAttributes)?.password?.let { token ->
