@@ -9,6 +9,7 @@ import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.asContextElement
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.ui.components.JBLabel
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.*
@@ -23,6 +24,42 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
         fun getInstance(): ClaudeCodeClientService = service()
     }
 
+    fun detectCliPath(): Result<String> {
+        val command = if (SystemInfo.isWindows) listOf("where", "claude") else listOf("which", "claude")
+        return try {
+            val process = ProcessBuilder(command)
+                .redirectErrorStream(true)
+                .start()
+
+            val outputFuture = java.util.concurrent.CompletableFuture.supplyAsync {
+                process.inputStream.bufferedReader().readText()
+            }
+            val completed = process.waitFor(10, TimeUnit.SECONDS)
+            if (!completed) {
+                process.destroyForcibly()
+                outputFuture.cancel(true)
+                return Result.failure(IllegalStateException(message("claudeCode.cliNotFound")))
+            }
+
+            val output = outputFuture.get(1, TimeUnit.SECONDS).trim()
+            if (process.exitValue() != 0 || output.isBlank()) {
+                Result.failure(IllegalStateException(message("claudeCode.cliNotFound")))
+            } else {
+                Result.success(output.lines().first().trim())
+            }
+        } catch (e: Exception) {
+            Result.failure(IllegalStateException(message("claudeCode.cliNotFound")))
+        }
+    }
+
+    fun detectCliPathAsync(onResult: (Result<String>) -> Unit) {
+        val modalityContext = ModalityState.current().asContextElement()
+        cs.launch {
+            val result = withContext(Dispatchers.IO) { detectCliPath() }
+            withContext(Dispatchers.EDT + modalityContext) { onResult(result) }
+        }
+    }
+
     override suspend fun executeCli(
         client: ClaudeCodeClientConfiguration,
         prompt: String
@@ -34,21 +71,25 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
         client: ClaudeCodeClientConfiguration,
         prompt: String
     ): Result<String> = withContext(Dispatchers.IO) {
-        // Require explicit path configuration
-        if (client.cliPath.isBlank()) {
-            return@withContext Result.failure(
-                IllegalStateException(message("claudeCode.pathNotConfigured"))
-            )
+        // Resolve the CLI path: use the configured path if set, otherwise auto-detect from PATH.
+        val resolvedPath = if (client.cliPath.isNotBlank()) {
+            client.cliPath
+        } else {
+            val detected = detectCliPath()
+            if (detected.isFailure) {
+                return@withContext Result.failure(detected.exceptionOrNull()!!)
+            }
+            detected.getOrThrow()
         }
 
-        val file = File(client.cliPath)
+        val file = File(resolvedPath)
         if (!file.exists() || !file.canExecute()) {
             return@withContext Result.failure(
-                IllegalStateException(message("claudeCode.pathNotFound", client.cliPath))
+                IllegalStateException(message("claudeCode.pathNotFound", resolvedPath))
             )
         }
 
-        val command = mutableListOf(client.cliPath, "-p", "--output-format", "json")
+        val command = mutableListOf(resolvedPath, "-p", "--output-format", "json")
 
         // Add model if specified
         if (client.modelId.isNotBlank()) {
