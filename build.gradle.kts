@@ -69,6 +69,7 @@ dependencies {
     // tests
     testImplementation("org.junit.jupiter:junit-jupiter-params:6.1.3")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
+    testRuntimeOnly("junit:junit:4.13.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -111,7 +112,11 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            recommended()
+            if (providers.gradleProperty("verifyPluginRecommendedIdes").map(String::toBoolean).getOrElse(false)) {
+                recommended()
+            } else {
+                current()
+            }
         }
     }
 }

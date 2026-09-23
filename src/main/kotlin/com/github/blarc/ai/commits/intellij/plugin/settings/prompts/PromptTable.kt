@@ -1,6 +1,5 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.prompts
 
-import ai.grazie.utils.applyIf
 import com.github.blarc.ai.commits.intellij.plugin.*
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsVcsUtils.computeDiff
@@ -20,6 +19,7 @@ import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.table.TableView
+import com.intellij.util.applyIf
 import com.intellij.util.ui.ListTableModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

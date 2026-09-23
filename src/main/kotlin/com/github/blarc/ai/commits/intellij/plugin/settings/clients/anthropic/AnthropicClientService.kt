@@ -64,6 +64,10 @@ class AnthropicClientService(private val cs: CoroutineScope) : LlmClientService<
             builder.version(it)
         }
 
+        client.beta?.takeIf { it.isNotBlank() }?.let {
+            builder.beta(it)
+        }
+
         return builder.build()
     }
 
