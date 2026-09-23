@@ -49,7 +49,7 @@ class GitHubModelsClientPanel private constructor(
         clientConfiguration.modelId = modelComboBox.item
         clientConfiguration.temperature = temperatureTextField.text
         clientConfiguration.timeout = socketTimeoutTextField.text.toInt()
-        clientConfiguration.topP = topPTextField.text.toDouble()
+        clientConfiguration.topP = topPTextField.text.toDoubleOrNull()
         clientConfiguration.token = String(tokenPasswordField.password)
 
         service.verifyConfiguration(clientConfiguration, verifyLabel)

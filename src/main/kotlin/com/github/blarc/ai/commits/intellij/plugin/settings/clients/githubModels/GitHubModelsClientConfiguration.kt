@@ -22,7 +22,8 @@ class GitHubModelsClientConfiguration : LlmClientConfiguration(
     var tokenIsStored: Boolean = false
     @Transient
     var token: String? = null
-    var topP = 0.95
+    @Attribute
+    var topP: Double? = null
 
     companion object {
         const val CLIENT_NAME = "GitHub Models"

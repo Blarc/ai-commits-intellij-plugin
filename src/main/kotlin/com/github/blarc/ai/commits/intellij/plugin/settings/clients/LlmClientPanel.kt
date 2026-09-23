@@ -153,7 +153,7 @@ abstract class LlmClientPanel(
             label(message("settings.llmClient.topK"))
                 .widthGroup("label")
             cell(topKField)
-                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toInt()) })
+                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toIntOrNull()) })
                 .align(Align.FILL)
                 .validationOnInput { isInt(it.text) }
                 .resizableColumn()
@@ -167,7 +167,7 @@ abstract class LlmClientPanel(
             label(message("settings.llmClient.topP"))
                 .widthGroup("label")
             cell(topPField)
-                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toDouble()) })
+                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toDoubleOrNull()) })
                 .align(Align.FILL)
                 .validationOnInput { isDouble(it.text) }
                 .resizableColumn()
@@ -182,7 +182,7 @@ abstract class LlmClientPanel(
                 .widthGroup("label")
 
             cell(topPField)
-                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toFloat()) })
+                .bindText({ property.get()?.toString() ?: "" }, { s -> property.set(s.toFloatOrNull()) })
                 .align(Align.FILL)
                 .validationOnInput { isFloat(it.text) }
                 .resizableColumn()
