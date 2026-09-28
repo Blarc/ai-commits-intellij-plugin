@@ -2,7 +2,7 @@ package com.github.blarc.ai.commits.intellij.plugin
 
 import com.intellij.DynamicBundle
 import com.intellij.ide.browsers.BrowserLauncher
-import com.intellij.ide.plugins.PluginManagerCore
+import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
@@ -39,7 +39,7 @@ object AICommitsBundle : DynamicBundle(BUNDLE) {
         BrowserLauncher.instance.open("https://github.com/Blarc/ai-commits-intellij-plugin");
     }
 
-    fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("com.github.blarc.ai-commits-intellij-plugin"))
+    fun plugin() = PluginManager.getInstance().findEnabledPlugin(PluginId.getId("com.github.blarc.ai-commits-intellij-plugin"))
 
 
 }
