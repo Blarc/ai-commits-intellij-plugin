@@ -9,21 +9,10 @@ import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.OneTimeString
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.service
-import com.intellij.openapi.diff.impl.patch.IdeaTextPatchBuilder
-import com.intellij.openapi.diff.impl.patch.UnifiedDiffWriter
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vcs.changes.Change
-import com.intellij.openapi.vfs.VfsUtilCore
-import com.intellij.tasks.TaskManager
 import com.intellij.util.text.DateFormatUtil
-import com.intellij.vcsUtil.VcsUtil
-import git4idea.GitVcs
-import git4idea.repo.GitRepositoryManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.idea.svn.SvnUtil
-import org.jetbrains.idea.svn.SvnVcs
-import java.io.StringWriter
 import java.nio.file.FileSystems
 import java.util.*
 
@@ -97,13 +86,12 @@ object AICommitsUtils {
 
     fun replaceTask(promptContent: String, project: Project): String {
         var content = promptContent
-        val taskManager = TaskManager.getManager(project)
+        val activeTask = getActiveTask(project)
 
-        if (taskManager != null) {
-            val activeTask = taskManager.activeTask
+        if (activeTask != null) {
             content = content.replace("{taskId}", activeTask.id)
             content = content.replace("{taskSummary}", activeTask.summary)
-            content = content.replace("{taskDescription}", activeTask.description.orEmpty())
+            content = content.replace("{taskDescription}", activeTask.description)
             content = content.replace("{taskTimeSpent}", DateFormatUtil.formatTime(activeTask.totalTimeSpent))
         } else if (content.contains("{taskId}") || content.contains("{taskSummary}") || content.contains("{taskDescription}") || content.contains("{taskTimeSpent}")) {
             sendNotification(Notification.taskManagerIsNull())
@@ -111,6 +99,34 @@ object AICommitsUtils {
 
         return content
     }
+
+    /**
+     * The Tasks API is no longer bundled in every IntelliJ Platform product. Keep
+     * task prompt variables available where the API exists without making the
+     * entire plugin unloadable on products where it does not.
+     */
+    private fun getActiveTask(project: Project): ActiveTask? = runCatching {
+        val taskManagerClass = Class.forName("com.intellij.tasks.TaskManager")
+        val taskManager = taskManagerClass
+            .getMethod("getManager", Project::class.java)
+            .invoke(null, project)
+            ?: return null
+        val task = taskManagerClass.getMethod("getActiveTask").invoke(taskManager)
+
+        ActiveTask(
+            id = task.javaClass.getMethod("getId").invoke(task) as String,
+            summary = task.javaClass.getMethod("getSummary").invoke(task) as String,
+            description = task.javaClass.getMethod("getDescription").invoke(task) as? String ?: "",
+            totalTimeSpent = task.javaClass.getMethod("getTotalTimeSpent").invoke(task) as Long,
+        )
+    }.getOrNull()
+
+    private data class ActiveTask(
+        val id: String,
+        val summary: String,
+        val description: String,
+        val totalTimeSpent: Long,
+    )
 
     suspend fun retrieveToken(title: String): OneTimeString? {
         val credentialAttributes = getCredentialAttributes(title)
