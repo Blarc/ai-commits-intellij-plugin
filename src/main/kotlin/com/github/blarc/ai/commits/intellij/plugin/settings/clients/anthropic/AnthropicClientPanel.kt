@@ -3,8 +3,10 @@ package com.github.blarc.ai.commits.intellij.plugin.settings.clients.anthropic
 import com.github.blarc.ai.commits.intellij.plugin.AICommitsBundle.message
 import com.github.blarc.ai.commits.intellij.plugin.emptyText
 import com.github.blarc.ai.commits.intellij.plugin.settings.clients.LlmClientPanel
+import com.github.blarc.ai.commits.intellij.plugin.temperatureValidNullable
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
+import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.dsl.builder.*
 
 class AnthropicClientPanel private constructor(
@@ -23,7 +25,10 @@ class AnthropicClientPanel private constructor(
         nameRow()
         hostRow(clientConfiguration::host.toNullableProperty())
         modelIdRow()
-        temperatureRow(clientConfiguration::temperature.toMutableProperty())
+        temperatureRow(
+            clientConfiguration::temperature.toMutableProperty(),
+            ValidationInfoBuilder::temperatureValidNullable
+        )
         timeoutRow(clientConfiguration::timeout)
         tokenRow()
         versionRow()
