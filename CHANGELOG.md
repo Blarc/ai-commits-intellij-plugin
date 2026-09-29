@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Make Task Manager integration optional for compatibility with IntelliJ products that do not include the Tasks API.
+
 ## [2.20.0] - 2026-09-29
 
 ### Added
@@ -19,7 +22,6 @@
 - Claude Code CLI array responses are now handled correctly.
 - Optional LLM parameters, including Anthropic temperature, can be left empty.
 - Amazon Bedrock static credentials use the correct access and secret keys.
-- Compatibility with IntelliJ products that do not include the Tasks API.
 
 ## [2.19.1] - 2026-02-23
 
