@@ -30,12 +30,15 @@ class AnthropicClientService(private val cs: CoroutineScope) : LlmClientService<
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = AnthropicChatModel.builder()
             .modelName(client.modelId)
-            .temperature(client.temperature.toDouble())
             .apiKey(token ?: "")
             .baseUrl(client.host)
             .topP(client.topP)
             .topK(client.topK)
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
+
+        client.temperature.takeIf { it.isNotBlank() }?.let {
+            builder.temperature(it.toDouble())
+        }
 
         client.version?.takeIf { it.isNotBlank() }?.let {
             builder.version(it)
@@ -53,12 +56,15 @@ class AnthropicClientService(private val cs: CoroutineScope) : LlmClientService<
         val token = client.token.nullize(true) ?: retrieveToken(client.id)?.toString(true)
         val builder = AnthropicStreamingChatModel.builder()
             .modelName(client.modelId)
-            .temperature(client.temperature.toDouble())
             .apiKey(token ?: "")
             .baseUrl(client.host)
             .topP(client.topP)
             .topK(client.topK)
             .timeout(Duration.ofSeconds(client.timeout.toLong()))
+
+        client.temperature.takeIf { it.isNotBlank() }?.let {
+            builder.temperature(it.toDouble())
+        }
 
         client.version?.takeIf { it.isNotBlank() }?.let {
             builder.version(it)
