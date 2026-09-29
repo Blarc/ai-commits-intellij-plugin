@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.20.0] - 2026-09-29
+
 ### Added
 
 - Chinese localization.
@@ -487,7 +489,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.1...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.20.0...HEAD
+[2.20.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.1...v2.20.0
 [2.19.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.18.0...v2.19.0
 [2.18.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.17.0...v2.18.0
