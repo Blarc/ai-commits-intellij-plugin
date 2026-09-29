@@ -15,14 +15,14 @@ class ApplicationStartupListener : ProjectActivity {
     }
     private fun showVersionNotification(project: Project) {
         val settings = AppSettings2.instance
-        val version = AICommitsBundle.plugin()?.version
+        val version = AICommitsBundle.plugin().version
 
         if (version == settings.lastVersion) {
             return
         }
 
         settings.lastVersion = version
-        if (firstTime && version != null) {
+        if (firstTime) {
             sendNotification(Notification.welcome(version), project)
         }
         firstTime = false
