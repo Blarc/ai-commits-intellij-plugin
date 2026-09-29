@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added
+
+- Chinese localization.
+- Automatic Claude Code CLI detection.
+
+### Changed
+
+- Require IntelliJ Platform 2025.3 or later.
+- Show Claude Code CLI errors as tooltips in settings.
+
+### Fixed
+
+- Claude Code CLI array responses are now handled correctly.
+- Optional LLM parameters, including Anthropic temperature, can be left empty.
+- Amazon Bedrock static credentials use the correct access and secret keys.
+- Compatibility with IntelliJ products that do not include the Tasks API.
+
 ## [2.19.1] - 2026-02-23
 
 ### Fixed
