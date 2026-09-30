@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
+## [2.20.1] - 2026-09-30
+
 ### Fixed
+
 - Make Task Manager integration optional for compatibility with IntelliJ products that do not include the Tasks API.
 
 ## [2.20.0] - 2026-09-29
@@ -491,7 +494,8 @@
 - Settings for locale and OpenAI token.
 - Create commit message only for selected files.
 
-[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.20.0...HEAD
+[Unreleased]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.20.1...HEAD
+[2.20.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.20.0...v2.20.1
 [2.20.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.1...v2.20.0
 [2.19.1]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/Blarc/ai-commits-intellij-plugin/compare/v2.18.0...v2.19.0
