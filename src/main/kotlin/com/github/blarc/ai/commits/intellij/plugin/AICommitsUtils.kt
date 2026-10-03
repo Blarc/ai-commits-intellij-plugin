@@ -147,4 +147,11 @@ object AICommitsUtils {
     fun getIDELocale(): Locale {
         return DynamicBundle.getLocale()
     }
+
+    private val REASONING_BLOCK =
+        Regex("""(?s)<think(?:\s[^>]*?)?(?<!/)>.*?</think>\s*|<think(?:\s[^>]*?)?(?<!/)>.*""")
+
+    fun cleanCommitMessage(response: String, cleanupRegex: Regex): String {
+        return response.replace(REASONING_BLOCK, "").replace(cleanupRegex, "").trim()
+    }
 }

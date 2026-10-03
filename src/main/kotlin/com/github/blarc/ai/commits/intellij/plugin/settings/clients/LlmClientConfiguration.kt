@@ -1,5 +1,6 @@
 package com.github.blarc.ai.commits.intellij.plugin.settings.clients
 
+import com.github.blarc.ai.commits.intellij.plugin.AICommitsUtils.cleanCommitMessage
 import com.github.blarc.ai.commits.intellij.plugin.Icons
 import com.github.blarc.ai.commits.intellij.plugin.notifications.Notification
 import com.github.blarc.ai.commits.intellij.plugin.notifications.sendNotification
@@ -92,7 +93,7 @@ abstract class LlmClientConfiguration(
         prompt: String,
         result: String
     ) {
-        val cleanedResult = result.replace(getCleanUpRegex(), "").trim()
+        val cleanedResult = cleanCommitMessage(result, getCleanUpRegex())
         commitWorkflowHandler.setCommitMessage(cleanedResult)
     }
 
