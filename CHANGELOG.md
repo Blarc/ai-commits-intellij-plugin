@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove reasoning blocks from generated commit messages @mvanhorn.
+
 ## [2.20.1] - 2026-09-30
 
 ### Fixed
